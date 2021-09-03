@@ -1,0 +1,107 @@
+% comments here in the beginning of the file to describe blablablablblabllablalb
+% -------------------------------------------------------------------------
+
+% simulation type
+pointlike
+
+% number of cores
+12
+
+% number of simulations
+15
+
+% system parameters
+./parameters/system_parameters_pointlike.txt
+
+% cell parameters
+./parameters/cell_parameters.txt ./parameters/specific_parameters_pointlike.txt
+
+% substrate parameters
+uniform 1100 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 1100 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 1100 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 1100 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 1100 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 4500 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 4500 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 4500 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 4500 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 4500 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 11000 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 11000 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 11000 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 11000 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+uniform 11000 ./parameters/substrate_parameters.txt ./parameters/focal_adhesion_parameters.csv
+
+% initial state
+./results/20210507_180848_g0504_1_D250.zip 0
+./results/20210507_180848_g0504_2_D250.zip 0
+./results/20210507_180848_g0504_3_D250.zip 0
+./results/20210507_180848_g0504_4_D250.zip 0
+./results/20210507_180848_g0504_5_D250.zip 0
+./results/20210507_180848_g0504_6_D250.zip 0
+./results/20210507_180848_g0504_7_D250.zip 0
+./results/20210507_180848_g0504_8_D250.zip 0
+./results/20210507_180848_g0504_9_D250.zip 0
+./results/20210507_180848_g0504_10_D250.zip 0
+./results/20210507_180848_g0504_11_D250.zip 0
+./results/20210507_180848_g0504_12_D250.zip 0
+./results/20210507_180848_g0504_13_D250.zip 0
+./results/20210507_180848_g0504_18_D250.zip 0
+./results/20210507_180848_g0504_19_D250.zip 0
+
+% simulation time
+1 s 0.0001 s
+
+% simulation specific input
+57 ./settings/pointlike_movements/30um_1s.txt
+167 ./settings/pointlike_movements/30um_1s.txt
+194 ./settings/pointlike_movements/30um_1s.txt
+175 ./settings/pointlike_movements/30um_1s.txt
+4 ./settings/pointlike_movements/30um_1s.txt
+2 ./settings/pointlike_movements/30um_1s.txt
+6 ./settings/pointlike_movements/30um_1s.txt
+36 ./settings/pointlike_movements/30um_1s.txt
+154 ./settings/pointlike_movements/30um_1s.txt
+12 ./settings/pointlike_movements/30um_1s.txt
+6 ./settings/pointlike_movements/30um_1s.txt
+8 ./settings/pointlike_movements/30um_1s.txt
+1 ./settings/pointlike_movements/30um_1s.txt
+2 ./settings/pointlike_movements/30um_1s.txt
+3 ./settings/pointlike_movements/30um_1s.txt
+
+% parameter study
+
+% export settings
+500 ./settings/export/export_options_custom_pointlike.txt
+
+% simulation names
+g0501_D250_1kPa_1
+g0501_D250_1kPa_2
+g0501_D250_1kPa_3
+g0501_D250_1kPa_4
+g0501_D250_1kPa_5
+g0501_D250_4kPa_1
+g0501_D250_4kPa_2
+g0501_D250_4kPa_3
+g0501_D250_4kPa_4
+g0501_D250_4kPa_5
+g0501_D250_11kPa_1
+g0501_D250_11kPa_2
+g0501_D250_11kPa_3
+g0501_D250_11kPa_4
+g0501_D250_11kPa_5
+
+% -------------------------------------------------------------------------
+% whatever is below this point does not affect the simulation, so you can use it e.g. for storing settings
+to study in format parameterName = value1,value2,value3
+% (e.g. fArea = 10.2,32.4,43.4) or leave empty if you want to run all of
+% the simulation with the same values
+
+, type number 1 = growth, 2 = pointlike, 3 = stretching
+% pointlike and stretching require additional details
+
+4 ./parameters/substrate_parameters_pointlike.txt ./Settings/Pointlike_movements/substrate_test_6.txt
+1 ./parameters/substrate_parameters_pointlike.txt ./Settings/Pointlike_movements/substrate_test_6.txt
+
+./Results/20191113_152347_test_res.zip

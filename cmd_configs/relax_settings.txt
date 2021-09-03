@@ -1,0 +1,66 @@
+% Config file to relax epithelia after cutting away extra cells
+% -------------------------------------------------------------------------
+
+% simulation type
+growth
+
+% number of cores
+8
+
+% number of simulations
+15
+
+% system parameters
+./parameters/system_parameters_growth_relax.txt
+
+% cell parameters
+./parameters/cell_parameters.txt ./parameters/specific_parameters_growth_relax.txt
+
+% substrate parameters
+
+% initial state
+./results/20210507_175026_g0504_1_D250.zip 0
+./results/20210507_175110_g0504_2_D250.zip 0
+./results/20210507_175138_g0504_3_D250.zip 0
+./results/20210507_175220_g0504_4_D250.zip 0
+./results/20210507_175309_g0504_5_D250.zip 0
+./results/20210507_175340_g0504_6_D250.zip 0
+./results/20210507_175414_g0504_7_D250.zip 0
+./results/20210507_175510_g0504_8_D250.zip 0
+./results/20210507_175544_g0504_9_D250.zip 0
+./results/20210507_175626_g0504_10_D250.zip 0
+./results/20210507_175656_g0504_11_D250.zip 0
+./results/20210507_175724_g0504_12_D250.zip 0
+./results/20210507_175749_g0504_13_D250.zip 0
+./results/20210507_175815_g0504_18_D250.zip 0
+./results/20210507_175857_g0504_19_D250.zip 0
+
+% simulation time
+0.5 s 1e-4 s 0 s
+
+% simulation specific input
+mdck
+
+% parameter study
+
+% export settings
+1000 ./settings/export/export_options_import_growth.txt
+
+% simulation names
+g0504_1_D250.zip
+g0504_2_D250.zip
+g0504_3_D250.zip
+g0504_4_D250.zip
+g0504_5_D250.zip
+g0504_6_D250.zip
+g0504_7_D250.zip
+g0504_8_D250.zip
+g0504_9_D250.zip
+g0504_10_D250.zip
+g0504_11_D250.zip
+g0504_12_D250.zip
+g0504_13_D250.zip
+g0504_18_D250.zip
+g0504_19_D250.zip
+
+% -------------------------------------------------------------------------

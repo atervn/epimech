@@ -1,0 +1,15 @@
+fMembrane,0.005
+fDivision,1e-08
+divisionTimeMean,72000
+divisionTimeSD,14400
+maximumGrowthTime,28800
+maximumDivisionTime,3600
+divisionDistanceConstant,0.4
+newCellAreaConstant,1.055
+cellGrowthConstant,2
+cellGrowthForceConstant,0.2
+baseDivisionRate,5.67e-13
+divisionRateExponents,2.7
+maxMembraneAngle,1.047
+maxJunctionAngleConstant,0.6
+minimumCellSize,50e-12

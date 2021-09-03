@@ -1,0 +1,5 @@
+fMembrane,0.0001
+fEdgeCell,0.0005
+maxMembraneAngle,1.047
+maxJunctionAngleConstant,0.6
+focalAdhesionBreakingForce,1e-8

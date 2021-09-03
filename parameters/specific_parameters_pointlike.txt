@@ -1,0 +1,3 @@
+fMembrane,0.005
+fEdgeCell,0.0005
+focalAdhesionBreakingForce,1e-8

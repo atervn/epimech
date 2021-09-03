@@ -1,0 +1,9 @@
+rCell,5.79e-06
+membraneLength,1e-06
+junctionLength,1e-06
+fArea,0.04
+fCortex,0.001
+fJunctions,0.04
+fContact,0.02
+perimeterConstant,120
+perimeterModelingRate,0.00315

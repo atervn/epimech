@@ -1,0 +1,51 @@
+% comments here in the beginning of the file to describe blablablablblabllablalb
+% -------------------------------------------------------------------------
+
+% simulation type
+opto
+
+% number of cores
+2
+
+% number of simulations
+2
+
+% system parameters
+./parameters/system_parameters_opto.txt
+
+% cell parameters
+./parameters/cell_parameters.txt ./parameters/specific_parameters_opto.txt
+
+% substrate parameters
+heterogenous 4500 ./settings/misc/default_heterogeneous_data.csv ./substrate_parameters_1.txt ./parameters/focal_adhesion_parameters.csv
+
+% initial state
+./results/20210501_224240_g0501_1_D200.zip 0
+
+% simulation time
+40 m 1 s
+
+% simulation specific input
+./settings/misc/default_optogenetic_activation.csv ./settings/misc/test_area.csv
+
+% parameter study
+
+% export settings
+30 ./settings/export/export_options_import_optogenetics.txt
+
+% simulation names
+test2
+
+% -------------------------------------------------------------------------
+% whatever is below this point does not affect the simulation, so you can use it e.g. for storing settings
+to study in format parameterName = value1,value2,value3
+% (e.g. fArea = 10.2,32.4,43.4) or leave empty if you want to run all of
+% the simulation with the same values
+
+, type number 1 = growth, 2 = pointlike, 3 = stretching
+% pointlike and stretching require additional details
+
+4 ./parameters/substrate_parameters_pointlike.txt ./Settings/Pointlike_movements/substrate_test_6.txt
+1 ./parameters/substrate_parameters_pointlike.txt ./Settings/Pointlike_movements/substrate_test_6.txt
+
+./Results/20191113_152347_test_res.zip

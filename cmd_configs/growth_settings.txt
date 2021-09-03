@@ -1,0 +1,37 @@
+% Config file to grow epithelia with bit over 200 µm radius
+% -------------------------------------------------------------------------
+
+% simulation type
+growth
+
+% number of cores
+2
+
+% number of simulations
+2
+
+% system parameters
+./parameters/system_parameters_growth.txt
+
+% cell parameters
+./parameters/cell_parameters.txt ./parameters/specific_parameters_growth.txt
+
+% substrate parameters
+
+% initial state
+
+% simulation time
+12 d 60 s 11 d
+
+% simulation specific input
+mdck
+
+% parameter study
+
+% export settings
+480 ./settings/export/export_options_import_growth.txt
+
+% simulation names
+test
+
+% -------------------------------------------------------------------------

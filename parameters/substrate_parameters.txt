@@ -1,0 +1,7 @@
+substratePointDistance,2e-6
+youngsModulus,1100
+youngsModulusConstant,7.62e-6
+restorativeForceConstant,2.9e-4
+repulsionLengthConstant,0.5
+honeycombConstants,114
+substrateEdgeConstant,100
