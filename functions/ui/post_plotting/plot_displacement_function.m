@@ -30,11 +30,9 @@ switch d.pl.displacementPlot
             d.pl.axisLimits(3):(d.pl.axisLimits(4)-d.pl.axisLimits(3))*0.001:d.pl.axisLimits(4));
         
         z1 = griddata(centersX,centersY,displacements,xq,yq,'cubic');
-%         contourf(xq,yq,z1,256,'LineColor','none');
         contourf(xq,yq,z1,[1 2 5 10 15],'LineColor','none');
         mymap = csvread([app.defaultPath 'settings/Misc/mymap.csv']);
         colormap(mymap)
-%         colormap(gray)
         colorbar
         caxis([0, d.pl.displacementMax])
         
@@ -75,7 +73,6 @@ switch d.pl.displacementPlot
         contourf(xq,yq,z1,256,'LineColor','none');
         mymap = csvread('./settings/Misc/mymap.csv');
         colormap(mymap)
-%         colormap(gray)
         colorbar
         caxis([0, d.pl.displacementMax])
 end

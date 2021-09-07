@@ -64,9 +64,7 @@ else
         dispData(:,:,iSimulation) = griddata(subX,subY,displacements,xq,yq,'cubic');
         
     else
-        app.CallingApp.plotImport(fileIdx).currentTimePoint = oldTimePoint;
-        app.CallingApp.selectedFile = previousSelected;
-        uialert(app.UIFigure, ['Selected simulation number ' num2str(iSimulation) ' does not have substrate data.'],'Data missing');
+        dispData = -1;
         return
     end
     

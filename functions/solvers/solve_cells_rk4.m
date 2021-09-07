@@ -1,4 +1,4 @@
-function [d, dt, maxmaxMovement] = solve_cells_rk4(d, dt, time)
+function [d, dt, maxmaxMovement] = solve_cells_rk4(d, dt)
 
 tooLargeMovement = 1;
 
@@ -64,20 +64,6 @@ while tooLargeMovement
         
     end
      
-end
-
-if dt < d.spar.maximumTimeStep && maxmaxMovement <= d.spar.cellMinimumMovementSq
-    multiplier = 2;
-else
-    multiplier = 1;
-end
-while 1
-    if round( ((floor(time/d.spar.maximumTimeStep+1e-10)*d.spar.maximumTimeStep + d.spar.maximumTimeStep) - (multiplier*dt+time)),10) >= 0
-        dt = dt*multiplier;
-        break;
-    else
-        multiplier = multiplier/2;
-    end
 end
 
 for k = 1:length(d.cells)

@@ -1,4 +1,4 @@
-function [d, dt, maxmaxMovement] = solve_cells_rk2(d, dt, time)
+function [d, dt, maxmaxMovement] = solve_cells_rk2(d, dt)
 
 tooLargeMovement = 1;
 
@@ -39,20 +39,6 @@ while tooLargeMovement
         else
             tooLargeMovement = 0;
         end
-    end
-end
-
-if maxmaxMovement <= d.spar.cellMinimumMovementSq
-    multiplier = 2;
-else
-    multiplier = 1;
-end
-while 1
-    if round( ((floor(time/d.spar.maximumTimeStep+1e-10)*d.spar.maximumTimeStep + d.spar.maximumTimeStep) - (multiplier*dt+time)),10) >= 0
-        dt = dt*multiplier;
-        break;
-    else
-        multiplier = multiplier/2;
     end
 end
 
