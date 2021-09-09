@@ -310,7 +310,6 @@ end
 
 for k = find(verticesAdded)
    
-    d.cells(k) = get_convexities(d.cells(k));
     d.cells(k) = get_vertex_angles(d.cells(k));
 end
 

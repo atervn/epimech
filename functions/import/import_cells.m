@@ -156,7 +156,6 @@ for k = 1:nCells
         cells(k) = get_boundary_lengths(cells(k));
         cells(k) = get_cell_areas(cells(k));
         cells(k) = get_cell_perimeters(cells(k));
-        cells(k) = get_convexities(cells(k));
         cells(k) = get_vertex_angles(cells(k));
         
         cells(k) = set_empty_cell_properties(cells(k));

@@ -16,7 +16,7 @@ if d.simset.simulationType == 4
     
     d.simset.frame.cornersX = [-maxSize maxSize maxSize -maxSize]';
     d.simset.frame.cornersY = [-maxSize -maxSize maxSize maxSize]';
-    d.cells(end+1) = create_edge_cell(d);
+    d.cells(end+1) = create_frame_cell(d);
     
 end
 

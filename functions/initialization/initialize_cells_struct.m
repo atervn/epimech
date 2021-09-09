@@ -34,8 +34,6 @@ cells.leftVectorsY = [];
 cells.rightVectorsX = [];
 cells.rightVectorsY = [];
 
-cells.convexity = [];
-cells.vectorAngles = [];
 cells.outsideAngles = [];
 
 % substrate stuff

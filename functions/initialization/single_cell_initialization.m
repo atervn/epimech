@@ -48,7 +48,6 @@ d.cells(end).normArea = d.cells(end).area;
 d.cells(end).normPerimeter = d.cells(end).perimeter;
 
 d.cells(end).division.targetArea = 0;
-d.cells(end) = get_convexities(d.cells(end));
 d.cells(end) = get_vertex_angles(d.cells(end));
 
 d.cells(end).junctions.linkedIdx1 = zeros(0,1);

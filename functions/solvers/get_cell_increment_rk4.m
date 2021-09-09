@@ -35,7 +35,6 @@ end
 if kIteration > 1
     tempCells = get_boundary_lengths(tempCells);
     tempCells = get_boundary_vectors(tempCells);
-    tempCells = get_convexities(tempCells);
     tempCells = get_cell_areas(tempCells);
     tempCells = get_cell_perimeters(tempCells);
 end

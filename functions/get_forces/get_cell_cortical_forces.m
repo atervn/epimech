@@ -42,7 +42,7 @@ rightConcaveForcesX = leftConvexForcesX; rightConcaveForcesY = leftConvexForcesX
 leftConcaveForcesX = leftConvexForcesX; leftConcaveForcesY = leftConvexForcesX;
 
 % find the concave vertices
-middleConcaveIdx = ~cells.convexity;
+middleConcaveIdx = cells.outsideAngles < pi;
 
 multipliersTemp = cells.vertexCorticalTensions;
 

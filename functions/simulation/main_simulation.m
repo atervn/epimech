@@ -6,7 +6,6 @@ function d = main_simulation(d,app)
 %   simulating stopping as well as the progress bar.
 %   by Aapo Tervonen, 2021
 
-
 % set time to zero
 time = 0;
 
@@ -56,7 +55,6 @@ while time - d.spar.simulationTime <= 1e-8
     % get cell properties
     d.cells = get_boundary_vectors(d.cells);
     d.cells = get_boundary_lengths(d.cells);
-    d.cells = get_convexities(d.cells);
     d.cells = get_vertex_angles(d.cells);
     
     % check if focal adhesions are to be removed
@@ -64,7 +62,7 @@ while time - d.spar.simulationTime <= 1e-8
         d = remove_focal_adhesions(d);
     % define a frame around the cells (simulation type currently disabled)
     elseif d.simset.simulationType == 4
-        d.cells(end) = create_edge_cell(d);
+        d.cells(end) = create_frame_cell(d);
     end
     
     % remove vertices if needed
@@ -166,7 +164,7 @@ while time - d.spar.simulationTime <= 1e-8
     
     % move a frame around the cells (simulation type currently disabled)
     if d.simset.simulationType == 4
-         d = move_edge_frame(d,dt);
+         d = move_frame(d,dt);
     end
 
     % update time

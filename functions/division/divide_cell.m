@@ -204,7 +204,6 @@ for k = 1:length(d.cells)
             d.cells(end) = get_boundary_lengths(d.cells(end));
             d.cells(end) = get_cell_perimeters(d.cells(end));
             d.cells(end) = get_boundary_vectors(d.cells(end));
-            d.cells(end) = get_convexities(d.cells(end));
             d.cells(end) = get_vertex_angles(d.cells(end));
             
             d.cells(end).normPerimeter = d.cells(end).perimeter;
@@ -269,7 +268,6 @@ for k = 1:length(d.cells)
             d.cells(k) = get_boundary_vectors(d.cells(k));
             d.cells(k) = get_boundary_lengths(d.cells(k));
             d.cells(k) = get_cell_perimeters(d.cells(k));
-            d.cells(k) = get_convexities(d.cells(k));
             d.cells(k) = get_vertex_angles(d.cells(k));
             
             d.cells(k).normPerimeter = d.cells(k).perimeter;
