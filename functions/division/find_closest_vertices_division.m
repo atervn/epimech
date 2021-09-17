@@ -1,10 +1,11 @@
-function d = find_closest_vertices_division(d)
+function d = find_closest_vertices_division(d, k)
 % FIND_CLOSEST_VERTICES_DIVISION Finds the close vertices around division
 % vertices
 %   The function find the close vertices around the division vertices to
 %   prevent membrane overlapping in the cytokinesis cleavage sites.
 %   INPUTS:
 %       d: main simulation data structure
+%       k: current cell index
 %   OUTPUT:
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021

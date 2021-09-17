@@ -14,9 +14,8 @@ function d = find_closest_vertices(d)
 % number of cells
 nCells = size(d.cells,2);
 
-% create a vector for cell numbers used to find unique neighbors
+% vectors used to find unique neighbors
 cellNumbers = 1:nCells;
-% create a vector of zeros used by the get unique cells
 zeroVec = zeros(size(cellNumbers));
 
 % initialize vectors for the cell centers and radii
@@ -561,7 +560,7 @@ for k = 1:nCells
         
         % find the closest vertices in the same cell around the division
         % vertices
-        d = find_closest_vertices_division(d);
+        d = find_closest_vertices_division(d, k);
     end
 end
 

@@ -3,10 +3,15 @@ function d = add_focal_adhesions(d, k, longIdx, pos)
 %   The function defines new focal adhesions when new vertices are added.
 %   It defines the substrate position for the link as the average of the
 %   neighboring focal adhesions. New adhesions are created only if both
-%   neighboring vertices have focal adhesions. The function takes in the
-%   main simulation data structure d, the cell index k, the index of
-%   the long section, and the variable pos is 1 (other than the last vertex or
-%   2 (last vertex) and outputs the data structure d.
+%   neighboring vertices have focal adhesions.
+%   INPUTS:
+%       d: main simulation data structure
+%       k: current cell index
+%       longIdx: index of the long section (right side vertex)
+%       pos: variable to describe if the longIdx is the last vertex (2) or
+%       not (1)
+%   OUTPUT:
+%       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
 % neighboring point focal adhesions states

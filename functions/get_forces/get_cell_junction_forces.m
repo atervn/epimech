@@ -8,11 +8,6 @@ function cells = get_cell_junction_forces(cells,spar,k)
 %       cells: cell data including the junctions forces for each
 %       vertex
 
-% go through the cells
-% for k = 1:nCells
-
-
-
 % initialize the junction force vectors
 cells(k).forces.junctionX = zeros(cells(k).nVertices,1);
 cells(k).forces.junctionY = cells(k).forces.junctionX;
@@ -88,10 +83,8 @@ if numel(cells(k).junctions.pairCells1) > 0
         
         % find the junction forces for the long junction links
         cells(k).forces.junctionX(junctions.linkedIdx2) = 0.5.*cells(k).forces.junctionX(junctions.linkedIdx2) + forceMagnitudes.*(pair2VerticesX - cells(k).verticesX(junctions.linkedIdx2));
-        cells(k).forces.junctionY(junctions.linkedIdx2) = 0.5.*cells(k).forces.junctionY(junctions.linkedIdx2) + forceMagnitudes.*(pair2VerticesY - cells(k).verticesY(junctions.linkedIdx2));
-        
-    end
-    
-    
+        cells(k).forces.junctionY(junctions.linkedIdx2) = 0.5.*cells(k).forces.junctionY(junctions.linkedIdx2) + forceMagnitudes.*(pair2VerticesY - cells(k).verticesY(junctions.linkedIdx2)); 
+    end    
 end
-% end
+
+end

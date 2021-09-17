@@ -7,6 +7,7 @@ function d = update_close_vertices_and_junctions(d,time)
 %       time: current simulation time
 %   OUTPUT:
 %       d: main simulation data structure
+%   by Aapo Tervonen, 2021
 
 % junction are not edited in pointlike micromanipulation simulations
 % (simulation type 2)

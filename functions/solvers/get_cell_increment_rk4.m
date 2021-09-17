@@ -50,13 +50,8 @@ for k = 1:nCells
         if d.simset.simulationType == 1
             tempCells(k) = get_cell_division_forces(tempCells(k),d.spar);
         elseif d.simset.simulationType == 2
-            tempCells(k) = get_cell_focal_adhesion_forces(tempCells(k),d.sub);
             tempCells(k) = get_cell_pointlike_forces(tempCells(k),d.simset,d.spar,k);
-            tempCells(k) = get_edge_forces(tempCells(k),d.spar);
-        elseif d.simset.simulationType == 3
-            tempCells(k) = get_cell_focal_adhesion_forces(tempCells(k),d.sub);
-            tempCells(k) = get_edge_forces(tempCells(k),d.spar);
-        elseif d.simset.simulationType == 5
+        elseif any(d.simset.simulationType == [2 3 5])
             tempCells(k) = get_cell_focal_adhesion_forces(tempCells(k),d.sub);
             tempCells(k) = get_edge_forces(tempCells(k),d.spar);
         end

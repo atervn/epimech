@@ -3,10 +3,15 @@ function d = add_new_edge_vertices(d,k,longIdx,pos)
 %   The function adds new edge vertices when new vertices are added.
 %   New edge vertices is added only if both neighboring vertices are edge
 %   vertices. The initial coordinates are defined as a mean of the
-%   neighboring vertices' initial coordinates. The function takes in the
-%   main simulation data structure d, the cell index k,the index of
-%   the long section, and the variable pos is 1 (other than the last vertex or
-%   2 (last vertex) and outputs the data structure d.
+%   neighboring vertices' initial coordinates.
+%   INPUTS:
+%       d: main simulation data structure
+%       k: current cell index
+%       longIdx: index of the long section (right side vertex)
+%       pos: variable to describe if the longIdx is the last vertex (2) or
+%       not (1)
+%   OUTPUT:
+%       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
 % if edge cells

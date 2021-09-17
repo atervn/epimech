@@ -99,6 +99,8 @@ while time - d.spar.simulationTime <= 1e-8
     %% add vertices
     d.cells = get_boundary_vectors(d.cells);
     d.cells = get_boundary_lengths(d.cells);
+    
+    % if not pointlike simulation, add new vertices
     if d.simset.simulationType ~= 2
         d = add_vertices(d);
     end

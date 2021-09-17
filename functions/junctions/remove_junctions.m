@@ -7,6 +7,7 @@ function cells = remove_junctions(cells, spar)
 %       spar: scaled parameters data structure
 %   OUTPUT:
 %       cells: cell data structure
+%   by Aapo Tervonen, 2021
 
 % if there are more than one cell
 if length(cells) > 1
