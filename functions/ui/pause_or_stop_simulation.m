@@ -4,8 +4,9 @@ function pause_or_stop_simulation(app)
 %   clicked during the last iteration. Depending on the case, it either
 %   checks the simulation buttons or the post plotting buttons. If the
 %   pause has been clicked, the UI asks the user whether they want to
-%   continue the simulation or stop it. Takes as an input the main model
-%   structure.
+%   continue the simulation or stop it.
+%   INPUTS:
+%       app: main app handle
 %   by Aapo Tervonen, 2021
 
 % update the UI so the changes in the button states can be seen

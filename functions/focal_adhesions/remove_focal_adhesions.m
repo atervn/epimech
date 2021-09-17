@@ -1,9 +1,12 @@
 function d = remove_focal_adhesions(d)
 % REMOVE_FOCAL_ADHESIONS Removes focal adhesions based on FA force
-%   The function takes in the main simulation data structure d and goes
-%   through each cell to check if there are focal adhesions, whose force
-%   exceeds the allowed limit. Those exceeding are removed from the cell
-%   and substrate data. Finally, the data structure d outputted.
+%   The function goes through each cell to check if there are focal
+%   adhesions, whose force exceeds the allowed limit. Those exceeding are
+%   removed from the cell and substrate data.
+%   INPUTS:
+%       d: main simulation data structure
+%   OUTPUT:
+%       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
 % go through the cells

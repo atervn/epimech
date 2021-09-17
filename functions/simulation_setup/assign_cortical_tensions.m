@@ -13,7 +13,7 @@ switch app.modelCase
                 cells(k).corticalTension = cells(k).corticalTension*app.import.systemParameters.eta/app.systemParameters.eta;
                 cells(k).perimeterConstant = spar.perimeterConstant;
                 if app.cellParameters.fCortex ~= app.import.cellParameters.fCortex
-                    cells(k).corticalTension = cells(k).corticalTension*spar.fCortex/cells(k).corticalTension;
+                    cells(k).corticalTension = cells(k).corticalTension*app.cellParameters.fCortex/app.import.cellParameters.fCortex;
                     cells(k).perimeterConstant = spar.perimeterConstant;
                 end
             else

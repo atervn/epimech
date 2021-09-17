@@ -45,14 +45,6 @@ cells.substrate.connected = [];
 cells.substrate.weights = [];
 cells.substrate.weightsLin = [];
 cells.substrate.fFocalAdhesions = [];
-
-% possible junction stuff
-cells.possibleJunctionVertices = [];
-cells.possibleJunctions.pairCellIDs = [];
-cells.possibleJunctions.pairVertexIDs = [];
-cells.possibleJunctions.distances = [];
-cells.possibleJunctions.pairVerticesX = [];
-cells.possibleJunctions.pairVerticesY = [];
     
 cells.contacts.present = [];
 cells.contacts.cell1.next.vertices = [];

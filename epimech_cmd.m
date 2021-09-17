@@ -193,7 +193,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                     removedCells = outsideShape;
                     
                     for k = length(removedCells):-1:1
-                        d.cells = remove_cell_and_links(d.cells,removedCells(k));
+                        d = remove_cell_and_links(d,removedCells(k));
                     end
                 end
                 

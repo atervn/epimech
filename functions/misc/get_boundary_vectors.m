@@ -1,14 +1,17 @@
 function cells = get_boundary_vectors(cells)
 % GET_BOUNDARY_VECTORS Calculate the vectors based on vertex coordinates
-%   The function takes in the main cell structure and goes through each
-%   cell to calculate both the left and right sided boundary vectors for
-%   each vertex. The left side vector is from the current vertex to the
-%   next (in counterclockwise direction) and the right side vector is from
-%   the previous vertex (in clockwise direction) to the current vertex.
-%   Thus, both vectores are directed in the counterclockwise direction.
-%   Calculting both in this functions once reduces the times that circshift
-%   has to be used in the subsequent functions. Finally, the cell structure
-%   is outputted.
+%   The function goes through each cell to calculate both the left and 
+%   right sided boundary vectors for each vertex. The left side vector is
+%   from the current vertex to the next (in counterclockwise direction) and
+%   the right side vector is from the previous vertex (in clockwise
+%   direction) to the current vertex. Thus, both vectores are directed in
+%   the counterclockwise direction. Calculting both in this functions once
+%   reduces the times that circshift has to be used in the subsequent
+%   functions.
+%   INPUTS:
+%       cells: cell structure
+%   OUTPUT:
+%       cells: cell structure
 %   by Aapo Tervonen, 2021
 
 % go througt the cells

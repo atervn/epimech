@@ -1,9 +1,13 @@
 function d = main_simulation(d,app)
 % MAIN_SIMULATION The main simulation loop in the model.
-%   Takes in the main model data structure d, that include the cell data,
-%   substrate data (if included), simulation settings, plotting settings,
-%   and export settings. Also, the main app handle is needed to enable
-%   simulating stopping as well as the progress bar.
+%   INPUTS:
+%       d: main simulation data structure that include the cell data,
+%           substrate data (if included), simulation settings, plotting
+%           settings, and export settings
+%       app: main app handle is needed to enable simulating stopping as
+%           well as the progress bar
+%   OUTPUT:
+%       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
 % set time to zero

@@ -175,6 +175,14 @@ elseif strcmp(data.parameterStudy.type,'cell')
                 disp('perimeterModelingRate must have a value above zero.')
                 stop = true;
             end
+        case 'minimumCellSize'
+            if ~isnumeric(value)
+                disp('minimumCellSize must be numeric.')
+                stop = true;
+            elseif value < 0
+                disp('minimumCellSize must have a nonnegative value.')
+                stop = true;
+            end
     end
 
 elseif strcmp(data.parameterStudy.type,'specific')
@@ -318,14 +326,6 @@ elseif strcmp(data.parameterStudy.type,'specific')
                 stop = true;
             elseif value <= 0
                 disp('maximumDivisionTime must have a value above zero.')
-                stop = true;
-            end
-        case 'minimumCellSize'
-            if ~isnumeric(value)
-                disp('minimumCellSize must be numeric.')
-                stop = true;
-            elseif value < 0
-                disp('minimumCellSize must have a nonnegative value.')
                 stop = true;
             end
     end

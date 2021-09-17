@@ -222,6 +222,6 @@ elseif switchOff
     end
 end
 
-
+%% COMMENT ADD_VERTICES OPTO SECTION, OR TAKE OUT IF UNNECESSARY
 
 end

@@ -12,12 +12,12 @@ if strcmp(fgetl(fID),'% parameter study')
         
         line = textscan(line,'%s %s %s');
         
-        cellParameters = {'rCell','membraneLength','junctionLength','fArea','fCortex','fJunctions','fContact','perimeterConstant','perimeterModelingRate'};
+        cellParameters = {'rCell','membraneLength','junctionLength','fArea','fCortex','fJunctions','fContact','perimeterConstant','perimeterModelingRate','minimumCellSize'};
         
         switch data.simulationType
             case 'growth'
                 systemParameters = {'eta','scalingLength','scalingTime','stopDivisionTime','cellMaximumMovement','cellMinimumMovement','junctionModificationTimeStep'};
-                specificCellParameters = {'fMembrane','fDivision','divisionTimeMean','divisionTimeSD','maximumGrowthTime','maximumDivisionTime','divisionDistanceConstant','newCellAreaConstant','cellGrowthConstant','cellGrowthForceConstant','baseDivisionRate','divisionRateExponents','maxMembraneAngle','maxJunctionAngleConstant','minimumCellSize'};
+                specificCellParameters = {'fMembrane','fDivision','divisionTimeMean','divisionTimeSD','maximumGrowthTime','maximumDivisionTime','divisionDistanceConstant','newCellAreaConstant','cellGrowthConstant','cellGrowthForceConstant','baseDivisionRate','divisionRateExponents','maxMembraneAngle','maxJunctionAngleConstant'};
             case 'pointlike'
                 systemParameters = {'eta','scalingLength','scalingTime','cellMaximumMovement','cellMinimumMovement','junctionModificationTimeStep','substrateMaximumMovement','substrateMinimumMovement','fPointlike'};
                 specificCellParameters = {'fMembrane','fEdgeCell','focalAdhesionBreakingForce'};

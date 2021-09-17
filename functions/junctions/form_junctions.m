@@ -1,8 +1,5 @@
 function d = form_junctions(d)
 
-% for k = 1:length(d.cells)
-% d.cells(k).vertexStates2 = d.cells(k).vertexStates;
-% end
 
 %  check that there are more than one cell
 if length(d.cells) > 1
@@ -21,7 +18,6 @@ if length(d.cells) > 1
             
             suitablePairCellsAll = d.cells(k).junctions.possible.pairCellIDs;
             suitablePairVerticesAll = d.cells(k).junctions.possible.pairVertexIDs;
-            suitableDistancesAll = d.cells(k).junctions.possible.distances;
             suitablePairVerticesXAll = d.cells(k).junctions.possible.pairVerticesX;
             suitablePairVerticesYAll = d.cells(k).junctions.possible.pairVerticesY;
             [~, numberOfPossibles] = max(cumsum(~isnan(suitablePairCellsAll), 1));
@@ -55,8 +51,7 @@ if length(d.cells) > 1
                                 && d.cells(suitablePairCells(i2)).junctions.possible.pairCellIDs(firstNonNan,idxPair) == k
                             
                             if ~atLeastOne
-                                
-                                suitablePairDistances = suitableDistancesAll(:,i);
+
                                 suitablePairVerticesX = suitablePairVerticesXAll(:,i);
                                 suitablePairVerticesY = suitablePairVerticesYAll(:,i);
                                 
@@ -66,8 +61,7 @@ if length(d.cells) > 1
                             suitablePairOutsideAngles = d.cells(suitablePairCells(i2)).outsideAngles(suitablePairVertices(i2));
                             suitablePairRigthVectorsX = d.cells(suitablePairCells(i2)).rightVectorsX(suitablePairVertices(i2));
                             suitablePairRigthVectorsY = d.cells(suitablePairCells(i2)).rightVectorsY(suitablePairVertices(i2));
-                            suitablePairRigthLengths = d.cells(suitablePairCells(i2)).rightLengths(suitablePairVertices(i2));
-                            
+                        
                             pairsPairCrosslinkCheck = d.cells(k).vertexStates(idx) == 1 && d.cells(d.cells(k).junctions.cells(idx,1)).vertexStates(d.cells(k).junctions.vertices(idx,1)) == 2;
                             
                             if pairsPairCrosslinkCheck
@@ -79,8 +73,8 @@ if length(d.cells) > 1
                                 pairsPairC = d.cells(ownPairC).junctions.cells(ownPairV,pairOtherJunction);
                                 pairsPairV = d.cells(ownPairC).junctions.vertices(ownPairV,pairOtherJunction);
                             end
-                            
-                            if check_junction_angle_adding(d.spar,d.cells(k),idx,suitablePairVerticesX(i2),suitablePairVerticesY(i2),suitablePairRigthVectorsX,suitablePairRigthVectorsY,suitablePairOutsideAngles(i2))...
+
+                            if check_junction_angle_add(d.spar,d.cells(k),idx,suitablePairVerticesX(i2),suitablePairVerticesY(i2),suitablePairRigthVectorsX,suitablePairRigthVectorsY,suitablePairOutsideAngles)...
                                     && check_junction_crossing(d.cells,k,idx,suitablePairCells(i2),suitablePairVertices(i2))...
                                     && check_junction_crossing(d.cells,suitablePairCells(i2),suitablePairVertices(i2),k,idx)...
                                     && ~(pairsPairCrosslinkCheck && ~check_line_intersection(d.cells(k).verticesX(idx),d.cells(k).verticesY(idx),d.cells(ownPairC).verticesX(ownPairV),d.cells(ownPairC).verticesY(ownPairV),d.cells(newPairC).verticesX(newPairV),d.cells(newPairC).verticesY(newPairV),d.cells(pairsPairC).verticesX(pairsPairV),d.cells(pairsPairC).verticesY(pairsPairV)))

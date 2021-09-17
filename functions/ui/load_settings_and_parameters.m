@@ -35,6 +35,7 @@ if option == 1
                     app.import.exportOptions = exportOptions;
                     app.cellParameters = import_settings([app.import.folderName '/cell_parameters.csv']);
                     app.import.cellParameters = app.cellParameters;
+                    app.defaultCellParameters = import_settings([app.defaultPath 'parameters/cell_parameters.txt']);
                     app.import.specificCellParameters = import_settings([app.import.folderName '/specific_cell_parameters.csv']);
                     app.import.systemParameters = import_settings([app.import.folderName '/system_parameters.csv']);
                     app.import.scaledParameters = import_settings([app.import.folderName '/scaled_parameters.csv']);

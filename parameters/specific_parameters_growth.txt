@@ -12,4 +12,3 @@ baseDivisionRate,5.67e-13
 divisionRateExponents,2.7
 maxMembraneAngle,1.047
 maxJunctionAngleConstant,0.6
-minimumCellSize,50e-12

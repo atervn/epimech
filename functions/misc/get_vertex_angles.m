@@ -1,9 +1,11 @@
 function cells = get_vertex_angles(cells)
 % GET_VERTEX_ANGLES Calculate the angles for each vertex
-%   The function takes in the main cell structure and goes through each
-%   cell to calculate both the outside angles between the previous and next
-%   boundary segment for each vertex. Finally, the cell structure
-%   is outputted.
+%   The function goes through each cells to calculate both the outside
+%   angles between the previous and next boundary segment for each vertex.
+%   INPUTS:
+%       cells: cell structure
+%   OUTPUT:
+%       cells: cell structure
 %   by Aapo Tervonen, 2021
 
 % go through the cells

@@ -4,14 +4,6 @@ empty0by1 = zeros(0,1);
 empty0by3 = zeros(0,3);
 emptyLogical = logical(zeros(0,1)); %#ok<LOGL>
 
-% possible junction stuff
-cells.possibleJunctionVertices = empty0by1;
-cells.possibleJunctions.pairCellIDs = empty0by1;
-cells.possibleJunctions.pairVertexIDs = empty0by1;
-cells.possibleJunctions.distances = empty0by1;
-cells.possibleJunctions.pairVerticesX = empty0by1;
-cells.possibleJunctions.pairVerticesY = empty0by1;
-
 % substrate stuff
 cells.substrate.points = empty0by3;
 cells.substrate.pointsLin = empty0by1;

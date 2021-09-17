@@ -54,7 +54,7 @@ end
 if any(d.simset.simulationType == [2,3,5])
     d = get_edge_vertices(d);
 end
-        
+
 %% Substrate
 
 d.sub = initialize_substrate_structure;

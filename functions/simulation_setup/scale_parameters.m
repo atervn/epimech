@@ -9,7 +9,12 @@ spar.fJunctions = app.cellParameters.fJunctions*app.systemParameters.scalingTime
 spar.fContact = app.cellParameters.fContact*app.systemParameters.scalingTime/app.systemParameters.eta;
 spar.perimeterConstant = app.cellParameters.perimeterConstant;
 spar.perimeterModelingRate = app.cellParameters.perimeterModelingRate*app.systemParameters.scalingTime;
-
+if isfield(app.cellParameters,'minimumCellSize')
+    spar.minimumCellSize = app.cellParameters.minimumCellSize/app.systemParameters.scalingLength^2;
+else
+    spar.minimumCellSize = app.defaultCellParameters.minimumCellSize/app.systemParameters.scalingLength^2;  
+end
+    
 if strcmp(app.simulationType,'growth')
     spar.fMembrane = app.specificCellParameters.fMembrane*app.systemParameters.scalingTime/app.systemParameters.eta;
     spar.fDivision = app.specificCellParameters.fDivision*app.systemParameters.scalingTime/app.systemParameters.eta/app.systemParameters.scalingLength;
@@ -27,8 +32,7 @@ if strcmp(app.simulationType,'growth')
     spar.junctionModificationTimeStep = app.systemParameters.junctionModificationTimeStep/app.systemParameters.scalingTime;
     spar.maximumGrowthTime = app.specificCellParameters.maximumGrowthTime/app.systemParameters.scalingTime;
     spar.maximumDivisionTime = app.specificCellParameters.maximumDivisionTime/app.systemParameters.scalingTime;
-    spar.minimumCellSize = app.specificCellParameters.minimumCellSize/app.systemParameters.scalingLength^2;
-    
+
 elseif strcmp(app.simulationType,'pointlike')
     spar.fMembrane = app.specificCellParameters.fMembrane*app.systemParameters.scalingTime/app.systemParameters.eta;
     spar.fEdgeCell = app.specificCellParameters.fEdgeCell*app.systemParameters.scalingTime/app.systemParameters.eta*app.cellParameters.membraneLength*1e6;

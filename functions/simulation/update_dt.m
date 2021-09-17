@@ -5,6 +5,13 @@ function dt = update_dt(d,dt,time,maxmaxMovement)
 %   lower than a set limit and so that the each "normal time step" time
 %   point is gone through (for the plotting and exporting at specific time
 %   points to work).
+%   INPUTS:
+%       d: main simulation data structure
+%       dt: current time step
+%       time: current simulation time
+%       maxmaxMovement: maximum movement of any cell vertex
+%   OUTPUT:
+%       dt: updated time step
 %   by Aapo Tervonen, 2021
 
 % if the current time step is lower than the maximum and the max vertex

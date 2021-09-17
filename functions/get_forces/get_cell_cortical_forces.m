@@ -58,7 +58,7 @@ if any(middleConcaveIdx)
     leftMultipliers = multipliersTemp(leftConcaveIdx);
     
     % remove the indices with concave vertex as their neighbor
-    leftConvexIdx(leftConcaveIdx) = [];%%%%
+    leftConvexIdx(leftConcaveIdx) = [];
     
     concaveRightLengths = cells.rightLengths(middleConcaveIdx);
     concaveLeftLengths = cells.leftLengths(middleConcaveIdx);
@@ -69,7 +69,7 @@ if any(middleConcaveIdx)
     concavesY = cells.verticesY(middleConcaveIdx);
     
     % calculate the force magnitudes (including the unit vector
-    % scaling) (leftConcaveIdx deliberate, since the has the same
+    % scaling) (leftConcaveIdx is deliberate, since the has the same
     % multiplier as the that on the other side of the concave vertex due to
     % the indexing: the first element of both rightSideConcaveIdx and
     % leftSideConcaveIdx both correspond to the same middleConcaveIdx

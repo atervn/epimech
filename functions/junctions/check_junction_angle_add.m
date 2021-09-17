@@ -1,4 +1,4 @@
-function angleCheck = check_junction_angle_adding(spar,cells,i,pairVerticesX,pairVerticesY,pairPreviousVectorsX,pairPreviousVectorsY,pairOutsideAngles)
+function angleCheck = check_junction_angle_add(spar,cells,i,pairVerticesX,pairVerticesY,pairPreviousVectorsX,pairPreviousVectorsY,pairOutsideAngles)
 
 % create a coordinate vector for the possible link
 junctionVectorX = pairVerticesX - cells.verticesX(i);

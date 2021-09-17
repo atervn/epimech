@@ -1,8 +1,16 @@
 function d = setup_division(d,k)
+% SETUP_DIVISION Define the division vertices
+%   The function finds the division vertices for the cell based on the
+%   cells axis and the daughter cell areas. It also removed the junctions
+%   from the division vertices.
+%   INPUTS:
+%       d: main simulation data structure
+%       k: current cell index
+%   OUTPUT:
+%       d: main simulation data structure
+%   by Aapo Tervonen, 2021
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIND THE DIVISION AXIS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FIND THE DIVISION AXIS
 
 % meshgrids for x and y coordinates for the distance measurements
 [gridX, gridY] = meshgrid(d.cells(k).verticesX,d.cells(k).verticesY);
@@ -31,9 +39,7 @@ end
 % calculate the orthogonal slope
 divisionSlope = -1/slope;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIND DIVISION LINE LOCATION
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FIND DIVISION LINE LOCATION
 
 % Halfway index between the MaxInds as the starting
 % position (tempVertex is the index of one end of the division line)
@@ -52,12 +58,7 @@ stopCondition = 0;
 % to first index or other way around
 passedFirst = 0;
 
-% jaa-a T?H?N J?I, T?? ON SEN TAKIA, ETT? JOS TUO VERTEXCANDIDATE
-% EI OO NOISTA KAHESTA PIENEMPI, NIIN SE K??NT?? TUON SOLUN TOISEN
-% PUOLEN!
-%         switchOppositeSide = 0;
-%         originalCandidate1 = vertexCandidate1;
-%
+% find the relative area for one of the new daughter cells
 areaMultiplier = d.cells(k).division.newAreas(2)/sum(d.cells(k).division.newAreas);
 
 % Iterative loop that goes through the vertices and finds the one the
@@ -71,10 +72,6 @@ areaMultiplier = d.cells(k).division.newAreas(2)/sum(d.cells(k).division.newArea
 % minimizing ones.
 while 1
     
-    %             if switchOppositeSide == 1
-    %                 oppositeSide = (min(maxInds):max(maxInds));
-    %             end
-    %
     % calculates the distance between a line through vertexCandidate1
     % with slope divisionSlope and the vertices in oppositeSide
     % (https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line)
@@ -86,9 +83,10 @@ while 1
     % index of the vertex closest to the line in the boundaryVertices
     vertexCandidate2 = oppositeSide(idx);
     
-    VertexCandidates = [vertexCandidate1 vertexCandidate2];
-    vertexCandidate1 = min(VertexCandidates);
-    vertexCandidate2 = max(VertexCandidates);
+    % reorder the vertex candidates
+    vertexCandidates = [vertexCandidate1 vertexCandidate2];
+    vertexCandidate1 = min(vertexCandidates);
+    vertexCandidate2 = max(vertexCandidates);
     
     % switch the other side if the vertex with small index is in
     % the current opposite side
@@ -226,56 +224,69 @@ end
 % get divisionDistance
 d.cells(k).division.distanceSq = d.spar.divisionDistanceConstant*((d.cells(k).verticesX(d.cells(k).division.vertices(1)) - d.cells(k).verticesX(d.cells(k).division.vertices(2)))^2 + (d.cells(k).verticesY(d.cells(k).division.vertices(1)) - d.cells(k).verticesY(d.cells(k).division.vertices(2)))^2);
 
+% go through the division vertices to check if they have junctions
 for i = 1:2
-    % checks if the division vertex is bound
+    % checks if the division vertex has junctions
     if d.cells(k).vertexStates(d.cells(k).division.vertices(i)) > 0
+        
+        % go through the junctions
         for i2 = 1:d.cells(k).vertexStates(d.cells(k).division.vertices(i))
             
-            cellid = d.cells(k).junctions.cells(d.cells(k).division.vertices(i),i2);
-            vertexid = d.cells(k).junctions.vertices(d.cells(k).division.vertices(i),i2);
+            % get the pair indices
+            cellID = d.cells(k).junctions.cells(d.cells(k).division.vertices(i),i2);
+            vertexID = d.cells(k).junctions.vertices(d.cells(k).division.vertices(i),i2);
             
-            whichJunction = find(d.cells(cellid).junctions.cells(vertexid,:) == k);
+            % find which junction this is for the pair
+            whichJunction = find(d.cells(cellID).junctions.cells(vertexID,:) == k);
             
             % remove the junction information of the vertex the
             % division vertex was bound with
-            d.cells(cellid).junctions.cells(vertexid,whichJunction) = 0;
-            d.cells(cellid).junctions.vertices(vertexid,whichJunction) = 0;
+            d.cells(cellID).junctions.cells(vertexID,whichJunction) = 0;
+            d.cells(cellID).junctions.vertices(vertexID,whichJunction) = 0;
             
+            % if this is the first junction for the pair
             if whichJunction == 1
-                if d.cells(cellid).junctions.cells(vertexid,2) ~= 0
-                    idx = d.cells(cellid).junctions.linkedIdx1 == vertexid;
-                    d.cells(cellid).junctions.pairCells1(idx) = d.cells(cellid).junctions.cells(vertexid,2);
-                    d.cells(cellid).junctions.pairVertices1(idx) = d.cells(cellid).junctions.vertices(vertexid,2);
-                    d.cells(cellid).junctions.cells(vertexid,1) = d.cells(cellid).junctions.cells(vertexid,2);
-                    d.cells(cellid).junctions.vertices(vertexid,1) = d.cells(cellid).junctions.vertices(vertexid,2);
-                    d.cells(cellid).junctions.cells(vertexid,2) = 0;
-                    d.cells(cellid).junctions.vertices(vertexid,2) = 0;
-                    idx = d.cells(cellid).junctions.linkedIdx2 == vertexid;
-                    
-                    d.cells(cellid).junctions.linkedIdx2(idx) = [];
-                    d.cells(cellid).junctions.pairCells2(idx) = [];
-                    d.cells(cellid).junctions.pairVertices2(idx) = [];
-                    
-                    
-                else
-                    idx = d.cells(cellid).junctions.linkedIdx1 == vertexid;
-                    
-                    d.cells(cellid).junctions.linkedIdx1(idx) = [];
-                    d.cells(cellid).junctions.pairCells1(idx) = [];
-                    d.cells(cellid).junctions.pairVertices1(idx) = [];
-                end
-            else
-                idx = d.cells(cellid).junctions.linkedIdx2 == vertexid;
                 
-                d.cells(cellid).junctions.linkedIdx2(idx) = [];
-                d.cells(cellid).junctions.pairCells2(idx) = [];
-                d.cells(cellid).junctions.pairVertices2(idx) = [];
+                % check if there is a second junction, if yes move the
+                % junction data from the second position to the first and
+                % remove the junction data related to new division vertex
+                if d.cells(cellID).junctions.cells(vertexID,2) ~= 0
+                    idx = d.cells(cellID).junctions.linkedIdx1 == vertexID;
+                    d.cells(cellID).junctions.pairCells1(idx) = d.cells(cellID).junctions.cells(vertexID,2);
+                    d.cells(cellID).junctions.pairVertices1(idx) = d.cells(cellID).junctions.vertices(vertexID,2);
+                    d.cells(cellID).junctions.cells(vertexID,1) = d.cells(cellID).junctions.cells(vertexID,2);
+                    d.cells(cellID).junctions.vertices(vertexID,1) = d.cells(cellID).junctions.vertices(vertexID,2);
+                    d.cells(cellID).junctions.cells(vertexID,2) = 0;
+                    d.cells(cellID).junctions.vertices(vertexID,2) = 0;
+                    idx = d.cells(cellID).junctions.linkedIdx2 == vertexID;
+                    
+                    
+                    d.cells(cellID).junctions.linkedIdx2(idx) = [];
+                    d.cells(cellID).junctions.pairCells2(idx) = [];
+                    d.cells(cellID).junctions.pairVertices2(idx) = [];
+                    
+                % if there is only one junction, just remove the data
+                else
+                    idx = d.cells(cellID).junctions.linkedIdx1 == vertexID;
+                    
+                    d.cells(cellID).junctions.linkedIdx1(idx) = [];
+                    d.cells(cellID).junctions.pairCells1(idx) = [];
+                    d.cells(cellID).junctions.pairVertices1(idx) = [];
+                end
+            
+            % if this is pais second junction, just remove the data
+            else
+                idx = d.cells(cellID).junctions.linkedIdx2 == vertexID;
+                
+                d.cells(cellID).junctions.linkedIdx2(idx) = [];
+                d.cells(cellID).junctions.pairCells2(idx) = [];
+                d.cells(cellID).junctions.pairVertices2(idx) = [];
                 
             end
             
             % change the state of the vertex the division vertex was
             % bound with to a nonbound state
-            d.cells(cellid).vertexStates(vertexid) = sum(d.cells(cellid).junctions.cells(vertexid,:) > 0);
+            d.cells(cellID).vertexStates(vertexID) = sum(d.cells(cellID).junctions.cells(vertexID,:) > 0);
             
             % remove the junction information of the division vertex
             d.cells(k).junctions.cells(d.cells(k).division.vertices(i),i2) = 0;
@@ -298,9 +309,9 @@ for i = 1:2
         end
 
     end
+    
     % change the vertex state to division vertex
     d.cells(k).vertexStates(d.cells(k).division.vertices(i)) = -1;
-    
 end
 
 end

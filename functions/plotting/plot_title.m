@@ -5,7 +5,7 @@ switch d.pl.titleType
         if d.simset.simulationType == 1
             timeString = separate_times(d,time*d.spar.scalingTime);
 %             title(d.pl.axesHandle,['Time: ' timeString '; nCells: ' num2str(length(d.cells)) '; tLoop: ' num2str(loopTime,'%05.3f') ' s; tPlot: ' num2str(plottingTime,'%05.3f') ' s; tCell:' num2str(loopTime/length(d.cells)*(3600/d.spar.scalingTime/d.pl.plotDt),'%05.3f')]);
-            title(d.pl.axesHandle,['Time: ' timeString '; nCells: ' num2str(length(d.cells)) '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str(loopTime/length(d.cells)*(3600/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
+            title(d.pl.axesHandle,['Time: ' timeString '; nCells: ' num2str(length(d.cells)) '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str((loopTime - plottingTime)/length(d.cells)*(3600/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
         elseif d.simset.simulationType == 2
             timeString = separate_times(d,time*d.spar.scalingTime);
 %             title(d.pl.axesHandle,['Time: ' timeString '; tLoop: ' num2str(loopTime,'%05.3f') ' s; tPlot: ' num2str(plottingTime,'%05.3f') ' s; tCell:' num2str(loopTime/length(d.cells)*(0.001/d.spar.scalingTime/d.pl.plotDt),'%05.3f')]);

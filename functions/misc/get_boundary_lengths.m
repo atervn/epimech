@@ -1,10 +1,13 @@
 function cells = get_boundary_lengths(cells)
 % GET_BOUNDARY_LENGTHS Calculate the lengths between neighboring vertices
-%   The function takes in the main cell structure and goes through each
-%   cell to calculate the lengths for both the left (counterclockwise) and right (clockwise) sided 
-%   boundary segment between the vertices. Both sides are calculate the
-%   reduce the need to use circshift later. Finally, the cell structure
-%   is outputted.  
+%   The function goes through each cell to calculate the lengths for both
+%   the left (counterclockwise) and right (clockwise) sided  boundary
+%   segment between the vertices. Both sides are calculate the reduce the
+%   need to use circshift later.
+%   INPUTS:
+%       cells: cell structure
+%   OUTPUT:
+%       cells: cell structure
 %   by Aapo Tervonen, 2021
 
 % go through the cells

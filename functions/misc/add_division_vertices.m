@@ -1,136 +1,216 @@
-function cells = add_division_vertices(cells, k, switched, newIdx, newRightX, newRightY, newLeftX, newLeftY)
+function d = add_division_vertices(d, k, divisionVertex, divisionVertexRight, divisionVertexLeft)
+% ADD_DIVISION_VERTICES Adds new vertices on both sides of a division
+% vertex
+%   The function adds new vertices one both sides of a division vertex if
+%   the current neighbors are too far apart.
+%   INPUTS:
+%       d: main simulation data structure
+%       k: current cell index
+%       divisionVertex: one of the division vertices
+%       divisionVertexRight: index of the vertex on the right side of the
+%           division vertex
+%       divisionVertexLeft: index of the vertex on the left side of the
+%           division vertex
+%   OUTPUT:
+%       d: main simulation data structure
+%   by Aapo Tervonen, 2021
 
-% goes through the too long sections, if no, skips this step
-for i = 1:length(newIdx)
+% distance between the division vertex and the left and
+% right neighbors
+distanceLeft = sqrt((d.cells(k).verticesX(divisionVertexLeft) - d.cells(k).verticesX(divisionVertex))^2 + (d.cells(k).verticesY(divisionVertexLeft) - d.cells(k).verticesY(divisionVertex))^2);
+distanceRight = sqrt((d.cells(k).verticesX(divisionVertexRight) - d.cells(k).verticesX(divisionVertex))^2 + (d.cells(k).verticesY(divisionVertexRight) - d.cells(k).verticesY(divisionVertex))^2);
+
+% unit vectors from the division vertex towards the two
+% neighbors
+leftUnitX = (d.cells(k).verticesX(divisionVertexLeft) - d.cells(k).verticesX(divisionVertex))/distanceLeft;
+leftUnitY = (d.cells(k).verticesY(divisionVertexLeft) - d.cells(k).verticesY(divisionVertex))/distanceLeft;
+rightUnitX = (d.cells(k).verticesX(divisionVertexRight) - d.cells(k).verticesX(divisionVertex))/distanceRight;
+rightUnitY = (d.cells(k).verticesY(divisionVertexRight) - d.cells(k).verticesY(divisionVertex))/distanceRight;
+
+% find the distance that has to be travelled from the
+% division vertex 1 towards both neighbors that will
+% produce the distance of normal junction length between
+% these two locations
+distanceFromDivVertex = sqrt(d.spar.junctionLength^2/((leftUnitX - rightUnitX)^2 + (leftUnitY - rightUnitY)^2));
+
+% find the coordinates of the new vertices separted by the
+% normal junction length
+newCoords.LeftX = d.cells(k).verticesX(divisionVertex) + distanceFromDivVertex*leftUnitX;
+newCoords.LeftY = d.cells(k).verticesY(divisionVertex) + distanceFromDivVertex*leftUnitY;
+newCoords.RightX = d.cells(k).verticesX(divisionVertex) + distanceFromDivVertex*rightUnitX;
+newCoords.RightY = d.cells(k).verticesY(divisionVertex) + distanceFromDivVertex*rightUnitY;
+
+% check if the original right neighbor is the last vertex
+% in the cell, if yes, put the left neighbor first, since
+% it has a smaller index
+if divisionVertexRight == d.cells(k).nVertices
+    vertexIdx = [divisionVertexLeft divisionVertexRight];
+    leftIndexSmaller = 1;
+else
+    vertexIdx = [divisionVertexRight divisionVertexLeft];
+    leftIndexSmaller = 0;
+end
+
+% goes through the neighboring vertices
+for i = 1:2
     
-    if switched
+    % if left neighbor has smaller index
+    if leftIndexSmaller
+        
+        % left neighbor
         if i == 1
-            if newIdx(i) == 1
-                newIdx(i) = cells(k).nVertices;
+            
+            % if the left neighbor index is 1
+            if vertexIdx(i) == 1
+                
+                % set the newIndex to the last index (since the new point
+                % is added following a vertex, not before it)
+                vertexIdx(i) = d.cells(k).nVertices;
             else
-                newIdx(i) = newIdx(i) - 1;
+                
+                % otherwise, get the previous index
+                vertexIdx(i) = vertexIdx(i) - 1;
             end
-            newVertexX = newLeftX;
-            newVertexY = newLeftY;
+            
+            % the new vertex coordinates
+            newVertexX = newCoords.LeftX;
+            newVertexY = newCoords.LeftY;
+            
+        % right neighbor
         elseif i == 2
-            newVertexX = newRightX;
-            newVertexY = newRightY;
+            
+            % the new vertex coordinates
+            newVertexX = newCoords.RightX;
+            newVertexY = newCoords.RightY;
         end
+     
+    % if right neighbor has smaller index
     else
+        
+        % right neighbor
         if i == 1
-            newVertexX = newRightX;
-            newVertexY = newRightY;
+            
+            % the new vertex coordinates
+            newVertexX = newCoords.RightX;
+            newVertexY = newCoords.RightY;
+            
+        % left neighbor
         elseif i == 2
-            newIdx(i) = newIdx(i) - 1;
-            newVertexX = newLeftX;
-            newVertexY = newLeftY;
+            
+            % reduce the index by one and get the new vertex coordinates
+            vertexIdx(i) = vertexIdx(i) - 1;
+            newVertexX = newCoords.LeftX;
+            newVertexY = newCoords.LeftY;
         end
     end
     
     % the case when too long section is the last one is dealt separately
-    if newIdx(i) < cells(k).nVertices
+    if vertexIdx(i) < d.cells(k).nVertices
         
         % add the new vertex into the boundaryVertices matrix
-        cells(k).verticesX = [cells(k).verticesX(1:newIdx(i)) ; newVertexX ; cells(k).verticesX(newIdx(i)+1:end)];
-        cells(k).verticesY = [cells(k).verticesY(1:newIdx(i)) ; newVertexY ; cells(k).verticesY(newIdx(i)+1:end)];
+        d.cells(k).verticesX = [d.cells(k).verticesX(1:vertexIdx(i)) ; newVertexX ; d.cells(k).verticesX(vertexIdx(i)+1:end)];
+        d.cells(k).verticesY = [d.cells(k).verticesY(1:vertexIdx(i)) ; newVertexY ; d.cells(k).verticesY(vertexIdx(i)+1:end)];
         
         % add the new vertex into the vertexStates vector
-        cells(k).vertexStates = [cells(k).vertexStates(1:newIdx(i)) ; 0 ; cells(k).vertexStates(newIdx(i)+1:end)];
+        d.cells(k).vertexStates = [d.cells(k).vertexStates(1:vertexIdx(i)) ; 0 ; d.cells(k).vertexStates(vertexIdx(i)+1:end)];
         
         % update the divisionVertices vector
-        cells(k).division.vertices = cells(k).division.vertices + 1.*(cells(k).division.vertices > newIdx(i));
+        d.cells(k).division.vertices = d.cells(k).division.vertices + 1.*(d.cells(k).division.vertices > vertexIdx(i));
         
         % add the new vertex into the junctions matrix
-        cells(k).junctions.cells = [cells(k).junctions.cells(1:newIdx(i),:) ; [0 0] ; cells(k).junctions.cells(newIdx(i)+1:end,:)];
-        cells(k).junctions.vertices = [cells(k).junctions.vertices(1:newIdx(i),:) ; [0 0] ; cells(k).junctions.vertices(newIdx(i)+1:end,:)];
+        d.cells(k).junctions.cells = [d.cells(k).junctions.cells(1:vertexIdx(i),:) ; [0 0] ; d.cells(k).junctions.cells(vertexIdx(i)+1:end,:)];
+        d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(1:vertexIdx(i),:) ; [0 0] ; d.cells(k).junctions.vertices(vertexIdx(i)+1:end,:)];
 
-        originals = cells(k).vertexCorticalTensions;
-        if newIdx(i) == 1
-            cells(k).vertexCorticalTensions(1) = (originals(end) + originals(1))./2;
-            cells(k).vertexCorticalTensions = [cells(k).vertexCorticalTensions(1) ; (originals(end) + originals(1))./2 ; cells(k).vertexCorticalTensions(2:end)];
-        else
-            cells(k).vertexCorticalTensions(newIdx(i)) = (originals(newIdx(i)-1) + originals(newIdx(i)))./2;
-            cells(k).vertexCorticalTensions = [cells(k).vertexCorticalTensions(1:newIdx(i)) ; (originals(newIdx(i)-1) + originals(newIdx(i)))./2 ; cells(k).vertexCorticalTensions(newIdx(i)+1:end)];
-        end
+        % modify the vertex cortical tensions
+        originals = d.cells(k).vertexCorticalTensions;
         
+        % if first index
+        if vertexIdx(i) == 1
+            
+            % modify the cortical tensions of the vertices on both sides of
+            % the new vertex
+            d.cells(k).vertexCorticalTensions = [(originals(end) + originals(1))./2 ; (originals(end) + originals(1))./2 ; d.cells(k).vertexCorticalTensions(2:end)];
+        
+        % otherwise
+        else
+            
+            % modify the cortical tensions of the vertices on both sides of
+            % the new vertex
+            d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(1:vertexIdx(i)-1) ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; d.cells(k).vertexCorticalTensions(vertexIdx(i)+1:end)];
+        end
+    
+    % last vertex in the cell
     else
         
         % add the new vertex into the boundaryVertices matrix
-        cells(k).verticesX = [cells(k).verticesX ; newVertexX];
-        cells(k).verticesY = [cells(k).verticesY ; newVertexY];
+        d.cells(k).verticesX = [d.cells(k).verticesX ; newVertexX];
+        d.cells(k).verticesY = [d.cells(k).verticesY ; newVertexY];
         
         % add the new vertex into the vertexStates vector
-        cells(k).vertexStates = [cells(k).vertexStates ; 0];
+        d.cells(k).vertexStates = [d.cells(k).vertexStates ; 0];
         
         % add the new vertex into the junctions matrix
-        cells(k).junctions.cells = [cells(k).junctions.cells ; [0 0]];
-        cells(k).junctions.vertices = [cells(k).junctions.vertices ; [0 0]];
+        d.cells(k).junctions.cells = [d.cells(k).junctions.cells ; [0 0]];
+        d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices ; [0 0]];
 
-        originals = cells(k).vertexCorticalTensions;
-        cells(k).vertexCorticalTensions(end) = (originals(end-1) + originals(end))./2;
-        cells(k).vertexCorticalTensions = [cells(k).vertexCorticalTensions ; (originals(end-1) + originals(end))./2;];
+        % modify the cortical tensions on both sides of the new vertex by
+        % setting them to the average of the two cortical links that span
+        % over the new vertex
+        originals = d.cells(k).vertexCorticalTensions;
+        d.cells(k).vertexCorticalTensions(end) = (originals(end-1) + originals(end))./2;
+        d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions ; (originals(end-1) + originals(end))./2;];
         
     end
     
-    % increase the indices of the following too long sections as a
-    % vertex was added into the cell
+    % update the number of vertices
+    d.cells(k).nVertices = d.cells(k).nVertices + 1;
     
-    cells(k).nVertices = cells(k).nVertices + 1;
+    % find the vertices that have at least one junction and those that have
+    % two junctions
+    d.cells(k).junctions.linkedIdx1 = find(d.cells(k).vertexStates > 0);
+    d.cells(k).junctions.linkedIdx2 = find(d.cells(k).vertexStates == 2);
     
-    cells(k).junctions.linkedIdx1 = find(cells(k).vertexStates > 0);
-    cells(k).junctions.linkedIdx2 = find(cells(k).vertexStates == 2);
-    
-    junctions2UpdateIdx = cells(k).junctions.linkedIdx1;
-    
-    junctions2UpdateIdx(junctions2UpdateIdx <= newIdx(i)) = [];
-    
-    if numel(junctions2UpdateIdx) > 0
-        for j = junctions2UpdateIdx'
+    % go through the first and second junctions
+    for j = 1:2
+        
+        % temporary variable
+        if j == 1   
+            junctions2UpdateIdx = d.cells(k).junctions.linkedIdx1;
+        else
+            junctions2UpdateIdx = d.cells(k).junctions.linkedIdx2;
+        end
+        
+        % remove indices for vertices that were not affected by the new vertex
+        junctions2UpdateIdx(junctions2UpdateIdx <= vertexIdx(i)) = [];
+        
+        % if these vertices exist
+        if numel(junctions2UpdateIdx) > 0
             
-            % temporary index
-            cellID = cells(k).junctions.cells(j,1);
-            vertexID = cells(k).junctions.vertices(j,1);
-            
-            whichJunction = cells(cellID).junctions.cells(vertexID,:) == k;
-            
-            % update the junction pairs
-            cells(cellID).junctions.vertices(vertexID,whichJunction) = cells(cellID).junctions.vertices(vertexID,whichJunction) + 1;
-            
-            if whichJunction == 1
-                tempIdx2 = cells(cellID).junctions.linkedIdx1 == vertexID;
-                cells(cellID).junctions.pairVertices1(tempIdx2) = cells(cellID).junctions.pairVertices1(tempIdx2) + 1;
-            else
-                tempIdx2 = cells(cellID).junctions.linkedIdx2 == vertexID;
-                cells(cellID).junctions.pairVertices2(tempIdx2) = cells(cellID).junctions.pairVertices2(tempIdx2) + 1;
+            % go through the junctions
+            for j2 = junctions2UpdateIdx'
+                
+                % temporary indices
+                cellID = d.cells(k).junctions.cells(j2,j);
+                vertexID = d.cells(k).junctions.vertices(j2,j);
+                
+                % find if this is the first or decond junction for the pair
+                whichJunction = d.cells(cellID).junctions.cells(vertexID,:) == k;
+                
+                % update the junction pairs
+                d.cells(cellID).junctions.vertices(vertexID,whichJunction) = d.cells(cellID).junctions.vertices(vertexID,whichJunction) + 1;
+                
+                % update the pairVertices vectors for the pair
+                if whichJunction == 1
+                    tempIdx = d.cells(cellID).junctions.linkedIdx1 == vertexID;
+                    d.cells(cellID).junctions.pairVertices1(tempIdx) = d.cells(cellID).junctions.pairVertices1(tempIdx) + 1;
+                else
+                    tempIdx = d.cells(cellID).junctions.linkedIdx2 == vertexID;
+                    d.cells(cellID).junctions.pairVertices2(tempIdx) = d.cells(cellID).junctions.pairVertices2(tempIdx) + 1;
+                end
             end
         end
     end
     
-    junctions2UpdateIdx = cells(k).junctions.linkedIdx2;
-    
-    junctions2UpdateIdx(junctions2UpdateIdx <= newIdx(i)) = [];
-    
-    if numel(junctions2UpdateIdx) > 0
-        for j = junctions2UpdateIdx'
-            
-            % temporary index
-            cellID = cells(k).junctions.cells(j,2);
-            vertexID = cells(k).junctions.vertices(j,2);
-            
-            whichJunction = cells(cellID).junctions.cells(vertexID,:) == k;
-            
-            % update the junction pairs
-            cells(cellID).junctions.vertices(vertexID,whichJunction) = cells(cellID).junctions.vertices(vertexID,whichJunction) + 1;
-            
-            if whichJunction == 1
-                tempIdx2 = cells(cellID).junctions.linkedIdx1 == vertexID;
-                cells(cellID).junctions.pairVertices1(tempIdx2) = cells(cellID).junctions.pairVertices1(tempIdx2) + 1;
-            else
-                tempIdx2 = cells(cellID).junctions.linkedIdx2 == vertexID;
-                cells(cellID).junctions.pairVertices2(tempIdx2) = cells(cellID).junctions.pairVertices2(tempIdx2) + 1;
-            end
-        end
-    end
-    
-    newIdx = newIdx + 1;
+    % add one to the new indices
+    vertexIdx = vertexIdx + 1;
 end

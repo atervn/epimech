@@ -1,9 +1,15 @@
 function angles = get_angles(vector1X, vector1Y, vector2X, vector2Y)
 % GET_ANGLES Calculate the angles between two vectors
-%   The function takes in the vector components of two vectors meeting in
-%   a vertex and calculates the angle between the vectors. It assumes that
-%   the first vector is directed towards the vertex and the second vector
-%   is directed away from the vertex
+%   The function calculates the angles between the vectors meeting at a
+%   vertex. It assumes that the first vector is directed towards the vertex
+%   and the second vector is directed away from the vertex
+%   INPUTS:
+%       vector1X: x-components of the first vector
+%       vector1Y: y-components of the first vector
+%       vector2X: x-components of the second vector
+%       vector2Y: y-components of the second vector
+%   OUTPUT:
+%       angles: the calculate vertex angles
 %   by Aapo Tervonen, 2021
 
 % get the outside angles between the two vectors
