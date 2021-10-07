@@ -1,21 +1,23 @@
 function cells = get_cell_cortical_forces(cells,spar)
-% CALCULATE_CORTICAL_FORCE Calculates the forces from actin cortex
-%   Calculates the forces that originate from the cortical actin and are
-%   calculate between every other vertex. If a vertex is concave, the link
-%   that connects its neighboring vertices travels "behind" the concave
-%   vertex. This means that the forces imposed on the neighboring vertices
-%   are directed towards the concave point and the link length equals the
-%   sum of the distances between the concave vertex and both of the
-%   neighboring vertices. This link also pushes the concave vertex outwards
-%   at the same time
+% GET_CORTICAL_FORCE Calculate the forces from actin cortex
+%   The function calculates the forces that originate from the cortical
+%   actin and are defined between every other vertex. If a vertex is
+%   concave, the link that connects its neighboring vertices travels
+%   "behind" the concave vertex. This means that the forces imposed on the
+%   neighboring vertices are directed towards the concave point and the
+%   link length equals the sum of the distances between the concave vertex
+%   and both of the neighboring vertices. This link also pushes the concave
+%   vertex outwards at the same time
 %   INPUTS:
-%       cells: contains the cell data
-%       spar: scaled parameters
+%       cells: single cell data structure
+%       spar: scaled parameter structure
 %   OUTPUT:
-%       cells: cell data including the cortical forces for each vertex
+%       cells: single cell data structure
+%   by Aapo Tervonen, 2021
 
+% calculate the magnitude of each cortical force based on the perimeter
+% strain
 tempMagnitude = (1 + cells.perimeterConstant.*(cells.perimeter - cells.normPerimeter)/cells.normPerimeter).*spar.fCortex;
-% tempMagnitude = cells.corticalTension;
 
 % make a vector with the vertex indices
 cellIdx= uint32(1:cells.nVertices);
@@ -46,7 +48,6 @@ middleConcaveIdx = cells.outsideAngles < pi;
 
 multipliersTemp = cells.vertexCorticalTensions;
 
-
 % if there are concave vertices
 if any(middleConcaveIdx)
     
@@ -55,16 +56,21 @@ if any(middleConcaveIdx)
     rightConcaveIdx = leftIdx(middleConcaveIdx);
     leftConcaveIdx = rightIdx(middleConcaveIdx);
     
+    % get the cortical multipliers for the left side focal adhesions
     leftMultipliers = multipliersTemp(leftConcaveIdx);
     
     % remove the indices with concave vertex as their neighbor
     leftConvexIdx(leftConcaveIdx) = [];
     
+    % get the right and left side lengths for the concave vertices
     concaveRightLengths = cells.rightLengths(middleConcaveIdx);
     concaveLeftLengths = cells.leftLengths(middleConcaveIdx);
     
+    % calculate the lengths of the focal adhesion links that travel around
+    % the convave vertex
     totalConcaveDistance = concaveLeftLengths + concaveRightLengths;
 
+    % get the concave vertex coordinates
     concavesX = cells.verticesX(middleConcaveIdx);
     concavesY = cells.verticesY(middleConcaveIdx);
     
@@ -80,7 +86,6 @@ if any(middleConcaveIdx)
     % neighbors
     rightConcaveForcesX(rightConcaveIdx) = forceMagnitudes.*(concavesX - cells.verticesX(rightConcaveIdx));
     rightConcaveForcesY(rightConcaveIdx) = forceMagnitudes.*(concavesY - cells.verticesY(rightConcaveIdx));
-    
     
     % calculate the force magnitudes (including the unit vector
     % scaling)
@@ -114,7 +119,12 @@ rightConvexForcesY = -leftConvexForcesY(mirrorIdx);
 cells.forces.corticalX = rightConvexForcesX + leftConvexForcesX + rightConcaveForcesX + leftConcaveForcesX + middleConcaveForcesX;
 cells.forces.corticalY = rightConvexForcesY + leftConvexForcesY + rightConcaveForcesY + leftConcaveForcesY + middleConcaveForcesY;
 
+% if the cell is in cytokinesis, set the cortical force to zero for the
+% division vertices (the cortical force would hinder the rate of the
+% division significantly)
 if cells.division.state == 2
     cells.forces.corticalX(cells.division.vertices) = 0;
     cells.forces.corticalY(cells.division.vertices) = 0;
+end
+
 end

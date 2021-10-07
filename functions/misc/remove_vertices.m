@@ -24,7 +24,7 @@ for k = length(d.cells):-1:1
     %% Removal by angle
     
     % find the vertices with too large or small angles
-    vertices2Remove = find(d.cells(k).outsideAngles < d.spar.maxMembraneAngle + d.cells(k).outsideAngles > 2*pi-d.spar.maxMembraneAngle);
+    vertices2Remove = find((d.cells(k).outsideAngles < d.spar.maxMembraneAngle) + (d.cells(k).outsideAngles > 2*pi-d.spar.maxMembraneAngle));
     
     % if cell is in cytokinesis, remove the division vertices from the
     % vertices to be removed if they are included
@@ -52,17 +52,20 @@ for k = length(d.cells):-1:1
                 cellRemoved = 1;
                 break
             end
-        end      
+        end  
+        
+        % calculate lengths, vectors, areas and update the number of
+        % vertices
+        d.cells(k) = get_boundary_vectors(d.cells(k));
+        d.cells(k) = get_boundary_lengths(d.cells(k));
+        d.cells(k) = get_vertex_angles(d.cells(k));
+        d.cells(k).nVertices = size(d.cells(k).verticesX,1);
     end
     
     %% Remove by length
     
     % if the cell is not to be removed
     if ~cellRemoved
-        
-        % calculate vectors and lengths
-        d.cells(k) = get_boundary_vectors(d.cells(k));
-        d.cells(k) = get_boundary_lengths(d.cells(k));
         
         % find boundary sections that are too short
         vertices2Remove = find(d.cells(k).leftLengths < lengthLimit);

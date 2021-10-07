@@ -155,7 +155,7 @@ d = setup_frame(d);
 
 %% Plotting
 
-d = set_plotting_options(app,'simulate',d);
+d = setup_plotting_options(app,'simulate',d);
 
 %% Export
 

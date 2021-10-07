@@ -85,9 +85,7 @@ set(panUtil,'ActionPostCallback',{@zoomCallBack,d.spar,d.pl,app});
         
         figureSize = evd.Source.Position(3:4);
         bottomGap = 10/figureSize(2);
-        if any(pl.titleType == [2 4 8])
-            topGap = 20/figureSize(2) + 2*axesHandle.Title.FontSize/figureSize(2);
-        elseif isfield(pl,'extraTitleType') && pl.extraTitleType == 2
+        if pl.nTitleLines == 2
             topGap = 20/figureSize(2) + 2*axesHandle.Title.FontSize/figureSize(2);
         else
             topGap = 20/figureSize(2) + axesHandle.Title.FontSize/figureSize(2);

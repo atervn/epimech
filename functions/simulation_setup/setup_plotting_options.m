@@ -1,4 +1,4 @@
-function d = set_plotting_options(app, plotCase,d,varargin)
+function d = setup_plotting_options(app, plotCase,d,varargin)
 
 if strcmp(plotCase,'simulate') && ~app.ShowanimationCheckBox.Value
     d.pl = struct();
@@ -12,6 +12,7 @@ switch plotCase
         d.pl = app.plottingOptions;
         d.pl.plotType = 1;
         d.pl.titleType = 1;
+        d.pl.nTitleLines = 1;
         d.pl.maxTime = app.systemParameters.simulationTime;
         d.pl.plotDt = app.plottingOptions.plotDtMultiplier*d.spar.maximumTimeStep;
         d.pl.highlightType = 0;
@@ -24,6 +25,7 @@ switch plotCase
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
         d.pl.titleType = 2;
+        d.pl.nTitleLines = 2;
         d.pl.maxTime = app.import.scaledParameters.simulationTime*app.import.scaledParameters.scalingTime;
         d.pl.plotDt = app.import.scaledParameters.maximumTimeStep;
         d.pl.highlightType = 0;
@@ -36,6 +38,7 @@ switch plotCase
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
         d.pl.titleType = 3;
+        d.pl.nTitleLines = 1;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
         d.pl.highlightType = 0;
@@ -46,6 +49,7 @@ switch plotCase
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
         d.pl.titleType = 4;
+        d.pl.nTitleLines = 1;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
         d.pl.highlightType = 3;
@@ -55,37 +59,68 @@ switch plotCase
     case 'remove_with_shape'
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 3;
-        d.pl.titleType = 4;
+        d.pl.titleType = 5;
+        d.pl.nTitleLines = 1;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
-        d.pl.highlightType = 3;
+        d.pl.highlightType = 5;
         d.pl.highlightedCells = [];
         d.pl.windowSize = app.plottingOptions.windowSize;
         d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
-    case 'opto_cell'
+    case 'show_substrate_size'
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        d.pl.plotType = 2;
-        d.pl.titleType = 9;
+        d.pl.plotType = 4;
+        d.pl.titleType = 6;
+        d.pl.nTitleLines = 1;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
-        d.pl.highlightType = 4;
-        d.pl.highlightedCells = app.optoVertices;
+        d.pl.highlightType = 0;
+        d.pl.highlightedCells = [];
         d.pl.windowSize = app.plottingOptions.windowSize;
         d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
+    case 'select_pointlike_cell'
+        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+        d.pl.plotType = 2;
+        d.pl.titleType = 7;
+        d.pl.nTitleLines = 1;
+        d.pl.maxTime = 0;
+        d.pl.plotDt = 1;
+        d.pl.highlightType = 3;
+        d.pl.highlightedCells = app.pointlikeProperties.cell;
+        d.pl.windowSize = app.plottingOptions.windowSize;
+        d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
+    case 'post'
+        d.pl = app.importPlottingOptions;
+        d.pl.plotType = 2;
+        d.pl.titleType = 8;
+        d.pl.nTitleLines = 1;
+        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+        d = get_highlighted_cells(app,d);
+        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    case 'post_browse'
+        d.pl = app.importPlottingOptions;
+        d.pl.plotType = 2;
+        d.pl.titleType = 2;
+        d.pl.nTitleLines = 2;
+        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+        d = get_highlighted_cells(app,d);
+        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    case 'post_animation'
+        d.pl = app.importPlottingOptions;
+        d.pl.plotType = 2;
+        d.pl.titleType = 8;
+        d.pl.nTitleLines = 1;
+        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+        d = get_highlighted_cells(app,d);
+        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
     case 'opto_area'
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
-        d.pl.titleType = 10;
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        d.pl.highlightType = 4;
-        d.pl.highlightedCells = app.optoVertices;
-        d.pl.windowSize = app.plottingOptions.windowSize;
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
-    case 'opto_remove'
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        d.pl.plotType = 2;
-        d.pl.titleType = 11;
+        d.pl.titleType = 9;
+        d.pl.nTitleLines = 2;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
         d.pl.highlightType = 4;
@@ -95,66 +130,14 @@ switch plotCase
     case 'opto_post_cell'
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
-        d.pl.titleType = 12;
+        d.pl.titleType = 10;
+        d.pl.nTitleLines = 2;
         d.pl.maxTime = 0;
         d.pl.plotDt = 1;
         d.pl.highlightType = 3;
         d.pl.highlightedCells = app.plotImport(app.selectedFile).optoSelectedCells;
         d.pl.windowSize = app.importPlottingOptions.windowSize;
         d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
-    case 'select_cell'
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        d.pl.plotType = 2;
-        d.pl.titleType = 5;
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        d.pl.highlightType = 3;
-        d.pl.highlightedCells = app.pointlikeProperties.cell;
-        d.pl.windowSize = app.plottingOptions.windowSize;
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
-    case 'show_shape'
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        d.pl.plotType = 4;
-        d.pl.titleType = 6;
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        d.pl.highlightType = 0;
-        d.pl.highlightedCells = [];
-        d.pl.windowSize = app.plottingOptions.windowSize;
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
-    case 'post'
-        d.pl = app.importPlottingOptions;
-        d.pl.plotType = 2;
-        d.pl.titleType = 7;
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        d = get_highlighted_cells(app,d);
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-    case 'post_browse'
-        d.pl = app.importPlottingOptions;
-        d.pl.plotType = 2;
-        d.pl.titleType = 8;
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        d = get_highlighted_cells(app,d);
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-    case 'post_animation'
-        d.pl = app.importPlottingOptions;
-        d.pl.plotType = 2;
-        d.pl.titleType = 7;
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        d = get_highlighted_cells(app,d);
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-    case 'post_select_cells'
-        d.pl = app.importPlottingOptions;
-        d.pl.plotType = 2;
-        d.pl.titleType = 7;
-        d.pl.highlightType = 3;
-        d.pl.highlightedCells = app.selectedCells;
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
     case 'force_magnitude'
         d.pl = app.importPlottingOptions;
         d.pl.plotType = 10;
@@ -173,7 +156,7 @@ switch plotCase
         d.pl.cellForcesPointlike = 0;
         d.pl.cellForcesFocalAdhesions = 0;
         d.pl.cellForcesTotal = 0;
-        d.pl.substrateForcesDirect = 0;
+        d.pl.substrateForcesCentral = 0;
         d.pl.substrateForcesRepulsion = 0;
         d.pl.substrateForcesRestoration = 0;
         d.pl.substrateForcesFocalAdhesions = 0;
@@ -186,12 +169,10 @@ switch plotCase
         d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);
         d.pl.colorLocations = linspace(d.pl.minMagnitude,d.pl.maxMagnitude,64);
         
-        if numel(varargin) > 0
-           if strcmp(varargin{1},'browse')
-               d.pl.extraTitleType = 2;
-           end
+        if numel(varargin) > 0 && strcmp(varargin{1},'browse')
+            d.pl.nTitleLines = 2;
         else
-            d.pl.extraTitleType = 1;
+            d.pl.nTitleLines = 1;
         end
         
         switch app.ForceDropDown_2.Value
@@ -225,8 +206,8 @@ switch plotCase
             case 'Total substrate forces'
                 d.pl.substrateForcesTotal = 1;
                 d.pl.titleType = 29;
-            case 'Direct substrate forces'
-                d.pl.substrateForcesDirect = 1;
+            case 'Central substrate forces'
+                d.pl.substrateForcesCentral = 1;
                 d.pl.titleType = 30;
             case 'Restorative substrate forces'
                 d.pl.substrateForcesRestoration = 1;
@@ -253,39 +234,37 @@ switch plotCase
         d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);
         d.pl.colorLocations = linspace(d.pl.minMagnitude,d.pl.maxMagnitude,64);
         
-        if numel(varargin) > 0
-           if strcmp(varargin{1},'browse')
-               d.pl.extraTitleType = 2;
-           end
+        if numel(varargin) > 0 && strcmp(varargin{1},'browse')
+            d.pl.nTitleLines = 2;
         else
-            d.pl.extraTitleType = 1;
+            d.pl.nTitleLines = 1;
         end
         
         switch app.DescriptorDropDown.Value
             case 'Area'
                 d.pl.cellStyle = 7;
-                d.pl.titleType = 34;
+                d.pl.titleType = 40;
             case 'Area strain'
                 d.pl.cellStyle = 8;
-                d.pl.titleType = 35;
+                d.pl.titleType = 41;
             case 'Perimeter'
                 d.pl.cellStyle = 9;
-                d.pl.titleType = 36;
+                d.pl.titleType = 42;
             case 'Perimeter strain'
                 d.pl.cellStyle = 10;
-                d.pl.titleType = 37;
+                d.pl.titleType = 43;
             case 'Circularity'
                 d.pl.cellStyle = 11;
-                d.pl.titleType = 38;
+                d.pl.titleType = 44;
             case 'Aspect ratio'
                 d.pl.cellStyle = 12;
-                d.pl.titleType = 39;
+                d.pl.titleType = 45;
             case 'Angle'
                 d.pl.cellStyle = 13;
                 d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap2.csv']);
                 d.pl.colormap = [d.pl.colormap;flipud(d.pl.colormap)];
                 d.pl.colorLocations = linspace(-90,90,128);
-                d.pl.titleType = 40;
+                d.pl.titleType = 46;
         end
         
 end
@@ -357,9 +336,7 @@ end
 
 d.pl.axesHandle.Title.FontSize = titleFontSize;
 
-if any(d.pl.titleType == [2 4 8 10])
-    topGap = 20/figureSize(2) + 2*d.pl.axesHandle.Title.FontSize/figureSize(2);
-elseif isfield(d.pl,'extraTitleType') && d.pl.extraTitleType == 2
+if d.pl.nTitleLines == 2
     topGap = 20/figureSize(2) + 2*d.pl.axesHandle.Title.FontSize/figureSize(2);
 else
     topGap = 20/figureSize(2) + d.pl.axesHandle.Title.FontSize/figureSize(2);
@@ -368,6 +345,7 @@ d.pl.axesHandle.Position(4) = 1 - bottomGap - topGap;
 
 d.pl.axesHandle.XLim = d.pl.axisLimits(1:2);
 d.pl.axesHandle.YLim = d.pl.axisLimits(3:4);
+
 
 axis square
 

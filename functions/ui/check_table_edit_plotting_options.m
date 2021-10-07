@@ -120,24 +120,27 @@ if strcmp(app.appTask,'plotAndAnalyze')
             if eventdata.NewData && exist([folderName '/cell_forces/focal_adhesion/'],'dir') ~= 7
                 restore_previous_value('Substrate force data not available.',eventdata,tempTableData,app)
             end
-        case 'substrateForcesDirect'
-            if eventdata.NewData && exist([folderName '/subtrate_forces/direct/'],'dir') ~= 7
-                restore_previous_value('Direct substrate force data not available.',eventdata,tempTableData,app)
+        case 'substrateForcesCentral'
+            if eventdata.NewData && exist([folderName '/substrate_forces/central/'],'dir') ~= 7
+                % LEGACY
+                if eventdata.NewData && exist([folderName '/substrate_forces/direct/'],'dir') ~= 7
+                    restore_previous_value('Central substrate force data not available.',eventdata,tempTableData,app)
+                end
             end
         case 'substrateForcesRepulsion'
-            if eventdata.NewData && exist([folderName '/subtrate_forces/repulsion/'],'dir') ~= 7
+            if eventdata.NewData && exist([folderName '/substrate_forces/repulsion/'],'dir') ~= 7
                 restore_previous_value('Boundary repulsion substrate force data not available.',eventdata,tempTableData,app)
             end
         case 'substrateForcesRestoration'
-            if eventdata.NewData && exist([folderName '/subtrate_forces/restoration/'],'dir') ~= 7
+            if eventdata.NewData && exist([folderName '/substrate_forces/restoration/'],'dir') ~= 7
                 restore_previous_value('Restorative substrate force data not available.',eventdata,tempTableData,app)
             end
         case 'substrateForcesFocalAdhesions'
-            if eventdata.NewData && exist([folderName '/subtrate_forces/focal_adhesion/'],'dir') ~= 7
+            if eventdata.NewData && exist([folderName '/substrate_forces/focal_adhesion/'],'dir') ~= 7
                 restore_previous_value('Cell substrate force data not available.',eventdata,tempTableData,app)
             end
         case 'substrateForcesTotal'
-            if eventdata.NewData && exist([folderName '/subtrate_forces/total/'],'dir') ~= 7
+            if eventdata.NewData && exist([folderName '/substrate_forces/total/'],'dir') ~= 7
                 restore_previous_value('Total substrate force data not available.',eventdata,tempTableData,app)
             end
     end

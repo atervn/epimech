@@ -162,8 +162,8 @@ for k = 1:nCells
         
         % sort the pairCells and pairVertices so that they are according to
         % their closeness for each vertex with at least one interaction
-        pairCells=pairCells(sortedIdx2);
-        pairVertices=pairVertices(sortedIdx2);
+        pairCells = pairCells(sortedIdx2);
+        pairVertices = pairVertices(sortedIdx2);
         
         % remove the extra part of the matrix    
         pairCells = pairCells(1:maxPossible,:);
@@ -383,7 +383,7 @@ for k = 1:nCells
                 end
             end
             
-            % get the projections between vertices with at least one
+            % get the projections between vertices with at least two
             % interaction and the membrane segments on each side of the
             % closest pair vertex
             projectionRight = ((d.cells(k).verticesX(atLeastTwo) - rightSegmentX).*rightSegmentVectorX + (d.cells(k).verticesY(atLeastTwo) - rightSegmentY).*rightSegmentVectorY)./rightSegmentLength.^2;

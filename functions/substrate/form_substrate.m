@@ -50,15 +50,15 @@ if any(d.simset.simulationType == [2,5])
     
     springMultiplierMatrix = sparse(d.sub.nPoints,d.sub.nPoints);
     
-    % an empty matrix for the direct interaction pairs
-    directInteractionPairsIdx = zeros(6,d.sub.nPoints);
+    % an empty matrix for the central interaction pairs
+    centralInteractionPairsIdx = zeros(6,d.sub.nPoints);
     
     % empty matrices to store the one of the neighbors for boundary repulsion force
     % and the vector between the two neighbors
-    boundaryRepulsionPairsIdx = zeros(6,d.sub.nPoints);
-    boundaryRepulsionVectors1Idx = zeros(6,d.sub.nPoints);
-    boundaryRepulsionVectors2Idx = zeros(6,d.sub.nPoints);
-    boundaryRepulsionChangeSigns = zeros(6,d.sub.nPoints);
+    repulsionPairsIdx = zeros(6,d.sub.nPoints);
+    repulsionVectors1Idx = zeros(6,d.sub.nPoints);
+    repulsionVectors2Idx = zeros(6,d.sub.nPoints);
+    repulsionChangeSigns = zeros(6,d.sub.nPoints);
     
     % define the squared max pair separation
     maxDistance = (d.spar.substratePointDistance*1.1)^2;
@@ -214,7 +214,7 @@ if any(d.simset.simulationType == [2,5])
         interactionMatrix(i,suitablePairs) = 1; %#ok<SPRIX>
         
         % input the sorted pairs to the repulsion pair matrix
-        boundaryRepulsionPairsIdx(1:length(suitablePairs),i) = suitablePairs;
+        repulsionPairsIdx(1:length(suitablePairs),i) = suitablePairs;
         
         for k = 1:length(suitablePairs)
             springMultiplierMatrix(i,suitablePairs(k)) = sC(k); %#ok<SPRIX>
@@ -274,15 +274,15 @@ if any(d.simset.simulationType == [2,5])
     % go through the points
     for i = 1:d.sub.nPoints
         
-        % input the direct interaction indices to the direct interaction matrix
+        % input the central interaction indices to the central interaction matrix
         % (unique interactions on rows 1:3 and counter interactions on rows
         % 4:6)
-        directInteractionPairsIdx(1:nnz(interactionMatrixIdx(i,:)),i) = nonzeros(interactionMatrixIdx(i,:))';
-        directInteractionPairsIdx(4:3+nnz(counterInteractionMatrixIdx(i,:)),i) = nonzeros(counterInteractionMatrixIdx(i,:))';
+        centralInteractionPairsIdx(1:nnz(interactionMatrixIdx(i,:)),i) = nonzeros(interactionMatrixIdx(i,:))';
+        centralInteractionPairsIdx(4:3+nnz(counterInteractionMatrixIdx(i,:)),i) = nonzeros(counterInteractionMatrixIdx(i,:))';
         
         % get the boundary repulsion pairs for point i and their number
-        boundaryRepulsionPairsIdxTemp = nonzeros(boundaryRepulsionPairsIdx(:,i))';
-        nPairs = length(boundaryRepulsionPairsIdxTemp);
+        repulsionPairsIdxTemp = nonzeros(repulsionPairsIdx(:,i))';
+        nPairs = length(repulsionPairsIdxTemp);
         
         % FIND THE INDICES OF THE UNIQUE INTERACTION VECTORS THAT CORRESPONDS
         % TO THE 2 VECTORS NEEDED IN THE boundary REPULSION FORCE CALCULATION (1:
@@ -297,15 +297,15 @@ if any(d.simset.simulationType == [2,5])
                 % find the index of the matching interaction pair (checking
                 % both ways) and save it to the vector 1 matrix
                 match = interactionPairs(:,1) == i;
-                match(match) = interactionPairs(match,2) == boundaryRepulsionPairsIdxTemp(j);
+                match(match) = interactionPairs(match,2) == repulsionPairsIdxTemp(j);
                 idx = find(match);
                 if ~isempty(idx)
-                    boundaryRepulsionVectors1Idx(j,i) = idx;
-                    boundaryRepulsionChangeSigns(j,i) = 1;
+                    repulsionVectors1Idx(j,i) = idx;
+                    repulsionChangeSigns(j,i) = 1;
                 else
                     match = interactionPairs(:,2) == i;
-                    match(match) = interactionPairs(match,1) == boundaryRepulsionPairsIdxTemp(j);
-                    boundaryRepulsionVectors1Idx(j,i) = find(match);
+                    match(match) = interactionPairs(match,1) == repulsionPairsIdxTemp(j);
+                    repulsionVectors1Idx(j,i) = find(match);
                 end
                 
                 % indices of the vector 2 in the pairs of point i
@@ -313,21 +313,21 @@ if any(d.simset.simulationType == [2,5])
                 
                 % find the index of the matching interaction pair (checking
                 % both ways) and save it to the vector 2 matrix
-                match = interactionPairs(:,1) == boundaryRepulsionPairsIdxTemp(boundaryPair(1));
-                match(match) = interactionPairs(match,2) == boundaryRepulsionPairsIdxTemp(boundaryPair(2));
+                match = interactionPairs(:,1) == repulsionPairsIdxTemp(boundaryPair(1));
+                match(match) = interactionPairs(match,2) == repulsionPairsIdxTemp(boundaryPair(2));
                 idx = find(match);
                 if ~isempty(idx)
-                    boundaryRepulsionVectors2Idx(j,i) = idx;
+                    repulsionVectors2Idx(j,i) = idx;
                 else
-                    match = interactionPairs(:,2) == boundaryRepulsionPairsIdxTemp(boundaryPair(1));
-                    match(match) = interactionPairs(match,1) == boundaryRepulsionPairsIdxTemp(boundaryPair(2));
-                    boundaryRepulsionVectors2Idx(j,i) = find(match);
+                    match = interactionPairs(:,2) == repulsionPairsIdxTemp(boundaryPair(1));
+                    match(match) = interactionPairs(match,1) == repulsionPairsIdxTemp(boundaryPair(2));
+                    repulsionVectors2Idx(j,i) = find(match);
                 end
             end
             
             % remove the last pair, since this is the end of the boundary vector
             % and thus not needed)
-            boundaryRepulsionPairsIdx(nPairs,i) = 0;
+            repulsionPairsIdx(nPairs,i) = 0;
         else
             
             % go through the pairs
@@ -336,15 +336,15 @@ if any(d.simset.simulationType == [2,5])
                 % find the index of the matching interaction pair (checking
                 % both ways) and save it to the vector 1 matrix
                 match = interactionPairs(:,1) == i;
-                match(match) = interactionPairs(match,2) == boundaryRepulsionPairsIdxTemp(j);
+                match(match) = interactionPairs(match,2) == repulsionPairsIdxTemp(j);
                 idx = find(match);
                 if ~isempty(idx)
-                    boundaryRepulsionVectors1Idx(j,i) = idx;
-                    boundaryRepulsionChangeSigns(j,i) = 1;
+                    repulsionVectors1Idx(j,i) = idx;
+                    repulsionChangeSigns(j,i) = 1;
                 else
                     match = interactionPairs(:,2) == i;
-                    match(match) = interactionPairs(match,1) == boundaryRepulsionPairsIdxTemp(j);
-                    boundaryRepulsionVectors1Idx(j,i) = find(match);
+                    match(match) = interactionPairs(match,1) == repulsionPairsIdxTemp(j);
+                    repulsionVectors1Idx(j,i) = find(match);
                 end
                 
                 % indices of the boundary pairs in the pairs of point i (last is
@@ -357,15 +357,15 @@ if any(d.simset.simulationType == [2,5])
                 
                 % find the index of the matching interaction pair (checking
                 % both ways) and save it to the index the vector2 matrix
-                match = interactionPairs(:,1) == boundaryRepulsionPairsIdxTemp(boundaryPair(1));
-                match(match) = interactionPairs(match,2) == boundaryRepulsionPairsIdxTemp(boundaryPair(2));
+                match = interactionPairs(:,1) == repulsionPairsIdxTemp(boundaryPair(1));
+                match(match) = interactionPairs(match,2) == repulsionPairsIdxTemp(boundaryPair(2));
                 idx = find(match);
                 if ~isempty(idx)
-                    boundaryRepulsionVectors2Idx(j,i) = idx;
+                    repulsionVectors2Idx(j,i) = idx;
                 else
-                    match = interactionPairs(:,2) == boundaryRepulsionPairsIdxTemp(boundaryPair(1));
-                    match(match) = interactionPairs(match,1) == boundaryRepulsionPairsIdxTemp(boundaryPair(2));
-                    boundaryRepulsionVectors2Idx(j,i) = find(match);
+                    match = interactionPairs(:,2) == repulsionPairsIdxTemp(boundaryPair(1));
+                    match(match) = interactionPairs(match,1) == repulsionPairsIdxTemp(boundaryPair(2));
+                    repulsionVectors2Idx(j,i) = find(match);
                 end
             end
         end
@@ -390,7 +390,7 @@ if any(d.simset.simulationType == [2,5])
     end
     
     % get the unique interactions in the 6-by-nPoints matrix
-    uniqueInteractions = directInteractionPairsIdx(1:3,:);
+    uniqueInteractions = centralInteractionPairsIdx(1:3,:);
     
     % find the unique interaction rows and cols
     [cols,rows] = find(uniqueInteractions);
@@ -399,7 +399,7 @@ if any(d.simset.simulationType == [2,5])
     d.sub.interactionLinIdx = uint32(sub2ind([6,d.sub.nPoints],cols,rows));
     
     % get the counter interactions in the 6-by-nPoints matrix
-    counterInteractions = directInteractionPairsIdx(4:6,:);
+    counterInteractions = centralInteractionPairsIdx(4:6,:);
     
     % linear indices of the corresponding unique interactions in the
     % counterInteractions matrix
@@ -416,20 +416,20 @@ if any(d.simset.simulationType == [2,5])
     
     % linear indices of the boundary repulsion interactions in the 6-by-nPoints
     % matrix
-    [row,col] = find(boundaryRepulsionPairsIdx > 0);
-    d.sub.boundaryRepulsionLinIdx = uint32(sub2ind([6,d.sub.nPoints],row,col));
+    [row,col] = find(repulsionPairsIdx > 0);
+    d.sub.repulsionLinIdx = uint32(sub2ind([6,d.sub.nPoints],row,col));
     
     % indices of the unique interaction vectors that each boundary repulsion vector
     % (1 and 2) corresponds to
-    d.sub.boundaryRepulsionVectorsIdx = uint32(boundaryRepulsionVectors1Idx(d.sub.boundaryRepulsionLinIdx));
-    d.sub.boundaryRepulsionVectors2Idx = uint32(boundaryRepulsionVectors2Idx(d.sub.boundaryRepulsionLinIdx));
+    d.sub.repulsionVectorsIdx = uint32(repulsionVectors1Idx(d.sub.repulsionLinIdx));
+    d.sub.repulsionVectors2Idx = uint32(repulsionVectors2Idx(d.sub.repulsionLinIdx));
     
     % vector used to flip the signs of vectors that are defined in the other
     % direction in the unique interactions
-    d.sub.boundaryRepulsionChangeSigns = ones(size(boundaryRepulsionChangeSigns));
-    boundaryRepulsionChangeSigns = ~logical(boundaryRepulsionChangeSigns);
-    d.sub.boundaryRepulsionChangeSigns(boundaryRepulsionChangeSigns) = -1;
-    d.sub.boundaryRepulsionChangeSigns = d.sub.boundaryRepulsionChangeSigns(d.sub.boundaryRepulsionLinIdx);
+    d.sub.repulsionChangeSigns = ones(size(repulsionChangeSigns));
+    repulsionChangeSigns = ~logical(repulsionChangeSigns);
+    d.sub.repulsionChangeSigns(repulsionChangeSigns) = -1;
+    d.sub.repulsionChangeSigns = d.sub.repulsionChangeSigns(d.sub.repulsionLinIdx);
     
     % empty matrix for faster matrix initialization
     d.sub.emptyMatrix = zeros(6,d.sub.nPoints);

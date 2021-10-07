@@ -1,5 +1,7 @@
 function d = main_simulation(d,app)
 % MAIN_SIMULATION The main simulation loop in the model.
+%   The function simulates the epimech model by running through the
+%   simulation loop.
 %   INPUTS:
 %       d: main simulation data structure that include the cell data,
 %           substrate data (if included), simulation settings, plotting
@@ -52,7 +54,6 @@ while time - d.spar.simulationTime <= 1e-8
             break
         end
     end
-    
     
     %% cell properties and component removal
     
@@ -142,6 +143,7 @@ while time - d.spar.simulationTime <= 1e-8
     
     %% solve substrate
     if any(d.simset.simulationType == [2 5])
+        
         % solve using 4th order Runge Kutta solver
         [d,subDt] = solve_substrate(d,dt,subDt);
         
@@ -153,30 +155,26 @@ while time - d.spar.simulationTime <= 1e-8
     
     %% misc
     
-    if d.simset.simulationType == 2
-        % move pointlike micromanipulator
-        d.simset.pointlike = move_pointlike(time,d.simset.pointlike);
-    elseif d.simset.simulationType == 3
-        % move substrate points in lateral compression or stretching
-        % simulations (not solved)
-        d = move_substrate_points(d,time,dt);
-    end
-    
     % plot data
     d.pl.videoObject = plot_function(d, time);
     
     % export data
     export_data(d, time)
     
+    % move pointlike micromanipulator
+    d.simset.pointlike = move_pointlike(time, dt, d.simset.pointlike);
+    
+    % move substrate points in lateral compression or stretching
+    % simulations (not solved)
+    d = move_substrate_points(d,time,dt);
+        
     % move a frame around the cells (simulation type currently disabled)
-    if d.simset.simulationType == 4
-         d = move_frame(d,dt);
-    end
+    d = move_frame(d,dt);
 
     % update time
     time = time + dt;
     
-    % update time step (depending on the maximum cell movement)
+    % update time step
     dt = update_dt(d,dt,time,maxmaxMovement);
 
     % update progress bar if shown
@@ -186,14 +184,7 @@ while time - d.spar.simulationTime <= 1e-8
 end
 
 % plot the simulation time steps if selected
-if d.simset.dtPlot
-    figure(2); semilogy(timeStepsCells);
-    if d.simset.simulationType == 2
-        hold on
-        plot(timeStepsSub);
-        hold off
-    end
-end
+post_plot_dt(d);
 
 % enable closing of the simulation plot
 if d.pl.plot

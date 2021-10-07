@@ -1,8 +1,8 @@
 function d = get_substrate_spring_constants(d,app)
 
 d.sub.restorativeSpringConstants = zeros(d.sub.nPoints,1);
-d.sub.directInteractionSpringConstants = zeros(length(d.sub.interactionSelvesIdx),1);
-d.sub.boundaryRepulsionSpringConstants = zeros(length(d.sub.boundaryRepulsionVectorsIdx),1);
+d.sub.centralInteractionSpringConstants = zeros(length(d.sub.interactionSelvesIdx),1);
+d.sub.repulsionSpringConstants = zeros(length(d.sub.repulsionVectorsIdx),1);
 
 scaledRestorativeMultiplier = app.substrateParameters.restorativeForceConstant*2*sqrt(3)*(app.substrateParameters.substratePointDistance*1e6/2)^2;
 
@@ -12,8 +12,8 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         d.spar.fSubstrate = app.substrateParameters.youngsModulusConstant*app.substrateParameters.youngsModulus*app.systemParameters.scalingTime/app.systemParameters.eta;
         
         d.sub.restorativeSpringConstants(:) = d.spar.fSubstrate*scaledRestorativeMultiplier;
-        d.sub.directInteractionSpringConstants(:) = d.spar.fSubstrate.*d.sub.springMultipliers;
-        d.sub.boundaryRepulsionSpringConstants(:) = d.spar.fSubstrate;
+        d.sub.centralInteractionSpringConstants(:) = d.spar.fSubstrate.*d.sub.springMultipliers;
+        d.sub.repulsionSpringConstants(:) = d.spar.fSubstrate;
     case 'Heterogeneous'
         
         substrateRadius = ceil(1.05*sqrt(max(d.sub.pointsX.^2 + d.sub.pointsY.^2))*app.systemParameters.scalingLength*1e6);
@@ -46,9 +46,9 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         
         selfConstants = pointSpringConstants(d.sub.interactionSelvesIdx);
         pairConstants = pointSpringConstants(d.sub.interactionPairsIdx);
-        d.sub.directInteractionSpringConstants = (1./(2.*selfConstants) + 1./(2.*pairConstants)).^-1;
+        d.sub.centralInteractionSpringConstants = (1./(2.*selfConstants) + 1./(2.*pairConstants)).^-1;
         
-        d.sub.boundaryRepulsionSpringConstants = pointSpringConstants(d.sub.interactionSelvesIdx(d.sub.boundaryRepulsionVectorsIdx));
+        d.sub.repulsionSpringConstants = pointSpringConstants(d.sub.interactionSelvesIdx(d.sub.repulsionVectorsIdx));
         
     case 'Gradient'
         
@@ -79,9 +79,9 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         
         selfConstants = pointSpringConstants(d.sub.interactionSelvesIdx);
         pairConstants = pointSpringConstants(d.sub.interactionPairsIdx);
-        d.sub.directInteractionSpringConstants = (1./(2.*selfConstants) + 1./(2.*pairConstants)).^-1;
+        d.sub.centralInteractionSpringConstants = (1./(2.*selfConstants) + 1./(2.*pairConstants)).^-1;
         
-        d.sub.boundaryRepulsionSpringConstants = pointSpringConstants(d.sub.interactionSelvesIdx(d.sub.boundaryRepulsionVectorsIdx));
+        d.sub.repulsionSpringConstants = pointSpringConstants(d.sub.interactionSelvesIdx(d.sub.repulsionVectorsIdx));
 
 end
 

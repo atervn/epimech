@@ -1,11 +1,13 @@
 function cells = get_cell_division_forces(cells,spar)
-% CALCULATE_DIVISION_FORCES Calculates forces pulling division vertices
-%   Calculates the forces that pull the division points towards each other
+% GET_DIVISION_FORCES Calculate forces pulling division vertices
+%   The function calculates the forces that pull the division points
+%   towards each other during cytokinesis
 %   INPUTS:
-%       cells: contains the cell data
-%       spar: scaled parameters
+%       cells: single cell data structure
+%       spar: scaled parameter structure
 %   OUTPUT:
-%       cells: cell data including the division forces for each vertex
+%       cells: single cell data structure
+%   by Aapo Tervonen, 2021
 
 % initialize the division force vectors
 cells.forces.divisionX = zeros(cells.nVertices,1); cells.forces.divisionY = cells.forces.divisionX;
@@ -25,4 +27,6 @@ if cells.division.state == 2
     
     cells.forces.divisionX(cells.division.vertices(2)) = forceMagnitude.*(cells.verticesX(cells.division.vertices(1),:) - cells.verticesX(cells.division.vertices(2),:));
     cells.forces.divisionY(cells.division.vertices(2)) = forceMagnitude.*(cells.verticesY(cells.division.vertices(1),:) - cells.verticesY(cells.division.vertices(2),:));
+end
+
 end

@@ -199,14 +199,14 @@ for i = 1:2
                 % update the junction pairs
                 d.cells(cellID).junctions.vertices(vertexID,whichJunction) = d.cells(cellID).junctions.vertices(vertexID,whichJunction) + 1;
                 
-                % update the pairVertices vectors for the pair
-                if whichJunction == 1
-                    tempIdx = d.cells(cellID).junctions.linkedIdx1 == vertexID;
-                    d.cells(cellID).junctions.pairVertices1(tempIdx) = d.cells(cellID).junctions.pairVertices1(tempIdx) + 1;
-                else
-                    tempIdx = d.cells(cellID).junctions.linkedIdx2 == vertexID;
-                    d.cells(cellID).junctions.pairVertices2(tempIdx) = d.cells(cellID).junctions.pairVertices2(tempIdx) + 1;
-                end
+%                 % update the pairVertices vectors for the pair
+%                 if whichJunction == 1
+%                     tempIdx = d.cells(cellID).junctions.linkedIdx1 == vertexID;
+%                     d.cells(cellID).junctions.pairVertices1(tempIdx) = d.cells(cellID).junctions.pairVertices1(tempIdx) + 1;
+%                 else
+%                     tempIdx = d.cells(cellID).junctions.linkedIdx2 == vertexID;
+%                     d.cells(cellID).junctions.pairVertices2(tempIdx) = d.cells(cellID).junctions.pairVertices2(tempIdx) + 1;
+%                 end
             end
         end
     end

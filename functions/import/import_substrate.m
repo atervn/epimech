@@ -17,21 +17,40 @@ switch app.appTask
         d.sub.interactionPairsIdx = csvread([folderName '/substrate_auxiliary/interaction_pairs_idx.csv']);
         d.sub.interactionLinIdx = csvread([folderName '/substrate_auxiliary/interaction_lin_idx.csv']);
         d.sub.counterInteractionLinIdx = csvread([folderName '/substrate_auxiliary/counter_interaction_lin_idx.csv']);
-        d.sub.boundaryRepulsionLinIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_lin_idx.csv']);
-        d.sub.boundaryRepulsionVectorsIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']);
-        d.sub.boundaryRepulsionVectors2Idx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors2_idx.csv']);
-        d.sub.boundaryRepulsionChangeSigns = csvread([folderName '/substrate_auxiliary/boundary_repulsion_change_signs.csv']);
+        % LEGACY
+        try
+            d.sub.repulsionLinIdx = csvread([folderName '/substrate_auxiliary/repulsion_lin_idx.csv']);
+            d.sub.repulsionVectorsIdx = csvread([folderName '/substrate_auxiliary/repulsion_vectors_idx.csv']);
+            d.sub.repulsionVectors2Idx = csvread([folderName '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
+            d.sub.repulsionChangeSigns = csvread([folderName '/substrate_auxiliary/repulsion_change_signs.csv']);
+        catch
+            d.sub.repulsionLinIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_lin_idx.csv']);
+            d.sub.repulsionVectorsIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']);
+            d.sub.repulsionVectors2Idx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors2_idx.csv']);
+            d.sub.repulsionChangeSigns = csvread([folderName '/substrate_auxiliary/boundary_repulsion_change_signs.csv']);
+        end
+        
         d.sub.springMultipliers = csvread([folderName '/substrate_auxiliary/spring_multipliers.csv']);
         d.sub.emptyMatrix = zeros(6,d.sub.nPoints);
         d.sub.edgePoints = logical(csvread([folderName '/substrate_auxiliary/edge_points.csv']));
         d.sub.restorativeSpringConstants = csvread([folderName '/substrate_auxiliary/restorative_spring_constant.csv']);
-        d.sub.directInteractionSpringConstants = csvread([folderName '/substrate_auxiliary/direct_interaction_spring_constant.csv']);
-        d.sub.boundaryRepulsionSpringConstants = csvread([folderName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
         
+        % LEGACY
+        try
+            d.sub.centralInteractionSpringConstants = csvread([folderName '/substrate_auxiliary/central_interaction_spring_constant.csv']);
+        catch
+            d.sub.centralInteractionSpringConstants = csvread([folderName '/substrate_auxiliary/direct_interaction_spring_constant.csv']);
+        end
+        % LEGACY
+        try
+            d.sub.repulsionSpringConstants = csvread([folderName '/substrate_auxiliary/repulsion_spring_constant.csv']);
+        catch
+            d.sub.repulsionSpringConstants = csvread([folderName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
+        end
         
     case 'plotAndAnalyze'
         
-        subForcesPlot = d.pl.substrateForcesTotal + d.pl.substrateForcesDirect + d.pl.substrateForcesRestoration + d.pl.substrateForcesRepulsion + d.pl.substrateForcesFocalAdhesions;
+        subForcesPlot = d.pl.substrateForcesTotal + d.pl.substrateForcesCentral + d.pl.substrateForcesRestoration + d.pl.substrateForcesRepulsion + d.pl.substrateForcesFocalAdhesions;
         
         if d.pl.substrateStyle ~= 0 || subForcesPlot > 0
             
@@ -46,15 +65,21 @@ switch app.appTask
             d.sub.interactionSelvesIdx = csvread([folderName '/substrate_auxiliary/interaction_selves_idx.csv']);
             d.sub.interactionPairsIdx = csvread([folderName '/substrate_auxiliary/interaction_pairs_idx.csv']);
             
-            if d.pl.substrateForcesDirect
-                importedForces = csvread([folderName '/substrate_forces/direct/direct_' num2str(app.plotImport(app.selectedFile).currentTimePoint), '.csv']);
-                d.sub.forces.directX = importedForces(:,1);
-                d.sub.forces.directY = importedForces(:,2);
+            if d.pl.substrateForcesCentral
+                % LEGACY
+                try
+                    importedForces = csvread([folderName '/substrate_forces/central/central_' num2str(app.plotImport(app.selectedFile).currentTimePoint), '.csv']);
+                catch
+                    importedForces = csvread([folderName '/substrate_forces/direct/direct_' num2str(app.plotImport(app.selectedFile).currentTimePoint), '.csv']); 
+                end
+                
+                d.sub.forces.centralX = importedForces(:,1);
+                d.sub.forces.centralY = importedForces(:,2);
             end
             if d.pl.substrateForcesRepulsion
                 importedForces = csvread([folderName '/substrate_forces/repulsion/repulsion_' num2str(app.plotImport(app.selectedFile).currentTimePoint), '.csv']);
-                d.sub.forces.boundaryRepulsionX = importedForces(:,1);
-                d.sub.forces.boundaryRepulsionY = importedForces(:,2);
+                d.sub.forces.repulsionX = importedForces(:,1);
+                d.sub.forces.repulsionY = importedForces(:,2);
             end
             if d.pl.substrateForcesRestoration
                 importedForces = csvread([folderName '/substrate_forces/restoration/restoration_' num2str(app.plotImport(app.selectedFile).currentTimePoint), '.csv']);

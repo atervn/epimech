@@ -86,33 +86,6 @@ d.cells(k).junctions.vertices(vertex2Remove,:) = [];
 % vertice that have higher index than the vertex to be removed
 d.cells(k).division.vertices = d.cells(k).division.vertices - 1.*double((d.cells(k).division.vertices) >= vertex2Remove);
 
-% in optogenetic simulations, edit the activated vertices if
-% required
-if d.simset.simulationType == 5
-    
-    % if the cell vertices are within the activated region
-    if any(d.simset.opto.cells == k)
-        
-        % reduce the indices of the activated vertices by one
-        % if they have higher index than the one being removed
-        cellIdx = d.simset.opto.cells == k;
-        d.simset.opto.vertices{cellIdx}(d.simset.opto.vertices{cellIdx} > vertex2Remove) = d.simset.opto.vertices{cellIdx}(d.simset.opto.vertices{cellIdx} > vertex2Remove) - 1;
-        
-        % if the removed vertex is being activated, remove it
-        % from the activated vertices
-        if any(d.simset.opto.vertices{cellIdx} == vertex2Remove)
-            d.simset.opto.vertices{cellIdx}(d.simset.opto.vertices{cellIdx} == vertex2Remove) = [];
-        end
-        
-        % if there are no longer activated vertices for this
-        % cell, remove it from the activated cells
-        if isempty(d.simset.opto.vertices{cellIdx})
-            d.simset.opto.cells(cellIdx) = [];
-            d.simset.opto.vertices(cellIdx) = [];
-        end
-    end
-end
-
 % if substrate is included
 if any(d.simset.simulationType == [3,5])
     if d.cells(k).substrate.connected(vertex2Remove)

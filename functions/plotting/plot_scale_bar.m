@@ -1,55 +1,94 @@
 function plot_scale_bar(d)
+% PLOT_SCALE_BAR Create the scale bar for the plot
+%   The function defines and creates the scale bar for the plot. The scale
+%   bar is surrounded by a white box and the length of the scale bar is
+%   plotted above the bar. The text is hidden if the scale bar length in
+%   pixels is too small.
+%   INPUTS:
+%       d: main simulation data structure
+%   by Aapo Tervonen, 2021
 
+% check if scale bar is to be plotted
 if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
-    figureSizeinScaled = d.pl.axesHandle.XLim(2) - d.pl.axesHandle.XLim(1);
-    figureSizeInMum = figureSizeinScaled*d.spar.scalingLength*1e6;
     
+    % get the image width in scale length units
+    figureSizeScaled = d.pl.axesHandle.XLim(2) - d.pl.axesHandle.XLim(1);
+    
+    % get the image width in micrometers
+    figureSizeUm = figureSizeScaled*d.spar.scalingLength*1e6;
+    
+    % get the ranges for the different scale bar lengths
     figureSizeRanges = d.pl.scaleBar.lengths(:,2:3);
+    
+    % get the corresponding scale bar lengths for the ranges
     possibleBarLengths = d.pl.scaleBar.lengths(:,1);
-    for i = 1:size(figureSizeRanges,1)
-        if figureSizeInMum > figureSizeRanges(i,1) && figureSizeInMum <= figureSizeRanges(i,2)
-            barLengthLabel = possibleBarLengths(i);
-            currentBarLength = possibleBarLengths(i)*1e-6/d.spar.scalingLength;
-            break
-        end
-    end
     
-    axisSizeInPixels = d.pl.figureHandle.Position(4)*d.pl.axesHandle.Position(4);
+    % get the correct based on the image width
+    selectedBarLength = logical((figureSizeUm > figureSizeRanges(:,1)).*(figureSizeUm <= figureSizeRanges(:,2)));
+
+    % get the bar length label and length in scaled length units
+    barLengthLabel = possibleBarLengths(selectedBarLength);
+    currentBarLength = possibleBarLengths(selectedBarLength)*1e-6/d.spar.scalingLength;
     
-    scaledLengthPerPixels = figureSizeinScaled/axisSizeInPixels;
+    % get the axis width in pixels
+    axisSizePixels = d.pl.figureHandle.Position(4)*d.pl.axesHandle.Position(4);
     
-    barBoxPositionRight = d.pl.axesHandle.XLim(2) - 10*scaledLengthPerPixels;
-    barBoxPositionLeft = barBoxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
-    barBoxPositionBottom = 10*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
+    % get how pixel size in scaled length units
+    scaledLengthPerPixels = figureSizeScaled/axisSizePixels;
     
-    barPositionBottomY = 20*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
-    barPositionTopY = barPositionBottomY + figureSizeinScaled.*0.02;
-    fontSize = axisSizeInPixels/40;
+    % define the left, right, and bottom limits of the box surrounding the
+    % scale bar
+    boxPositionRight = d.pl.axesHandle.XLim(2) - 10*scaledLengthPerPixels;
+    boxPositionLeft = boxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
+    boxPositionBottom = 10*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
+    
+    % set the font size for the length text based on the axis size in
+    % pixels (and make sure that it is between 10 and 18)
+    fontSize = axisSizePixels/40;
     if fontSize > 18
         fontSize = 18;
     elseif fontSize < 10
         fontSize = 10;
     end
-    barBoxPositionTop = barBoxPositionBottom + 10*scaledLengthPerPixels + 3.7*scaledLengthPerPixels*fontSize;
     
-    barTextPositinY = fontSize/2*scaledLengthPerPixels + barPositionTopY;
+    % set the top limit of the box surrounding the scale bar based on the
+    % font size
+    boxPositionTop = boxPositionBottom + 10*scaledLengthPerPixels + 3.7*scaledLengthPerPixels*fontSize;
     
-    barPositionRightX = d.pl.axesHandle.XLim(2) - 20*scaledLengthPerPixels;
-    barPositionLeftX = barPositionRightX - currentBarLength;
+    % calculate the limits for the scale bar itself
+    barPositionBottom = 20*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
+    barPositionTop = barPositionBottom + figureSizeScaled.*0.02;
+    barPositionRight = d.pl.axesHandle.XLim(2) - 20*scaledLengthPerPixels;
+    barPositionLeft = barPositionRight - currentBarLength;
     
+    % y-coordinate for the length text
+    barTextPositionY = fontSize/2*scaledLengthPerPixels + barPositionTop;
     
-    
-    
-    sbarBox = fill(d.pl.axesHandle,[barBoxPositionLeft barBoxPositionRight barBoxPositionRight barBoxPositionLeft],[barBoxPositionBottom barBoxPositionBottom barBoxPositionTop barBoxPositionTop],[1 1 1]);
+    %  plot the box surrounding the scale bar and give it a tag for editing
+    %  it when the image is resized or zoomed
+    sbarBox = fill(d.pl.axesHandle,[boxPositionLeft boxPositionRight boxPositionRight boxPositionLeft],[boxPositionBottom boxPositionBottom boxPositionTop boxPositionTop],[1 1 1]);
     sbarBox.Tag = 'scalebarbox';
-    sbar = fill(d.pl.axesHandle,[barPositionLeftX barPositionRightX barPositionRightX barPositionLeftX],[barPositionBottomY barPositionBottomY barPositionTopY barPositionTopY],[0 0 0]);
+    
+    %  plot the scale bar and give it a tag for editing it when the image
+    % is resized or zoomed
+    sbar = fill(d.pl.axesHandle,[barPositionLeft barPositionRight barPositionRight barPositionLeft],[barPositionBottom barPositionBottom barPositionTop barPositionTop],[0 0 0]);
     sbar.Tag = 'scalebar';
     
-    txt = text(d.pl.axesHandle,(barPositionRightX + barPositionLeftX)/2, barTextPositinY, [num2str(barLengthLabel) ' ' char(181) 'm'],'HorizontalAlignment','center','VerticalAlignment', 'bottom','clipping','on','FontSize',fontSize);
+    % plot the scale bar length above the bar and give it a tag for editing
+    % it when the image is resized or zoomed
+    txt = text(d.pl.axesHandle,(barPositionRight + barPositionLeft)/2, barTextPositionY, [num2str(barLengthLabel) ' ' char(181) 'm'],'HorizontalAlignment','center','VerticalAlignment', 'bottom','clipping','on','FontSize',fontSize);
     txt.Tag = 'scalebar';
+    
+    % if the scale bar is less than 40 pixels in length, hide the scale bar
+    % length (since it would be longer than the scale bar itself)
     if currentBarLength/scaledLengthPerPixels < 40
         txt.Visible = 'Off';
-        barBoxPositionTop = barBoxPositionBottom + 24*scaledLengthPerPixels;
-        sbarBox.YData = [barBoxPositionBottom barBoxPositionBottom barBoxPositionTop barBoxPositionTop];
+        
+        % also, recude the size of the box surrounding the scale bar to
+        % account for the missing length text
+        boxPositionTop = boxPositionBottom + 24*scaledLengthPerPixels;
+        sbarBox.YData = [boxPositionBottom boxPositionBottom boxPositionTop boxPositionTop];
     end
+end
+
 end

@@ -188,11 +188,11 @@ if app.ExportdataCheckBox.Value
         end
         mkdir([folderPath '/cell_forces'], 'total');
     end
-    if ex.substrateForcesDirect && any(d.simset.simulationType == [2 5])
+    if ex.substrateForcesCentral && any(d.simset.simulationType == [2 5])
         if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
             mkdir(folderPath, 'substrate_forces');
         end
-        mkdir([folderPath '/substrate_forces'], 'direct');
+        mkdir([folderPath '/substrate_forces'], 'central');
     end
     if ex.substrateForcesRepulsion && any(d.simset.simulationType == [2 5])
         if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
@@ -369,15 +369,15 @@ if app.ExportdataCheckBox.Value
     if any(d.simset.simulationType == [2,5]) && ex.substrateFull
         writematrix(d.sub.interactionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/interaction_lin_idx.csv']);
         writematrix(d.sub.counterInteractionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/counter_interaction_lin_idx.csv']);
-        writematrix(d.sub.boundaryRepulsionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boundary_repulsion_lin_idx.csv']);
-        writematrix(d.sub.boundaryRepulsionVectorsIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']);
-        writematrix(d.sub.boundaryRepulsionVectors2Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boundary_repulsion_vectors2_idx.csv']);
-        writematrix(d.sub.boundaryRepulsionChangeSigns, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boundary_repulsion_change_signs.csv']);
+        writematrix(d.sub.repulsionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_lin_idx.csv']);
+        writematrix(d.sub.repulsionVectorsIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors_idx.csv']);
+        writematrix(d.sub.repulsionVectors2Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
+        writematrix(d.sub.repulsionChangeSigns, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_change_signs.csv']);
         writematrix(d.sub.springMultipliers, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/spring_multipliers.csv']);
         writematrix(d.sub.edgePoints, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/edge_points.csv']);
         writematrix(d.sub.restorativeSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/restorative_spring_constant.csv']);
-        writematrix(d.sub.directInteractionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/direct_interaction_spring_constant.csv']);
-        writematrix(d.sub.boundaryRepulsionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
+        writematrix(d.sub.centralInteractionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/central_interaction_spring_constant.csv']);
+        writematrix(d.sub.repulsionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
         writematrix(app.fFAInfo, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/focal_adhesion_strengths.csv']);
     end
     

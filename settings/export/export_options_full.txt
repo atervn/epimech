@@ -23,7 +23,7 @@ cellForcesFocalAdhesions,1
 cellForcesPointlike,1
 cellForcesContact,1
 cellForcesTotal,1
-substrateForcesDirect,1
+substrateForcesCentral,1
 substrateForcesRepulsion,1
 substrateForcesRestoration,1
 substrateForcesFocalAdhesions,1

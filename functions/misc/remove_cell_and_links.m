@@ -19,7 +19,7 @@ if numel(varargin) > 0 && varargin{1} == 1
     numberOfConnected = nnz(d.cells(cellToRemove).substrate.connected);
     
     % if there are connected vertices
-    if numel(connectedIdx) > 0
+    if numel(numberOfConnected) > 0
         
         % go through the connected vertices
         for i = 1:numberOfConnected
@@ -57,23 +57,6 @@ if numel(varargin) > 0 && varargin{1} == 1
             d.sub.adhesionNumbers(d.cells(cellToRemove).substrate.points(i,:)) = d.sub.adhesionNumbers(d.cells(cellToRemove).substrate.points(i,:)) - 1;
         end
     end
-    
-    % in optogenetic simulations, edit the activated vertices if
-    % required
-    if d.simset.simulationType == 5
-        
-        % if the cell vertices are within the activated region
-        if any(d.simset.opto.cells == cellToRemove)
-            
-            % reduce the indices of the activated vertices by one
-            % if they have higher index than the one being removed
-            cellIdx = d.simset.opto.cells == cellToRemove;
-            
-            % remove the cell and vertices from the optogenetic data
-            d.simset.opto.cells(cellIdx) = [];
-            d.simset.opto.vertices(cellIdx) = [];
-        end
-    end    
 end
 
 % remove the cell
@@ -84,7 +67,7 @@ for k = 1:length(d.cells)
     
     % find indices of the vertices that have junctions with the removed
     % cell
-    linksWithCell2Remove = cells(k).junctions.cells(:) == cellToRemove;
+    linksWithCell2Remove = d.cells(k).junctions.cells(:) == cellToRemove;
     
     % sets those junctions to zero
     d.cells(k).junctions.cells(linksWithCell2Remove) = 0;

@@ -165,8 +165,8 @@ if any(d.simset.simulationType == [2,5])
     removedBRVectors2 = [];
     
     for i = 1:length(removedInteractions)
-        removedBRVectors1Temp = find(d.sub.boundaryRepulsionVectorsIdx == removedInteractions(i));
-        removedBRVectors2Temp = find(d.sub.boundaryRepulsionVectors2Idx == removedInteractions(i));
+        removedBRVectors1Temp = find(d.sub.repulsionVectorsIdx == removedInteractions(i));
+        removedBRVectors2Temp = find(d.sub.repulsionVectors2Idx == removedInteractions(i));
         
         removedBRVectors = [removedBRVectors; removedBRVectors1Temp]; %#ok<AGROW>
         removedBRVectors2 = [removedBRVectors2; removedBRVectors2Temp]; %#ok<AGROW>
@@ -186,14 +186,14 @@ if any(d.simset.simulationType == [2,5])
     
     removedBR = union(removedBRVectors, removedBRVectors2);
     
-    [repulsionRows,repulsionCols] = ind2sub([6,d.sub.nPoints], d.sub.boundaryRepulsionLinIdx);
+    [repulsionRows,repulsionCols] = ind2sub([6,d.sub.nPoints], d.sub.repulsionLinIdx);
     
     for i = length(removedBR):-1:1
         repulsionCols(removedBR(i)) = [];
         repulsionRows(removedBR(i)) = [];
-        d.sub.boundaryRepulsionVectorsIdx(removedBR(i)) = [];
-        d.sub.boundaryRepulsionVectors2Idx(removedBR(i)) = [];
-        d.sub.boundaryRepulsionChangeSigns(removedBR(i)) = [];
+        d.sub.repulsionVectorsIdx(removedBR(i)) = [];
+        d.sub.repulsionVectors2Idx(removedBR(i)) = [];
+        d.sub.repulsionChangeSigns(removedBR(i)) = [];
         if isobject(app)
             current = current + 1;
             fracTemp = current/iterations;
@@ -228,11 +228,11 @@ if any(d.simset.simulationType == [2,5])
     
     [rows,cols,~] = find(repulsionSparse);
     
-    d.sub.boundaryRepulsionLinIdx = uint32(sub2ind([6,size(repulsionSparse,2)], rows, cols));
+    d.sub.repulsionLinIdx = uint32(sub2ind([6,size(repulsionSparse,2)], rows, cols));
     
     for i = length(removedInteractions):-1:1
-        d.sub.boundaryRepulsionVectorsIdx(d.sub.boundaryRepulsionVectorsIdx > removedInteractions(i)) = d.sub.boundaryRepulsionVectorsIdx(d.sub.boundaryRepulsionVectorsIdx > removedInteractions(i)) - 1;
-        d.sub.boundaryRepulsionVectors2Idx(d.sub.boundaryRepulsionVectors2Idx > removedInteractions(i)) = d.sub.boundaryRepulsionVectors2Idx(d.sub.boundaryRepulsionVectors2Idx > removedInteractions(i)) - 1;
+        d.sub.repulsionVectorsIdx(d.sub.repulsionVectorsIdx > removedInteractions(i)) = d.sub.repulsionVectorsIdx(d.sub.repulsionVectorsIdx > removedInteractions(i)) - 1;
+        d.sub.repulsionVectors2Idx(d.sub.repulsionVectors2Idx > removedInteractions(i)) = d.sub.repulsionVectors2Idx(d.sub.repulsionVectors2Idx > removedInteractions(i)) - 1;
         if isobject(app)
             current = current + 1;
             fracTemp = current/iterations;

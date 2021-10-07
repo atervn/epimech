@@ -4,7 +4,7 @@ temp = import_settings([app.CallingApp.plotImport(fileIdx).folderName '/pointlik
 
 pointLikeCell = temp.cell;
 
-substrateForces = {'Total substrate forces','Direct substrate forces','Restorative substrate forces','Repulsion substrate forces','Focal adhesion substrate forces'};
+substrateForces = {'Total substrate forces','Central substrate forces','Restorative substrate forces','Repulsion substrate forces','Focal adhesion substrate forces'};
 
 if ~any(strcmp(app.ForceDropDown.Value,substrateForces))
     
@@ -78,9 +78,15 @@ else
             case 'Total substrate forces'
                 importForces = csvread([app.CallingApp.plotImport(fileIdx).folderName '/substrate_forces/total/total_' num2str(timePoint) '.csv']);
                 forces = sqrt(importForces(:,1).^2 + importForces(:,2).^2);
-            case 'Direct substrate forces'
-                importForces = csvread([app.CallingApp.plotImport(fileIdx).folderName '/substrate_forces/direct/direct_' num2str(timePoint) '.csv']);
-                forces = sqrt(importForces(:,1).^2 + importForces(:,2).^2);
+            case 'Central substrate forces'
+                % LEGACY
+                try
+                    importForces = csvread([app.CallingApp.plotImport(fileIdx).folderName '/substrate_forces/central/central_' num2str(timePoint) '.csv']);
+                    forces = sqrt(importForces(:,1).^2 + importForces(:,2).^2);
+                catch
+                    importForces = csvread([app.CallingApp.plotImport(fileIdx).folderName '/substrate_forces/direct/direct_' num2str(timePoint) '.csv']);
+                    forces = sqrt(importForces(:,1).^2 + importForces(:,2).^2);
+                end
             case 'Restorative substrate forces'
                 importForces = csvread([app.CallingApp.plotImport(fileIdx).folderName '/substrate_forces/restoration/restoration_' num2str(timePoint) '.csv']);
                 forces = sqrt(importForces(:,1).^2 + importForces(:,2).^2);

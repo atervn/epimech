@@ -1,100 +1,136 @@
-function exMat = initialize_export_matrices(d, exTemp)
+function exportMatrices = initialize_export_matrices(d, export)
+% INITIALIZE_EXPORT_MATRICES Initializes the matrices for the export
+%   The function creates the matrices to which the exported data is
+%   collected
+%   INPUTS:
+%       d: main simulation data structure
+%       export: temporary export data structure
+%   OUTPUT:
+%       exportMatrices: structure of export matrices
+%   by Aapo Tervonen, 2021
 
+% if the cell vertex coordinates are exported
 if d.ex.vertices
-    exMat.vertices = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.vertices = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if the cell vertex states are exported
 if d.ex.vertexStates
-    exMat.vertexStates = zeros([exTemp.nVerticesMax exTemp.nCells]);
+    exportMatrices.vertexStates = zeros([export.nVerticesMax export.nCells]);
 end
 
+% if the cell division related data is exported
 if d.ex.division
-    exMat.divisionStates = zeros([1 exTemp.nCells]);
-    exMat.divisionVertices = zeros([2 exTemp.nCells]);
-    exMat.divisionDistances = zeros([1 exTemp.nCells]);
-    exMat.newNormAreas = zeros([2 exTemp.nCells]);
-    exMat.targetAreas = zeros([1 exTemp.nCells]);
+    exportMatrices.divisionStates = zeros([1 export.nCells]);
+    exportMatrices.divisionVertices = zeros([2 export.nCells]);
+    exportMatrices.divisionDistances = zeros([1 export.nCells]);
+    exportMatrices.newNormAreas = zeros([2 export.nCells]);
+    exportMatrices.targetAreas = zeros([1 export.nCells]);
 end
 
+% if the cell states are exported
 if d.ex.cellStates
-    exMat.cellStates = zeros([1 exTemp.nCells]);
+    exportMatrices.cellStates = zeros([1 export.nCells]);
 end
 
+% if the cell junction data is exported
 if d.ex.junctions
-    exMat.junctions = zeros([exTemp.nVerticesMax exTemp.nCells*4]);
+    exportMatrices.junctions = zeros([export.nVerticesMax export.nCells*4]);
 end
 
+% if the cell boundary lengths are exported
 if d.ex.boundaryLengths
-    exMat.boundaryLengths = zeros([exTemp.nVerticesMax exTemp.nCells]);
+    exportMatrices.boundaryLengths = zeros([export.nVerticesMax export.nCells]);
 end
 
+% if the cell areas are exported
 if d.ex.areas
-    exMat.areas = zeros([1 exTemp.nCells]);
+    exportMatrices.areas = zeros([1 export.nCells]);
 end
 
+% if the cell perimeters are exported
 if d.ex.perimeters
-    exMat.perimeters = zeros([1 exTemp.nCells]);
+    exportMatrices.perimeters = zeros([1 export.nCells]);
 end
 
+% if the cell normal area and perimeter are exported
 if d.ex.normProperties
-    exMat.normProperties = zeros([2 exTemp.nCells]);
+    exportMatrices.normProperties = zeros([2 export.nCells]);
 end
 
+% if the cortical tension data is exported
 if d.ex.corticalTensions
-    exMat.vertexCorticalTensions = zeros([exTemp.nVerticesMax exTemp.nCells]);
-    exMat.corticalTensions = zeros([1 exTemp.nCells]);
-    exMat.perimeterConstants = zeros([1 exTemp.nCells]);
+    exportMatrices.vertexCorticalTensions = zeros([export.nVerticesMax export.nCells]);
+    exportMatrices.corticalTensions = zeros([1 export.nCells]);
+    exportMatrices.perimeterConstants = zeros([1 export.nCells]);
 end
 
+% if the cell lineage data is exported
 if d.ex.lineage
-    exMat.lineage = zeros([exTemp.nLineageMax exTemp.nCells]);
+    exportMatrices.lineage = zeros([export.nLineageMax export.nCells]);
 end
 
+% if focal adhesion data is exported (and if substrate is included in the
+% simulation)
 if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
-    exMat.focalAdhesionPoints = zeros([exTemp.nVerticesMax exTemp.nCells*3]);
-    exMat.focalAdhesionConnected = zeros([exTemp.nVerticesMax exTemp.nCells]);
-    exMat.focalAdhesionWeights = zeros([exTemp.nVerticesMax exTemp.nCells*3]);
-    if d.ex.substrateFull && any(d.simset.simulationType == [2,3])
-        exMat.focalAdhesionMatrixIdx = zeros([exTemp.nVerticesMax*3 exTemp.nCells]);
-        exMat.focalAdhesionLinkCols = zeros([exTemp.nVerticesMax exTemp.nCells*3]);
-        exMat.focalAdhesionStrengths = zeros([exTemp.nVerticesMax exTemp.nCells]);
+    
+    % this data is required for plotting the focal adhesions
+    exportMatrices.focalAdhesionPoints = zeros([export.nVerticesMax export.nCells*3]);
+    exportMatrices.focalAdhesionConnected = zeros([export.nVerticesMax export.nCells]);
+    exportMatrices.focalAdhesionWeights = zeros([export.nVerticesMax export.nCells*3]);
+    
+    % this data is required to use this export as a starting point for new
+    % simulation
+    if d.ex.substrateFull && any(d.simset.simulationType == [2,3,5])
+        exportMatrices.focalAdhesionMatrixIdx = zeros([export.nVerticesMax*3 export.nCells]);
+        exportMatrices.focalAdhesionLinkCols = zeros([export.nVerticesMax export.nCells*3]);
+        exportMatrices.focalAdhesionStrengths = zeros([export.nVerticesMax export.nCells]);
     end
 end
 
+% if cell area forces are exported
 if d.ex.cellForcesArea
-    exMat.cellForcesArea = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesArea = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell cortical forces are exported
 if d.ex.cellForcesCortical
-    exMat.cellForcesCortical = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesCortical = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell junction forces are exported
 if d.ex.cellForcesJunctions
-    exMat.cellForcesJunctions = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesJunctions = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell division forces are exported
 if and(d.ex.cellForcesDivision,d.simset.simulationType == 1)
-    exMat.cellForcesDivision = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesDivision = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell membrane forces are exported
 if d.ex.cellForcesMembrane
-    exMat.cellForcesMembrane = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesMembrane = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell focal adhesion forces are exported
 if and(d.ex.cellForcesFocalAdhesions,any(d.simset.simulationType == [2,3,5]))
-    exMat.cellForcesFocalAdhesions = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesFocalAdhesions = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell pointlike forces are exported
 if and(d.ex.cellForcesPointlike,d.simset.simulationType == 2)
-    exMat.cellForcesPointlike = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesPointlike = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell contact forces are exported
 if d.ex.cellForcesContact
-    exMat.cellForcesContact = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesContact = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if cell total forces are exported
 if d.ex.cellForcesTotal
-    exMat.cellForcesTotal = zeros([exTemp.nVerticesMax exTemp.nCells*2]);
+    exportMatrices.cellForcesTotal = zeros([export.nVerticesMax export.nCells*2]);
 end
 
 end

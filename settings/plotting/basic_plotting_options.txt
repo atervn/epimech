@@ -22,7 +22,7 @@ cellForcesArea,0
 cellForcesPointlike,0
 cellForcesFocalAdhesions,0
 cellForcesTotal,0
-substrateForcesDirect,0
+substrateForcesCentral,0
 substrateForcesRepulsion,0
 substrateForcesRestoration,0
 substrateForcesFocalAdhesions,0

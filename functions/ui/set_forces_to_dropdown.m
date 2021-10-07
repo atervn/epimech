@@ -120,13 +120,14 @@ else
     end
 end
 
-if exist([folderName '/substrate_forces/direct/'],'dir') == 7
-    temp = strcmp(forceItems,'Direct substrate forces');
+% LEGACY
+if exist([folderName '/substrate_forces/direct/'],'dir') == 7 || exist([folderName '/substrate_forces/central/'],'dir') == 7
+    temp = strcmp(forceItems,'Central substrate forces');
     if ~any(temp)
-        forceItems = [forceItems 'Direct substrate forces'];
+        forceItems = [forceItems 'Central substrate forces'];
     end
 else
-    temp = strcmp(forceItems,'Direct substrate forces');
+    temp = strcmp(forceItems,'Central substrate forces');
     if any(temp)
         forceItems(temp) = [];
     end

@@ -17,7 +17,7 @@ switch settingsType
         settings.focalAdhesions = logical(settings.focalAdhesions);
         settings.pointlike = logical(settings.pointlike);
         settings.opto = logical(settings.opto);
-        settings.substrateForcesDirect = logical(settings.substrateForcesDirect);
+        settings.substrateForcesCentral = logical(settings.substrateForcesCentral);
         settings.substrateForcesRepulsion = logical(settings.substrateForcesRepulsion);
         settings.substrateForcesRestoration = logical(settings.substrateForcesRestoration);
         settings.substrateForcesFocalAdhesions = logical(settings.substrateForcesFocalAdhesions);
@@ -44,7 +44,7 @@ switch settingsType
         settings.normProperties = logical(settings.normProperties);
         settings.substratePlot = logical(settings.substratePlot);
         settings.substrateFull = logical(settings.substrateFull);
-        settings.substrateForcesDirect = logical(settings.substrateForcesDirect);
+        settings.substrateForcesCentral = logical(settings.substrateForcesCentral);
         settings.substrateForcesRepulsion = logical(settings.substrateForcesRepulsion);
         settings.substrateForcesRestoration = logical(settings.substrateForcesRestoration);
         settings.substrateForcesFocalAdhesions = logical(settings.substrateForcesFocalAdhesions);

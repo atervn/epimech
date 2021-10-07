@@ -80,25 +80,11 @@ while longLengths ~= 0
                         d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(1:longIdx(i)-1) ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; d.cells(k).vertexCorticalTensions(longIdx(i)+1:end)];
                     end
                     
-                    % comment later
-                    if d.simset.simulationType == 5
-                        if any(d.simset.opto.cells == k)
-                            longVertex = longIdx(i);
-                            cellIdx = d.simset.opto.cells == k;
-                            d.simset.opto.vertices{cellIdx}(d.simset.opto.vertices{cellIdx} > longVertex) = d.simset.opto.vertices{cellIdx}(d.simset.opto.vertices{cellIdx} > longVertex) + 1;
-                            
-                            if any(d.simset.opto.vertices{cellIdx} == longVertex) || any(d.simset.opto.vertices{cellIdx} == longVertex + 2)
-                                d.simset.opto.vertices{cellIdx} = sort([d.simset.opto.vertices{cellIdx} ; longVertex + 1]);
-                            end
-                            
-                        end
-                    end
-                    
                     % with optogenetic or stretching simulation, update the
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i), 1);
-                        d = add_new_edge_vertices(d, k, longIdx(i), 1);
+                        d = add_new_frame_vertices(d, k, longIdx(i), 1);
                     end
                     
                     % last vertex of the cell
@@ -129,7 +115,7 @@ while longLengths ~= 0
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i),2);
-                        d = add_new_edge_vertices(d, k, longIdx(i),2);
+                        d = add_new_frame_vertices(d, k, longIdx(i),2);
                     end
                 end
                 

@@ -51,7 +51,8 @@ elseif strcmp(app.simulationType,'stretch')
     spar.substratePointDistance = app.substrateParameters.substratePointDistance/app.systemParameters.scalingLength;
     spar.maxMembraneAngle = app.specificCellParameters.maxMembraneAngle;
     spar.maxJunctionAngleConstant = app.specificCellParameters.maxJunctionAngleConstant;
- 
+    spar.junctionModificationTimeStep = app.systemParameters.junctionModificationTimeStep/app.systemParameters.scalingTime;
+    
 elseif strcmp(app.simulationType,'opto')
     spar.fMembrane = app.specificCellParameters.fMembrane*app.systemParameters.scalingTime/app.systemParameters.eta;
     spar.fEdgeCell = app.specificCellParameters.fEdgeCell*app.systemParameters.scalingTime/app.systemParameters.eta;

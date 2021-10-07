@@ -197,13 +197,14 @@ else
     end
 end
 
-if exist([folderName '/substrate_forces/direct/'],'dir') == 7
-    temp = strcmp(forceItemsPlot,'Direct substrate forces');
+% LEGACY
+if exist([folderName '/substrate_forces/central/'],'dir') == 7 || exist([folderName '/substrate_forces/direct/'],'dir') == 7
+    temp = strcmp(forceItemsPlot,'Central substrate forces');
     if ~any(temp)
-        forceItemsPlot = [forceItemsPlot 'Direct substrate forces'];
+        forceItemsPlot = [forceItemsPlot 'Central substrate forces'];
     end
 else
-    temp = strcmp(forceItemsPlot,'Direct substrate forces');
+    temp = strcmp(forceItemsPlot,'Central substrate forces');
     if any(temp)
         forceItemsPlot(temp) = [];
     end

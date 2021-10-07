@@ -6,6 +6,7 @@ function uniques = get_uniques(vector,cellNumbers,zeroVec)
 %       zeroVec: vector of zeros with the same length as cellNumbers
 %   OUTPUT:
 %       uniques: unique pair cell indices
+%   by Aapo Tervonen, 2021
 
 % if there are pair cells
 if numel(vector)

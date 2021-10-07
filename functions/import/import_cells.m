@@ -193,7 +193,6 @@ for k = 1:nCells
                 cells(k).junctions.cells = [importedJunctions(1:cells(k).nVertices,1+2*(k-1)) zeros(cells(k).nVertices,1)];
                 cells(k).junctions.vertices = [importedJunctions(1:cells(k).nVertices,2+2*(k-1)) zeros(cells(k).nVertices,1)];
             end
-            cells = initialize_junction_data(cells);
         end
         if app.importPlottingOptions.cellForcesTotal
             tempData = importedTotalForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
@@ -276,4 +275,10 @@ for k = 1:nCells
         end
     end
     
+end
+
+ if strcmp (option, 'post_plotting') && (app.importPlottingOptions.junctions || app.importPlottingOptions.cellStyle == 3 || app.importPlottingOptions.cellStyle == 5)
+     cells = initialize_junction_data(cells);
+ end
+ 
 end

@@ -44,10 +44,10 @@ for k = 1:length(d.cells)
                 % calculate the distance between the neighboring vertices
                 distance = sqrt((d.cells(k).verticesX(divisionVertexRight) - d.cells(k).verticesX(divisionVertexLeft)).^2 + (d.cells(k).verticesY(divisionVertexRight) - d.cells(k).verticesY(divisionVertexLeft)).^2);
                 
-                % if the distance is above 1.5 times the normal junction
-                % length, add new vertices on each side separated by the normal
+                % if the distance is above the normal junction length, add
+                % new vertices on each side separated by the normal
                 % junction length
-                if distance > 1.5*d.spar.junctionLength
+                if distance > d.spar.junctionLength
                                         
                     % add the new vertices on each side of the first division
                     % vertex
@@ -82,6 +82,10 @@ for k = 1:length(d.cells)
             d.cells(end).junctions.cells = d.cells(k).junctions.cells(divisionVertex1Left:divisionVertex2Right,:);
             d.cells(end).junctions.vertices = d.cells(k).junctions.vertices(divisionVertex1Left:divisionVertex2Right,:);
 
+            % get the indices of the vertex that have one or two junctions
+            d.cells(end).junctions.linkedIdx1 = find(d.cells(end).vertexStates > 0);
+            d.cells(end).junctions.linkedIdx2 = find(d.cells(end).vertexStates == 2);
+            
             % get the cortical tensions for the new cell
             d.cells(end).vertexCorticalTensions = d.cells(k).vertexCorticalTensions(divisionVertex1Left:divisionVertex2Right);
             
@@ -121,6 +125,10 @@ for k = 1:length(d.cells)
                 d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(idx1);d.cells(k).vertexCorticalTensions(idx2)];
             end
 
+            % get the indices of the vertex that have one or two junctions
+            d.cells(k).junctions.linkedIdx1 = find(d.cells(k).vertexStates > 0);
+            d.cells(k).junctions.linkedIdx2 = find(d.cells(k).vertexStates == 2);
+            
             % update junction pairs' data for both the new and old cells
             for k2 = [length(d.cells) k]
                 

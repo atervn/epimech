@@ -159,7 +159,7 @@ end
 % remove the orientation from the ellipse
 if ( min(abs(b/a),abs(b/c)) > orientation_tolerance )
     
-    orientation_rad = (1/2 * atan2(b,(c-a) )); %MODIFIED ACCORDING TO COMMENT BY FRANK (18 OCAT 2015 AT https://se.mathworks.com/matlabcentral/fileexchange/3215-fit_ellipse
+    orientation_rad = (1/2 * atan2(b,(c-a) )); %MODIFIED ACCORDING TO COMMENT BY FRANK (18 OCAT 2015 AT https://se.mathworks.com/matlabcentral/fileexchange/3215-fit_ellipse)
     cos_phi = cos( orientation_rad );
     sin_phi = sin( orientation_rad );
     [a,b,c,d,e] = deal(...

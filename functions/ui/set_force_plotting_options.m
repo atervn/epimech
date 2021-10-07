@@ -33,9 +33,9 @@ if pastOption == 0
         case 'Total substrate forces'
             pastOption = app.CallingApp.importPlottingOptions.substrateForcesTotal;
             app.CallingApp.importPlottingOptions.substrateForcesTotal = true;
-        case 'Direct substrate forces'
-            pastOption = app.CallingApp.importPlottingOptions.substrateForcesDirect;
-            app.CallingApp.importPlottingOptions.substrateForcesDirect = true;
+        case 'Central substrate forces'
+            pastOption = app.CallingApp.importPlottingOptions.substrateForcesCentral;
+            app.CallingApp.importPlottingOptions.substrateForcesCentral = true;
         case 'Restorative substrate forces'
             pastOption = app.CallingApp.importPlottingOptions.substrateForcesRepulsion;
             app.CallingApp.importPlottingOptions.substrateForcesRepulsion = true;
@@ -70,7 +70,7 @@ else
             app.CallingApp.importPlottingOptions.cellForcesFocalAdhesions = pastOption;
         case 'Total substrate forces'
             app.CallingApp.importPlottingOptions.substrateForcesTotal = pastOption;
-        case 'Direct substrate forces'
+        case 'Central substrate forces'
             app.CallingApp.importPlottingOptions.substrateForcesTotal = pastOption;
         case 'Restorative substrate forces'
             app.CallingApp.importPlottingOptions.substrateForcesRepulsion = pastOption;
