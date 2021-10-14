@@ -7,4 +7,4 @@ fJunctions,0.04
 fContact,0.02
 perimeterConstant,120
 perimeterModelingRate,0.00315
-minimumCellSize,25e-12
+minimumCellSize,10e-12

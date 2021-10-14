@@ -65,6 +65,6 @@ frameCell.junctions.linked2CellNumbers2 = zeros(0,1);
 frameCell = set_empty_cell_properties(frameCell);
 frameCell.division.newAreas = zeros(2,1);
 frameCell.lineage = 1;
-frameCell.corticalTension = 1;
+frameCell.cortex.fCortex = 1;
 
 end

@@ -19,8 +19,7 @@ switch plotCase
         d.pl.highlightedCells = [];
         d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
     case 'browse'
-        d.simset.simulationType = 0;
-        d.spar = scale_parameters(app);
+        d.simset.simulationType = 0;scal
         d.spar.scalingTime = app.import.scaledParameters.scalingTime;
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
@@ -34,7 +33,6 @@ switch plotCase
         d.pl.automaticSize = app.AutomaticsizeCheckBox_3.Value;
     case 'add_cells'
         d.simset.simulationType = 0;
-        d.spar = scale_parameters(app);
         d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
         d.pl.plotType = 2;
         d.pl.titleType = 3;

@@ -23,7 +23,7 @@ elseif strcmp(option,'browse_pre_simulation')
             d.cells = initialize_cells_struct;
             
             d.cells = import_cells(app,d.cells,'basic_plotting');
-            d.cells = remove_cells_gui(app, d.cells,'basic_plotting');
+            d = remove_cells_gui(app, d,'basic_plotting');
             
             if app.CentercellsCheckBox.Value
                 d.cells = center_cells(d.cells);

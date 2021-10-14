@@ -11,7 +11,10 @@ folderExists = exist([app.plotImport(app.selectedFile).folderName '/areas'],'dir
 for i = 1:app.plotImport(app.selectedFile).nTimePoints
     if ~folderExists
         app.plotImport(app.selectedFile).currentTimePoint = i;
-        cells = import_cells(app,'post_plotting');
+        
+        d = [];
+        
+        cells = import_cells(app,d,'post_plotting');
         
         tempAreas = zeros(1,length(cells));
         for k = 1:length(cells)

@@ -20,12 +20,12 @@ switch app.appTask
         % LEGACY
         try
             d.sub.repulsionLinIdx = csvread([folderName '/substrate_auxiliary/repulsion_lin_idx.csv']);
-            d.sub.repulsionVectorsIdx = csvread([folderName '/substrate_auxiliary/repulsion_vectors_idx.csv']);
+            d.sub.repulsionVectors1Idx = csvread([folderName '/substrate_auxiliary/repulsion_vectors1_idx.csv']);
             d.sub.repulsionVectors2Idx = csvread([folderName '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
             d.sub.repulsionChangeSigns = csvread([folderName '/substrate_auxiliary/repulsion_change_signs.csv']);
         catch
             d.sub.repulsionLinIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_lin_idx.csv']);
-            d.sub.repulsionVectorsIdx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']);
+            d.sub.repulsionVectors1Idx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']);
             d.sub.repulsionVectors2Idx = csvread([folderName '/substrate_auxiliary/boundary_repulsion_vectors2_idx.csv']);
             d.sub.repulsionChangeSigns = csvread([folderName '/substrate_auxiliary/boundary_repulsion_change_signs.csv']);
         end
@@ -37,9 +37,9 @@ switch app.appTask
         
         % LEGACY
         try
-            d.sub.centralInteractionSpringConstants = csvread([folderName '/substrate_auxiliary/central_interaction_spring_constant.csv']);
+            d.sub.centralSpringConstants = csvread([folderName '/substrate_auxiliary/central_spring_constant.csv']);
         catch
-            d.sub.centralInteractionSpringConstants = csvread([folderName '/substrate_auxiliary/direct_interaction_spring_constant.csv']);
+            d.sub.centralSpringConstants = csvread([folderName '/substrate_auxiliary/direct_interaction_spring_constant.csv']);
         end
         % LEGACY
         try

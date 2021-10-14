@@ -6,7 +6,7 @@ switch tempTableData{eventdata.Indices(1),1}
             restore_previous_value('rCell must be numeric.',eventdata,tempTableData,app)
         elseif ~isempty(app.cellCenters)
             restore_previous_value('Please reset the cells to modify rCell.',eventdata,tempTableData,app);
-        elseif strcmp(app.modelCase,'loaded')
+        elseif strcmp(app.modelCase,'import')
             restore_previous_value('Cannot be edited when simulation is loaded.',eventdata,tempTableData,app);
         elseif eventdata.NewData <= 0
             restore_previous_value('rCell must have a value above zero.',eventdata,tempTableData,app)

@@ -1,13 +1,13 @@
-function d = main_simulation(d,app)
+function d = main_simulation(app,d)
 % MAIN_SIMULATION The main simulation loop in the model.
 %   The function simulates the epimech model by running through the
 %   simulation loop.
 %   INPUTS:
+%       app: main app handle is needed to enable simulation stopping as
+%           well as the progress bar
 %       d: main simulation data structure that include the cell data,
 %           substrate data (if included), simulation settings, plotting
 %           settings, and export settings
-%       app: main app handle is needed to enable simulating stopping as
-%           well as the progress bar
 %   OUTPUT:
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021
@@ -29,14 +29,13 @@ if d.simset.timeSimulation
 end
 
 % if showing progress bar
-if d.simset.progressBar
-    d.simset = progress_bar(app,time,d.spar,d.simset);
-end
+d = update_progress_bar(app, d, time);
+
 
 % if the time steps are plotted following the simulation
 if d.simset.dtPlot
-    timeStepsCells = [];
-    timeStepsSub = [];
+    d.simset.timeStepsCells = [];
+    d.simset.timeStepsSub = [];
 end
 
 tic
@@ -138,7 +137,7 @@ while time - d.spar.simulationTime <= 1e-8
     
     % save time step for post plotting
     if d.simset.dtPlot
-        timeStepsCells(end+1) = dt; %#ok<AGROW>
+        d.simset.timeStepsCells(end+1) = dt;
     end
     
     %% solve substrate
@@ -149,7 +148,7 @@ while time - d.spar.simulationTime <= 1e-8
         
         % save time step for post plotting
         if d.simset.dtPlot
-            timeStepsSub(end+1) = subDt; %#ok<AGROW>
+            d.simset.timeStepsSub(end+1) = subDt;
         end
     end
     
@@ -162,7 +161,7 @@ while time - d.spar.simulationTime <= 1e-8
     export_data(d, time)
     
     % move pointlike micromanipulator
-    d.simset.pointlike = move_pointlike(time, dt, d.simset.pointlike);
+    d = move_pointlike(d, time, dt);
     
     % move substrate points in lateral compression or stretching
     % simulations (not solved)
@@ -178,9 +177,7 @@ while time - d.spar.simulationTime <= 1e-8
     dt = update_dt(d,dt,time,maxmaxMovement);
 
     % update progress bar if shown
-    if d.simset.progressBar
-        d.simset = progress_bar(app,time,d.spar,d.simset);
-    end
+    d = update_progress_bar(app, d, time);
 end
 
 % plot the simulation time steps if selected

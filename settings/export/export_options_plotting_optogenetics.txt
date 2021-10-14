@@ -9,7 +9,7 @@ areas,1
 perimeters,1
 normProperties,1
 normLengths,0
-corticalTensions,1
+corticalStrengths,1
 lineage,0
 pointlike,0
 opto,1

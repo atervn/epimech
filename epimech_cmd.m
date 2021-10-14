@@ -54,11 +54,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
         rng shuffle
         
         tic;
-        
-        d = initialize_d_structure;
-        
-        d.simset = define_simset_structure;
-        
+            
         switch data.simulationType
             case 'growth'
                 d.simset.solver = 1;
@@ -80,12 +76,10 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
             d.simset.simulationType = 3;
         end
         
-        d.simset.divisionType = 1;
-        d.simset.simulating = 1;
+        d.simset.division.type = 1;
         d.simset.progressBar = false;
         d.simset.timeSimulation = false;
         d.simset.simulating = 0;
-        d.simset.stopped = 0;
         d.simset.stopOrPause = false;
         d.simset.dtPlot = 0;
         
@@ -110,7 +104,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
             app.systemParameters.maximumTimeStep = data.maximumTimeStep;
             if data.stopDivisionTime ~= 0
                 app.systemParameters.stopDivisionTime = data.stopDivisionTime;
-                d.simset.divisionType = 2;
+                d.simset.division.type = 2;
             end
             
             app.customExportOptions = settings_to_logical(import_settings(data.exportSettings{iLoop}),'export');
@@ -132,17 +126,16 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
             if isempty(data.initialStateFiles)
                 app.modelCase = 'new';
                 d.cells = initialize_cells_struct;
-                d = single_cell_initialization(d,[0;0]);
+                d = create_cell(d,[0;0]);
                 if strcmp(data.simulationType,'growth')
-                    d.simset.sizeType = data.sizeType(iLoop);
+                    d.simset.division.sizeType = data.sizeType(iLoop);
                 elseif strcmp(data.simulationType,'pointlike')
-                    d.simset.sizeType = 0;
+                    d.simset.division.sizeType = 0;
                 elseif strcmp(data.simulationType,'opto')
-                    d.simset.sizeType = 0;
+                    d.simset.division.sizeType = 0;
                 end
-                d.cells = assign_cortical_tensions(app, d.cells, d.spar);
             else
-                app.modelCase = 'loaded';
+                app.modelCase = 'import';
                 app.import = struct();
                 [~,fileName,~] = fileparts(data.initialStateFiles{iLoop});
                 
@@ -171,7 +164,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                     d.spar.fArea = app.import.scaledParameters.fArea*app.systemParameters.scalingTime/app.systemParameters.eta/app.import.scaledParameters.scalingTime*app.import.systemParameters.eta;
                 end
                 
-                d.cells = import_cells(app,'simulation');
+                d = import_cells(app,d,'simulation');
                 
                 if ~isempty(data.removeCells.type)
                     shapeSize = data.removeCells.size{iLoop}*1e-6/d.spar.scalingLength/2;
@@ -197,13 +190,12 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                     end
                 end
                 
-                d.cells = assign_cortical_tensions(app, d.cells, d.spar);
-                d.cells = initialize_junction_data(d.cells);
+                d.cells = get_junction_data(d.cells);
                 
                 if d.simset.simulationType == 1
-                    d.cells = set_division_times(d.cells,d.simset,d.spar,length(d.cells));
+                    d = edit_division_properties(d);
                 end
-                d.simset.sizeType = csvread([app.import.folderName '/size_type.csv']);
+                d.simset.division.sizeType = csvread([app.import.folderName '/size_type.csv']);
                 
                 if any(d.simset.simulationType == [2 3 5])
                     for k = 1:length(d.cells)
@@ -217,34 +209,21 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                 
             end
             
-            d = get_edge_vertices(d);
+            d.cells = get_edge_vertices(d.cells);
             
-            if d.simset.simulationType == 1 && d.simset.sizeType == 2
-                
-                f = @(x) 0.02902.*exp(-((x-103.3)./12.82).^2) + 0.05107.*exp(-((x-79.61)./19.21).^2) + 0.07028.*exp(-((x-107.9)./45.84).^2) + 0.0126.*exp(-((x-164)./79.22).^2);
-                nTries = 10000;
-                
-                d.simset.newAreas = slicesample(1,nTries,'pdf',f)*1e-12/d.spar.scalingLength^2;
+            if d.simset.simulationType == 1 && d.simset.division.sizeType == 2
+
+                d.simset.newAreas = get_mdck_areas(d.spar)
             end
             
             if any(d.simset.simulationType == [2,3,5])
                 
                 d.sub = initialize_substrate_structure;
                 
-                maxPointX = zeros(1,length(d.cells));
-                minPointX = maxPointX;
-                maxPointY = maxPointX;
-                minPointY = maxPointX;
-                for k = 1:length(d.cells)
-                    maxPointX(k) = max(d.cells(k).verticesX);
-                    minPointX(k) = min(d.cells(k).verticesX);
-                    maxPointY(k) = max(d.cells(k).verticesY);
-                    minPointY(k) = min(d.cells(k).verticesY);
-                end
+                % find the square size that fits the epithelium
+                maxSize = get_maximum_epithelium_size(d);
                 
-                maxSize = max(max([abs([maxPointX; minPointX; maxPointY; minPointY])]));
-                
-                d.spar.substrateSize = maxSize*2 + d.spar.rCell;
+                substrateSize = maxSize*2 + d.spar.rCell;
                 
                 if d.simset.simulationType == 3
                     
@@ -265,7 +244,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                     d.simset.stretch.axis = data.stretching.directions{iLoop};
                 end
                 
-                d = form_substrate(d,app);
+                d = create_substrate(app,d,substrateSize);
                 
                 switch data.stiffnessType{iLoop}
                     case 'uniform'
@@ -290,7 +269,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
                     
                     
                     % define focal adhesions
-                    [d, ok] = form_focal_adhesions(d,app);
+                    [d, ok] = create_focal_adhesions(d,app);
                     if ~ok
                         expansionMultiplier = expansionMultiplier*1.1;
                     else
@@ -409,7 +388,7 @@ parfor (iLoop = 1:data.nSimulations, parforArg)
             d.pl.plot = 0;
             d.pl.videoObject = 0;
             
-            d = main_simulation(d,app);
+            d = main_simulation(app,d);
             
             
             

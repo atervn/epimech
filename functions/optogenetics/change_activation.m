@@ -2,7 +2,8 @@ function d = change_activation(d, time)
 % CHANGE_ACTIVATION Modify the state of the optogenetic activation
 %   The function finds the vertices that are within the optogenetic
 %   activation regions and assigns the appropriate increases in the
-%   cortical tension for the cortical links associated with these vertices.
+%   cortical multipliers for the cortical links associated with these
+%   vertices.
 %   INPUTS:
 %       d: main simulation data structure
 %       time: current simulation time
@@ -49,8 +50,8 @@ if d.simset.opto.levels(d.simset.opto.currentTime) > 0
         % go through these cells
         for k = notActivatedCells
             
-            % set the vertex cortical tensions to one (default)
-            d.cells(k).vertexCorticalTensions = ones(d.cells(k).nVertices,1);
+            % set the vertex cortical multipliers to one (default)
+            d.cells(k).cortex.vertexMultipliers = ones(d.cells(k).nVertices,1);
         end
     end
     
@@ -62,7 +63,7 @@ elseif switchOff
     
     % go through the activated cells and remove their activations
     for k = d.simset.opto.cells
-        d.cells(k).vertexCorticalTensions = ones(d.cells(k).nVertices,1);
+        d.cells(k).cortex.vertexMultipliers = ones(d.cells(k).nVertices,1);
         d.simset.opto.cells = [];
         d.simset.opto.vertices = {};
     end
@@ -162,16 +163,15 @@ end
 function d = assign_activations(d)
 % ASSIGN_ACTIVATIONS Assign the appropriate activation for the vertices
 %   The function goes through the activated vertices and assigns
-%   multipliers for their cortical tensions accordingly. To smoothen the
-%   changes in cortical tensions, 3 different levels of activation are
-%   used: (1) fully activated for vertices whose cortical link passes 
-%   between two activated vertices, with also the middle point that is
-%   passed over being activated; (2) the half activated is used for cases
-%   where only one of the end points of the cortical link is activated,
-%   with also the middle vertex being activated, or when only the middle
-%   vertex is activated; and (3) the quarter activated is used for cases
-%   where only one of the end points is activated, but not the middle
-%   vertex.
+%   multipliers accordingly. To smoothen the changes in cortical tensions,
+%   3 different levels of activation are used: (1) fully activated for
+%   vertices whose cortical link passes between two activated vertices,
+%   with also the middle point that is passed over being activated; (2) the
+%   half activated is used for cases where only one of the end points of
+%   the cortical link is activated, with also the middle vertex being
+%   activated, or when only the middle vertex is activated; and (3) the
+%   quarter activated is used for cases where only one of the end points is
+%   activated, but not the middle vertex.
 %   INPUTS:
 %       d: main simulation data structure
 %   OUTPUT:
@@ -185,7 +185,7 @@ for k = 1:length(d.simset.opto.cells)
     cellID = d.simset.opto.cells(k);
     
     % reset their vertex cortical tensions
-    d.cells(cellID).vertexCorticalTensions = ones(d.cells(cellID).nVertices,1);
+    d.cells(cellID).cortex.vertexMultipliers = ones(d.cells(cellID).nVertices,1);
     
     % make a temporary vector and assign 1 to all activated vertices
     verticesTemp = zeros(d.cells(cellID).nVertices,1);
@@ -419,9 +419,9 @@ for k = 1:length(d.simset.opto.cells)
     end
     
     % assign the activation values based on the derived multipliers
-    d.cells(cellID).vertexCorticalTensions(quarterActivated) = 1 + 0.25.*d.simset.opto.levels(d.simset.opto.currentTime);
-    d.cells(cellID).vertexCorticalTensions(halfActivated) = 1 + 0.5.*d.simset.opto.levels(d.simset.opto.currentTime);
-    d.cells(cellID).vertexCorticalTensions(fullyActivated) = 1 + d.simset.opto.levels(d.simset.opto.currentTime);
+    d.cells(cellID).cortex.vertexMultipliers(quarterActivated) = 1 + 0.25.*d.simset.opto.levels(d.simset.opto.currentTime);
+    d.cells(cellID).cortex.vertexMultipliers(halfActivated) = 1 + 0.5.*d.simset.opto.levels(d.simset.opto.currentTime);
+    d.cells(cellID).cortex.vertexMultipliers(fullyActivated) = 1 + d.simset.opto.levels(d.simset.opto.currentTime);
 end
 
 end

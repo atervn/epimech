@@ -12,10 +12,10 @@ function [centralForcesX,centralForcesY] = get_substrate_central_forces(d,subTem
 %   by Aapo Tervonen, 2021
 
 % calculate the force strengths based on the nonlinear springs (the 
-% centralInteractionSpringConstants is either a single value for a
-% substrate with unifrom stiffness or has the length of the number of
-% central interactions in the case for a heterogeneous stiffness).
-forceStrengths = d.sub.centralInteractionSpringConstants.*(subTemp.vectorLengths - d.spar.substratePointDistance.^2.*subTemp.reciprocalVectorLengths);
+% centralSpringConstants is either a single value for a substrate with
+% unifrom stiffness or has the length of the number of central interactions
+% in the case for a heterogeneous stiffness). 
+forceStrengths = d.sub.centralSpringConstants.*(subTemp.vectorLengths - d.spar.substratePointDistance.^2.*subTemp.reciprocalVectorLengths);
 
 % calculate the central forces for each interaction
 centralForcesLinX = forceStrengths.*subTemp.unitVectorsX;

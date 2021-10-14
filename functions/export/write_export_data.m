@@ -59,11 +59,11 @@ if d.ex.normProperties
     write_file(d.ex, exportMatrices.normProperties, 'norm_properties', exportNumber);
 end
 
-% write the cell cortical tension data to file
-if d.ex.corticalTensions
-    write_file(d.ex,exportMatrices.vertexCorticalTensions, 'vertex_cortical_tensions', exportNumber, 'cortical_tension');
-    write_file(d.ex,exportMatrices.corticalTensions, 'cortical_tensions', exportNumber, 'cortical_tension');
-    write_file(d.ex,exportMatrices.perimeterConstants, 'cortical_constants', exportNumber, 'cortical_tension');
+% write the cell cortical data to files
+if d.ex.corticalStrengths
+    write_file(d.ex,exportMatrices.vertexCorticalMultipliers, 'vertex_cortical_multipliers', exportNumber, 'cortex');
+    write_file(d.ex,exportMatrices.corticalStrengths, 'cortical_strengths', exportNumber, 'cortex');
+    write_file(d.ex,exportMatrices.perimeterConstants, 'perimeter_constants', exportNumber, 'cortex');
 end
 
 % write the cell vertex lineage to file

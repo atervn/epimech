@@ -47,7 +47,7 @@ else
                     switch app.modelCase
                         case 'new'
                             app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, {'Division','Cell size'}];
-                        case 'loaded'
+                        case 'import'
                             app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, {'Division'}];
                     end
                     

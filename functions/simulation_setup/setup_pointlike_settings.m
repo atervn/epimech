@@ -1,6 +1,17 @@
 function d = setup_pointlike_settings(d,app)
 
 if d.simset.simulationType == 2
+    
+    if app.UseimportedmovementdataCheckBox.Value
+        movementData = csvread([app.import.folderName '/pointlike/movement_data.csv']);
+        d.simset.pointlike.movementTime = [movementData(:,1); 1e20];
+        d.simset.pointlike.movementY = [movementData(:,2); movementData(end,2)];
+    else
+        d.simset.pointlike.movementTime = app.pointlikeProperties.movementTime./app.systemParameters.scalingTime;
+        d.simset.pointlike.movementY = app.pointlikeProperties.movementY./app.systemParameters.scalingLength;
+    end
+    
+    
     if app.UseimportedmovementdataCheckBox.Value
         
         pointlikeData = import_settings([app.import.folderName '/pointlike/pointlike_data.csv']);
@@ -12,7 +23,7 @@ if d.simset.simulationType == 2
         originalVertices = csvread([app.import.folderName '/pointlike/original_vertex_locations.csv']);
         d.simset.pointlike.vertexOriginalX = originalVertices(:,1);
         d.simset.pointlike.vertexOriginalY = originalVertices(:,2);
-
+        
         time = convert_import_time(app,app.import.currentTimePoint,'numberToTime');
         
         previousTime = max(d.simset.pointlike.movementTime(d.simset.pointlike.movementTime <= time));
@@ -26,19 +37,17 @@ if d.simset.simulationType == 2
         else
             displacementY = d.simset.pointlike.movementY(previousIdx) + (d.simset.pointlike.movementY(nextIdx) - d.simset.pointlike.movementY(previousIdx))*(time - d.simset.pointlike.movementY(previousIdx))/(d.simset.pointlike.movementTime(nextIdx) - d.simset.pointlike.movementTime(previousIdx));
         end
-
+        
         
         d.simset.pointlike.movementTime = d.simset.pointlike.movementTime - time;
         tempIdx = find(d.simset.pointlike.movementTime <= 0);
         d.simset.pointlike.movementTime(tempIdx) = [];
-        d.simset.pointlike.movementTime = [0 ; 2*d.simset.pointlike.movementTime];
+        d.simset.pointlike.movementTime = [0 ; d.simset.pointlike.movementTime];
         
-        if max(tempIdx) > 1
-            d.simset.pointlike.movementY(1:max(tempIdx)-1) = [];
-            d.simset.pointlike.movementY = [displacementY ; d.simset.pointlike.movementY];
-        else
-            d.simset.pointlike.movementY(1) = displacementY;
-        end
+        
+        d.simset.pointlike.movementY(tempIdx) = [];
+        d.simset.pointlike.movementY = [displacementY ; d.simset.pointlike.movementY];
+        
         
         multiplier = (2 - abs(max(d.simset.pointlike.vertexOriginalY) - d.simset.pointlike.originalY))/2;
         
@@ -51,7 +60,7 @@ if d.simset.simulationType == 2
         if app.SelectcentercellCheckBox.Value
             app.pointlikeProperties.cell = get_center_cell(d.cells);
         end
-
+        
         d.simset.pointlike.cell = app.pointlikeProperties.cell;
         d.simset.pointlike.pointX = mean(d.cells(d.simset.pointlike.cell).verticesX);
         d.simset.pointlike.pointY = mean(d.cells(d.simset.pointlike.cell).verticesY);

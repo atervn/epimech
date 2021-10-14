@@ -8,7 +8,7 @@ if option == 1
             switch app.modelCase
                 case 'new'
                     app.cellParameters = import_settings([app.defaultPath 'parameters/cell_parameters.txt']);
-                case 'loaded'
+                case 'import'
                     
                     fID = fopen([app.import.folderName '/simulation_type.csv']);
                     app.import.simulationType = fread(fID,'*char')';
@@ -105,7 +105,7 @@ import_scale_bar_data(app)
 
 
 if strcmp(app.appTask,'simulate')
-    if strcmp(app.modelCase,'loaded')
+    if strcmp(app.modelCase,'import')
         
         if strcmp(app.import.simulationType,'pointlike') && strcmp(app.SimulationtypeDropDown.Value,'Epithelial growth')
             uialert(app.EpiMechUIFigure,'Pointlike simulation cannot be used as the initial state of a growth simulation.','Bad Input');
@@ -147,7 +147,7 @@ if strcmp(app.appTask,'simulate')
                 
                 app.simulationType = 'growth';
                 
-                if strcmp(app.modelCase,'loaded') && strcmp(app.simulationType,app.import.simulationType)
+                if strcmp(app.modelCase,'import') && strcmp(app.simulationType,app.import.simulationType)
                     app.specificCellParameters = app.import.specificCellParameters;
                 else
                     app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_growth.txt']);
@@ -173,7 +173,7 @@ if strcmp(app.appTask,'simulate')
             end
             app.simulationType = 'pointlike';
             
-            if strcmp(app.modelCase,'loaded') && strcmp(app.simulationType,app.import.simulationType)
+            if strcmp(app.modelCase,'import') && strcmp(app.simulationType,app.import.simulationType)
                 app.specificCellParameters = app.import.specificCellParameters;
             else
                 app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_pointlike.txt']);
@@ -181,7 +181,7 @@ if strcmp(app.appTask,'simulate')
 
             app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_pointlike.txt']);
             
-            if strcmp(app.modelCase,'loaded')
+            if strcmp(app.modelCase,'import')
                 switch app.import.simulationType
                     case 'growth'
                         set_object_properties_function(app,{'FittedButton','SquareButton', 'SubstrateparametersButton'},'Enable',{'On'});
@@ -243,7 +243,7 @@ if strcmp(app.appTask,'simulate')
             end
             app.pointlikeProperties.cell = 1;
             
-            if strcmp(app.modelCase,'loaded') && strcmp(app.import.simulationType,'pointlike') && strcmp(app.import.stiffnessType,'Gradient')
+            if strcmp(app.modelCase,'import') && strcmp(app.import.simulationType,'pointlike') && strcmp(app.import.stiffnessType,'Gradient')
                 app.YoungsmodulusEditField.Value = defaultSubstrateParameters.youngsModulus/1000;
             else
                 app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
@@ -282,7 +282,7 @@ if strcmp(app.appTask,'simulate')
                 
                 app.simulationType = 'stretch';
                 
-                if strcmp(app.modelCase,'loaded') && strcmp(app.simulationType,app.import.simulationType)
+                if strcmp(app.modelCase,'import') && strcmp(app.simulationType,app.import.simulationType)
                     app.specificCellParameters = app.import.specificCellParameters;
                 else
                     app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_compression.txt']);
@@ -334,7 +334,7 @@ if strcmp(app.appTask,'simulate')
                 
                 app.simulationType = 'opto';
                 
-                if strcmp(app.modelCase,'loaded') && strcmp(app.simulationType,app.import.simulationType)
+                if strcmp(app.modelCase,'import') && strcmp(app.simulationType,app.import.simulationType)
                     app.specificCellParameters = app.import.specificCellParameters;
                 else
                     app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_opto.txt']);

@@ -51,7 +51,7 @@ else
         endPointsX = importedPoints(:,1);
         endPointsY = importedPoints(:,2);
         
-        initialCells = import_cells(app.CallingApp,'post_plotting','initial');
+        initialCells = import_cells(app.CallingApp,'post_plotting',1);
         
         moveX = -mean(initialCells(pointLikeCell).verticesX).*d.spar.scalingLength.*1e6;
         moveY = -mean(initialCells(pointLikeCell).verticesY).*d.spar.scalingLength.*1e6;

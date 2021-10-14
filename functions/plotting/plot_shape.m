@@ -10,7 +10,7 @@ function plot_shape(d)
 if d.pl.plotType == 4
     
     % get the half of the substrate size
-    halfSize = d.spar.substrateSize/2;
+    halfSize = d.simset.substrateSize/2;
     
     % create coordinate vectors
     cornersX = [-halfSize halfSize halfSize -halfSize -halfSize];

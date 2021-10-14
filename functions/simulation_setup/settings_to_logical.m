@@ -52,5 +52,5 @@ switch settingsType
         settings.pointlike = logical(settings.pointlike);
         settings.opto = logical(settings.opto);
         settings.lineage = logical(settings.lineage);
-        settings.corticalTensions = logical(settings.corticalTensions);
+        settings.corticalStrengths = logical(settings.corticalStrengths);
 end

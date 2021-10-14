@@ -8,7 +8,7 @@ boundaryLengths,1
 areas,1
 perimeters,1
 normProperties,1
-corticalTensions,1
+corticalStrengths,1
 lineage,1
 pointlike,1
 opto,1

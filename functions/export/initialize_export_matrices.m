@@ -58,10 +58,10 @@ if d.ex.normProperties
     exportMatrices.normProperties = zeros([2 export.nCells]);
 end
 
-% if the cortical tension data is exported
-if d.ex.corticalTensions
-    exportMatrices.vertexCorticalTensions = zeros([export.nVerticesMax export.nCells]);
-    exportMatrices.corticalTensions = zeros([1 export.nCells]);
+% if the cortical data is exported
+if d.ex.corticalStrengths
+    exportMatrices.vertexCorticalMultipliers = zeros([export.nVerticesMax export.nCells]);
+    exportMatrices.corticalStrengths = zeros([1 export.nCells]);
     exportMatrices.perimeterConstants = zeros([1 export.nCells]);
 end
 

@@ -153,32 +153,32 @@ if any(d.simset.simulationType == [3,5])
     end
 end
 
-% Modify the cortex tension multipliers. The value are edited for the links
+% Modify the cortex multipliers. The value are edited for the links
 % which either have the removed vertex as a start or an end point or have
 % the cortical link going over the removed vertex. The new values are
 % calculated as the average of the two neighboring links having some
 % association with the removed vertex.
-originals = d.cells(k).vertexCorticalTensions;
+originals = d.cells(k).cortex.vertexMultipliers;
 
 % if the removed vertex is the first
 if vertex2Remove == 1
-    d.cells(k).vertexCorticalTensions(end-1) = (originals(end-1) + originals(end))/2;
-    d.cells(k).vertexCorticalTensions(end) = (originals(end) + originals(1))/2;
+    d.cells(k).cortex.vertexMultipliers(end-1) = (originals(end-1) + originals(end))/2;
+    d.cells(k).cortex.vertexMultipliers(end) = (originals(end) + originals(1))/2;
     
     % if the removed vertex is the second
 elseif vertex2Remove == 2
-    d.cells(k).vertexCorticalTensions(end) = (originals(end) + originals(1))/2;
-    d.cells(k).vertexCorticalTensions(1) = (originals(1) + originals(2))/2;
+    d.cells(k).cortex.vertexMultipliers(end) = (originals(end) + originals(1))/2;
+    d.cells(k).cortex.vertexMultipliers(1) = (originals(1) + originals(2))/2;
     
     % otherwise
 else
     idx = vertex2Remove;
-    d.cells(k).vertexCorticalTensions(idx-2) = (originals(idx-2) + originals(idx-1))/2;
-    d.cells(k).vertexCorticalTensions(idx-1) = (originals(idx-1) + originals(idx))/2;
+    d.cells(k).cortex.vertexMultipliers(idx-2) = (originals(idx-2) + originals(idx-1))/2;
+    d.cells(k).cortex.vertexMultipliers(idx-1) = (originals(idx-1) + originals(idx))/2;
 end
 
-% remove the vertex from the cortical tensions
-d.cells(k).vertexCorticalTensions(vertex2Remove) = [];
+% remove the vertex from the cortical multipliers
+d.cells(k).cortex.vertexMultipliers(vertex2Remove) = [];
 
 % set junction modification to true
 d.simset.junctionModification = true;

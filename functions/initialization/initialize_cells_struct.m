@@ -1,15 +1,31 @@
 function cells = initialize_cells_struct
+% INITIALIZE_CELLS_STRUCTU Initialize the cell data structure
+%   The function defines the cell data structrure and initiates everything
+%   with empty vectors.
+%   OUTPUT:
+%       cells: cell data structure
+%   by Aapo Tervonen, 2021
 
+% cell coordinates
 cells.verticesX = [];
 cells.verticesY = [];
+
+% number of vertices
 cells.nVertices = [];
+
+% cell and vertex states
+cells.cellState = [];
 cells.vertexStates = [];
 
+% division related information
 cells.division.state = [];
-cells.cellState = [];
 cells.division.vertices = [];
 cells.division.time = [];
+cells.division.targetArea = [];
+cells.division.newAreas = [];
+cells.division.distanceSq = [];
 
+% junction relation information
 cells.junctions.cells = [];
 cells.junctions.vertices = [];
 cells.junctions.linkedIdx1 = [];
@@ -20,23 +36,26 @@ cells.junctions.pairVertices1 = [];
 cells.junctions.pairVertices2 = [];
 cells.junctions.linked2CellNumbers1 = [];
 cells.junctions.linked2CellNumbers2 = [];
+cells.junctions.possible = [];
 
+% vertex distance, area, perimeter and normal area and perimeter
 cells.leftLengths = [];
 cells.rightLengths = [];
 cells.area = [];
 cells.perimeter = [];
 cells.normArea = [];
 cells.normPerimeter = [];
-cells.division.targetArea = [];
 
+% the vectors to each neighbors
 cells.leftVectorsX = [];
 cells.leftVectorsY = [];
 cells.rightVectorsX = [];
 cells.rightVectorsY = [];
 
+% outside boundary angles
 cells.outsideAngles = [];
 
-% substrate stuff
+% focal adhesion related information
 cells.substrate.points = [];
 cells.substrate.pointsLin = [];
 cells.substrate.matrixIdx = [];
@@ -46,6 +65,7 @@ cells.substrate.weights = [];
 cells.substrate.weightsLin = [];
 cells.substrate.fFocalAdhesions = [];
     
+% contact related information
 cells.contacts.present = [];
 cells.contacts.cell1.next.vertices = [];
 cells.contacts.cell1.next.present = [];
@@ -78,6 +98,18 @@ cells.contacts.cell2.vertex.pairCellIDs = [];
 cells.contacts.cell2.vertex.pairVertexIDs = [];
 cells.contacts.cell2.vertex.pairCells = [];
 
+% division contant related information
+cells.contacts.division.next.vertices = [];
+cells.contacts.division.next.present = [];
+cells.contacts.division.next.pairIDs = [];
+cells.contacts.division.prev.vertices = [];
+cells.contacts.division.prev.present = [];
+cells.contacts.division.prev.pairIDs = [];
+cells.contacts.division.vertex.vertices = [];
+cells.contacts.division.vertex.present = [];
+cells.contacts.division.vertex.pairIDs = [];
+
+% vertex forces
 cells.forces.divisionX = [];
 cells.forces.divisionY = [];
 cells.forces.corticalX = [];
@@ -97,6 +129,7 @@ cells.forces.contactY = [];
 cells.forces.totalX = [];
 cells.forces.totalY = [];
 
+% vertex increments
 cells.increments.k1X = [];
 cells.increments.k1Y = [];
 cells.increments.k2X = [];
@@ -106,26 +139,26 @@ cells.increments.k3Y = [];
 cells.increments.k4X = [];
 cells.increments.k4Y = [];
 
+% vertex movement
 cells.movementX = [];
 cells.movementY = [];
 
+% previous vertex positions (needed for plotting during the simulation)
 cells.previousVerticesX = [];
 cells.previousVerticesY = [];
-cells.division.newAreas = [];
+
+% cell lineage
 cells.lineage = [];
 
-cells.vertexCorticalTensions =  [];
-cells.corticalTension = [];
+% cortex related information
+cells.cortex.vertexMultipliers =  [];
+cells.cortex.fCortex = [];
+cells.cortex.perimeterConstant = [];
 
-cells.corticalData.perimeter.k1 = [];
-cells.corticalData.perimeter.k2 = [];
-cells.corticalData.perimeter.k3 = [];
-cells.corticalData.perimeter.k4 = [];
-cells.corticalData.tension.k1 = [];
-cells.corticalData.tension.k2 = [];
-cells.corticalData.tension.k3 = [];
-cells.corticalData.tension.k4 = [];
-
-cells.division.distanceSq = [];
+% perimeter remodeling increments
+cells.perimeterIncrements.k1 = [];
+cells.perimeterIncrements.k2 = [];
+cells.perimeterIncrements.k3 = [];
+cells.perimeterIncrements.k4 = [];
 
 end

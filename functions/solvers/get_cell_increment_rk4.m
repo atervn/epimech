@@ -36,7 +36,7 @@ if kIteration == 2
         % time+k1/2
         tempCells(k).verticesX = tempCells(k).verticesX + tempCells(k).increments.k1X./2;
         tempCells(k).verticesY = tempCells(k).verticesY + tempCells(k).increments.k1Y./2;
-        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).corticalData.perimeter.k1/2;
+        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).perimeterIncrements.k1/2;
     end
     
     % if this is the third increment
@@ -49,7 +49,7 @@ elseif kIteration == 3
         % time+k2/2
         tempCells(k).verticesX = tempCells(k).verticesX + tempCells(k).increments.k2X./2;
         tempCells(k).verticesY = tempCells(k).verticesY + tempCells(k).increments.k2Y./2;
-        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).corticalData.perimeter.k2/2;
+        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).perimeterIncrements.k2/2;
     end
     
     % if this is the fourth increment
@@ -62,7 +62,7 @@ elseif kIteration == 4
         % time+k3
         tempCells(k).verticesX = tempCells(k).verticesX + tempCells(k).increments.k3X;
         tempCells(k).verticesY = tempCells(k).verticesY + tempCells(k).increments.k3Y;
-        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).corticalData.perimeter.k3;
+        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).perimeterIncrements.k3;
     end
 end
 
@@ -83,7 +83,7 @@ for k = 1:nCells
     tempCells(k) = get_cell_membrane_forces(tempCells(k),d.spar);
     
     % calculate the cortical forces
-    tempCells(k) = get_cell_cortical_forces(tempCells(k),d.spar);
+    tempCells(k) = get_cell_cortical_forces(tempCells(k));
     
     % calculate the area forces
     tempCells(k) = get_cell_area_forces(tempCells(k),d.spar);
@@ -139,7 +139,7 @@ for k = 1:nCells
         end
         
         % calculate the first perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k1 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k1 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
         
     % second increment
     elseif kIteration == 2
@@ -155,7 +155,7 @@ for k = 1:nCells
         end
         
         % calculate the second perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k2 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k2 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
         
     % third increment
     elseif kIteration == 3
@@ -171,7 +171,7 @@ for k = 1:nCells
         end
         
         % calculate the third perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k3 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k3 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
         
     % fourth increment
     elseif kIteration == 4
@@ -187,7 +187,7 @@ for k = 1:nCells
         end
         
         % calculate the fourth perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k4 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k4 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
     end
 end
 

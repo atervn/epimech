@@ -113,7 +113,7 @@ for k = 1:length(d.cells)
     d.cells(k).verticesY = d.cells(k).verticesY + d.cells(k).movementY;
     
     % calculate the new normal perimeter
-    d.cells(k).normPerimeter = d.cells(k).normPerimeter + 1/6*(d.cells(k).corticalData.perimeter.k1 + 2*d.cells(k).corticalData.perimeter.k2 + 2*d.cells(k).corticalData.perimeter.k3 + d.cells(k).corticalData.perimeter.k4);
+    d.cells(k).normPerimeter = d.cells(k).normPerimeter + 1/6*(d.cells(k).perimeterIncrements.k1 + 2*d.cells(k).perimeterIncrements.k2 + 2*d.cells(k).perimeterIncrements.k3 + d.cells(k).perimeterIncrements.k4);
 end
 
 end

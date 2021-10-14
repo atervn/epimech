@@ -31,7 +31,7 @@ switch app.appTask
         
         % if the previous simulation was loaded (old) and there is a results
         % folder, remove the folder
-        if strcmp(app.modelCase, 'loaded') && ~strcmp(app.import.folderName,'')
+        if strcmp(app.modelCase, 'import') && ~strcmp(app.import.folderName,'')
             removeFile = 1;
             if ~isempty(app.plotImport)
                 for i = 1:length(app.plotImport)

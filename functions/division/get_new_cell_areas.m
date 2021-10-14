@@ -16,14 +16,8 @@ function [newAreas, simset] = get_new_cell_areas(spar,area,simset)
 % if there are fewer than 2 areas left in the set
 if length(simset.newAreas) < 2
     
-    % define the area distrubtion
-    f = @(x) 0.02902.*exp(-((x-103.3)./12.82).^2) + 0.05107.*exp(-((x-79.61)./19.21).^2) + 0.07028.*exp(-((x-107.9)./45.84).^2) + 0.0126.*exp(-((x-164)./79.22).^2);
-    
-    % number of areas for the new set
-    nAreas = 10000;
-    
-    % get new areas from the distribtion
-    simset.newAreas = slicesample(1,nAreas,'pdf',f)*1e-12/spar.scalingLength^2;
+    % get new mdck areas
+    simset.newAreas = get_mdck_areas(spar);
 end
 
 % number of times to try to get daughter cell areas
@@ -36,15 +30,15 @@ for i = 1:nTries
     area1 = simset.newAreas(1);
     area2 = simset.newAreas(2);
     
-    % check if both the areas are at least double the minimum area for the
-    % cells (below the spar.minimumCellSize cells are removed from the
+    % check if both the areas are at least five times the minimum area for
+    % the cells (below the spar.minimumCellSize cells are removed from the
     % simulation), that neither of the areas if more than 1.5 times the
     % other, and that the combined area is between 1.5 and 2.5 times the
     % mother cell area
-    if area1 > 2*spar.minimumCellSize && area2 > 2*spar.minimumCellSize && area1/area2 <= 1.5 && area2/area1 <= 1.5 && area1 + area2 > 1.5*area && area1 + area2 < area*2.5
+    if area1 > 5*spar.minimumCellSize && area2 > 5*spar.minimumCellSize && area1/area2 <= 1.5 && area2/area1 <= 1.5 && area1 + area2 > 1.5*area && area1 + area2 < area*2.5
         
         % save the new cell areas (multiply with the constant to take into
-        % account the small reduction in size by the cortical tension
+        % account the small reduction in size by the cortical contractility
         newAreas = spar.newCellAreaConstant.*[area1; area2];
         
         % remove the used areas from the area set
@@ -60,14 +54,8 @@ for i = 1:nTries
         % if there are fewer than 2 areas left in the set
         if length(simset.newAreas) < 2
             
-            % define the area distrubtion
-            f = @(x) 0.02902.*exp(-((x-103.3)./12.82).^2) + 0.05107.*exp(-((x-79.61)./19.21).^2) + 0.07028.*exp(-((x-107.9)./45.84).^2) + 0.0126.*exp(-((x-164)./79.22).^2);
-            
-            % number of areas for the new set
-            nTries = 10000;
-            
-            % get new areas from the distribtion
-            simset.newAreas = slicesample(1,nTries,'pdf',f)*1e-12/spar.scalingLength^2;
+            % get new mdck areas
+            simset.newAreas = get_mdck_areas(spar);
         end
     end
 end

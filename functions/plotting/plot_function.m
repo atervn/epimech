@@ -98,6 +98,12 @@ if d.pl.plot
                 % plot boundary vertex numbers
                 plot_vertex_numbers(d,k);
             end
+            
+        % otherwise    
+        else
+            
+            % initialize forcePlot
+            forcePlot = [];
         end
         
         % plot cell forces
@@ -112,7 +118,7 @@ if d.pl.plot
         plot_pointlike(d);
         
         % plot optogenetic regions
-        plot_opto_region(d);
+        plot_opto_region(d,time);
         
         % plot frame
         plot_frame(d);

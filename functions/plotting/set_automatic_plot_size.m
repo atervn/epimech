@@ -6,23 +6,8 @@ function set_automatic_plot_size(d)
 % if automatic sizing is active
 if d.pl.automaticSize
     
-    % initialize vectors for the maximum and minimum x- and y-coordinates
-    maxPointX = zeros(1,length(d.cells));
-    minPointX = maxPointX;
-    maxPointY = maxPointX;
-    minPointY = maxPointX;
-    
-    % go through the cells and get the maximum and minimum x- and
-    % y-coordinates for each cell
-    for k = 1:length(d.cells)
-        maxPointX(k) = max(d.cells(k).verticesX);
-        minPointX(k) = min(d.cells(k).verticesX);
-        maxPointY(k) = max(d.cells(k).verticesY);
-        minPointY(k) = min(d.cells(k).verticesY);
-    end
-    
-    % get the largest distance from the model center
-    maxSize = max(max(abs([maxPointX; minPointX; maxPointY; minPointY])));
+    % find the square size that fits the epithelium
+    maxSize = get_maximum_epithelium_size(d);
     
     % set the size as the largest distance plus default cell radius
     d.pl.windowSize = maxSize + d.spar.rCell;

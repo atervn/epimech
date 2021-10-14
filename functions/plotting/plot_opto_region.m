@@ -1,9 +1,10 @@
-function plot_opto_region(d)
+function plot_opto_region(d,time)
 % PLOT_OPTO_REGION Plot the shape of the optogenetic activation region
 %   The function plots the shape(s) of the optogenetic activation regions
 %   either in red or in violet if the cells are red.
 %   INPUTS:
 %       d: main simulation data structure
+%       time: current simulation time
 %   by Aapo Tervonen, 2021
 
 % if the regions are plotted

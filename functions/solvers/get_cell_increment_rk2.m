@@ -35,7 +35,7 @@ if kIncrement == 2
         % calculate the vertex coordinates and normal perimeter at time+k1
         tempCells(k).verticesX = tempCells(k).verticesX + tempCells(k).increments.k1X;
         tempCells(k).verticesY = tempCells(k).verticesY + tempCells(k).increments.k1Y;
-        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).corticalData.perimeter.k1;
+        tempCells(k).normPerimeter = tempCells(k).normPerimeter + d.cells(k).perimeterIncrements.k1;
     end
     
     % calculate the boundary segment lengths, angles, cell areas and
@@ -54,7 +54,7 @@ for k = 1:nCells
     tempCells(k) = get_cell_membrane_forces(tempCells(k),d.spar);
         
     % calculate the cortical forces
-    tempCells(k) = get_cell_cortical_forces(tempCells(k),d.spar);
+    tempCells(k) = get_cell_cortical_forces(tempCells(k));
     
     % calculate the area forces
     tempCells(k) = get_cell_area_forces(tempCells(k),d.spar);
@@ -110,7 +110,7 @@ for k = 1:nCells
         end
         
         % calculate the first perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k1 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k1 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
         
     % second increment
     elseif kIncrement == 2
@@ -126,7 +126,7 @@ for k = 1:nCells
         end
 
         % calculate the second perimeter remodeling increment
-        d.cells(k).corticalData.perimeter.k2 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+        d.cells(k).perimeterIncrements.k2 = dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
     end
 end
 

@@ -7,7 +7,7 @@ switch app.appTask
             case 'new'
                 set_object_properties_function(app,{'InitialstatePanel_2'},'Visible',{'Off'})
                 set_object_properties_function(app,{'ParametersPanel','ComponentsettingsPanel','PlottingoptionsPanel','ExportoptionsPanel', 'InitialstatePanel', 'SimulationsettingsPanel','SimulateButton'},'Visible',{'On'})
-            case 'loaded'
+            case 'import'
                 set_object_properties_function(app,{'InitialstatePanel'},'Visible',{'Off'})
                 set_object_properties_function(app,{'ParametersPanel','ComponentsettingsPanel','PlottingoptionsPanel','ExportoptionsPanel','InitialstatePanel_2','SimulationsettingsPanel','SimulateButton'},'Visible',{'On'})
         end

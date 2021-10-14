@@ -18,7 +18,7 @@ for k = 1:length(d.cells)
     
     % if the cell is an edge cell and it is not growing or dividing (and if
     % division time has not been passed it the division type is 2)
-    if d.cells(k).cellState == 0 && d.cells(k).division.state == 0 && ~(d.simset.divisionType == 2 && time >= d.spar.stopDivisionTime)
+    if d.cells(k).cellState == 0 && d.cells(k).division.state == 0 && ~(d.simset.division.type == 2 && time >= d.spar.stopDivisionTime)
         
         % checks if the division time for the cell has been passed
         if d.cells(k).division.time < time
@@ -27,12 +27,12 @@ for k = 1:length(d.cells)
             d.cells(k).division.state = 1;
             
             % get the areas of the daughter cells
-            if d.simset.sizeType == 1
+            if d.simset.division.sizeType == 1
                 
                 % with uniform cell size
                 newAreas = ones(2,1).*d.spar.normArea;
                 
-            elseif d.simset.sizeType == 2
+            elseif d.simset.division.sizeType == 2
                 
                 % with cell sizes based on the MDCK data
                 [newAreas, d.simset] = get_new_cell_areas(d.spar,d.cells(k).normArea,d.simset);
@@ -51,7 +51,7 @@ for k = 1:length(d.cells)
     % if the cell is an internal cell, not growing or dividing, and that
     % the cell's division time has been passed (and if division time has
     % not been passed it the division type is 2)
-    elseif d.cells(k).cellState == 1 && d.cells(k).division.state == 0 && d.cells(k).division.time < time && ~(d.simset.divisionType == 2 && time >= d.spar.stopDivisionTime)
+    elseif d.cells(k).cellState == 1 && d.cells(k).division.state == 0 && d.cells(k).division.time < time && ~(d.simset.division.type == 2 && time >= d.spar.stopDivisionTime)
         
         % calculate the factor describing the effect or area on the
         % division probability
@@ -64,12 +64,12 @@ for k = 1:length(d.cells)
             d.cells(k).division.state = 1;
             
             % get the areas of the daughter cells
-            if d.simset.sizeType == 1
+            if d.simset.division.sizeType == 1
                 
                 % with uniform cell size
                 newAreas = ones(2,1).*d.spar.normArea;
                 
-            elseif d.simset.sizeType == 2
+            elseif d.simset.division.sizeType == 2
                 
                 % with cell sizes based on the MDCK data
                 newAreas = get_new_cell_areas(d.spar,d.cells(k).normArea,d.simset);

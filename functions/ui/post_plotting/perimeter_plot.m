@@ -12,7 +12,8 @@ if isempty(app.selectedCells)
 for i = 1:app.plotImport(app.selectedFile).nTimePoints
     if ~folderExists
         app.plotImport(app.selectedFile).currentTimePoint = i;
-        cells = import_cells(app,'post_plotting');
+        d = [];
+        cells = import_cells(app,d,'post_plotting');
         
         tempPerimeters = zeros(1,length(cells));
         cells = get_boundary_vectors(cells);
@@ -67,7 +68,8 @@ else
     for i = 1:app.plotImport(app.selectedFile).nTimePoints
         
         app.plotImport(app.selectedFile).currentTimePoint = i;
-        cells = import_cells(app,'post_plotting');
+        d = [];
+        cells = import_cells(app,d,'post_plotting');
         cells = get_boundary_vectors(cells);
         cells = get_boundary_lengths(cells);
         

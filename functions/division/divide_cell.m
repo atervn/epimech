@@ -86,12 +86,12 @@ for k = 1:length(d.cells)
             d.cells(end).junctions.linkedIdx1 = find(d.cells(end).vertexStates > 0);
             d.cells(end).junctions.linkedIdx2 = find(d.cells(end).vertexStates == 2);
             
-            % get the cortical tensions for the new cell
-            d.cells(end).vertexCorticalTensions = d.cells(k).vertexCorticalTensions(divisionVertex1Left:divisionVertex2Right);
+            % get the cortical multipliers for the new cell
+            d.cells(end).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(divisionVertex1Left:divisionVertex2Right);
             
            % modify the vertex coordinate vectors, the vertexState 
-            % vectors, junction matrices, and the cortical tensions of the
-            % old cell
+            % vectors, junction matrices, and the cortical multipliers of
+            % the old cell
             
             % if first division vertex has the index of 1
             if divisionVertex1Right ==  d.cells(k).nVertices
@@ -101,7 +101,7 @@ for k = 1:length(d.cells)
                 d.cells(k).vertexStates = d.cells(k).vertexStates(idx);
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
-                d.cells(k).vertexCorticalTensions = d.cells(k).vertexCorticalTensions(idx);
+                d.cells(k).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(idx);
             
             % if the second division vertex has the index of nVertices
             elseif divisionVertex2Left == 1
@@ -111,7 +111,7 @@ for k = 1:length(d.cells)
                 d.cells(k).vertexStates = d.cells(k).vertexStates(idx);
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
-                d.cells(k).vertexCorticalTensions = d.cells(k).vertexCorticalTensions(idx);
+                d.cells(k).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(idx);
                 
             % otherwise
             else
@@ -122,7 +122,7 @@ for k = 1:length(d.cells)
                 d.cells(k).vertexStates = [d.cells(k).vertexStates(idx1) ; d.cells(k).vertexStates(idx2)];
                 d.cells(k).junctions.cells = [d.cells(k).junctions.cells(idx1,:) ; d.cells(k).junctions.cells(idx2,:)];
                 d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(idx1,:) ; d.cells(k).junctions.vertices(idx2,:)];  
-                d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(idx1);d.cells(k).vertexCorticalTensions(idx2)];
+                d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers(idx1);d.cells(k).cortex.vertexMultipliers(idx2)];
             end
 
             % get the indices of the vertex that have one or two junctions
@@ -176,8 +176,8 @@ for k = 1:length(d.cells)
             d.cells(end).division.newAreas = zeros(2,1);
             d.cells(end).nVertices = size(d.cells(end).verticesX,1);
             d.cells(end).lineage = [d.cells(k).lineage length(d.cells)];
-            d.cells(end).corticalTension = d.cells(k).corticalTension;
-            d.cells(end).perimeterConstant = d.cells(k).perimeterConstant;
+            d.cells(end).cortex.fCortex = d.cells(k).cortex.fCortex;
+            d.cells(end).cortex.perimeterConstant = d.cells(k).cortex.perimeterConstant;
             d.cells(end).area = calculate_area(d.cells(end).verticesX,d.cells(end).verticesY);
             d.cells(end) = get_boundary_vectors(d.cells(end));
             d.cells(end) = get_boundary_lengths(d.cells(end));
@@ -185,13 +185,13 @@ for k = 1:length(d.cells)
             d.cells(end) = get_boundary_vectors(d.cells(end));
             d.cells(end) = get_vertex_angles(d.cells(end));
             d.cells(end).normPerimeter = d.cells(end).perimeter;
-            d.cells(end) = set_empty_cell_properties(d.cells(end));
+%             d.cells(end) = set_empty_cell_properties(d.cells(end));
             
             % get the division time for the new cell (either based on the
             % predefined values or random values)
-            if d.simset.uniformDivision
-                d.cells(end).division.time = time + d.spar.divisionTimeMean + d.simset.divisionRandomNumbers(d.simset.divisionNumberCounter)*d.spar.divisionTimeSD;
-                d.simset.divisionNumberCounter = d.simset.divisionNumberCounter + 1;
+            if d.simset.division.uniform
+                d.cells(end).division.time = time + d.spar.divisionTimeMean + d.simset.division.randomNumbers(d.simset.division.counter)*d.spar.divisionTimeSD;
+                d.simset.division.counter = d.simset.division.counter + 1;
             else
                 d.cells(end).division.time = time + d.spar.divisionTimeMean + randn*d.spar.divisionTimeSD;
             end
@@ -210,13 +210,13 @@ for k = 1:length(d.cells)
             d.cells(k) = get_cell_perimeters(d.cells(k));
             d.cells(k) = get_vertex_angles(d.cells(k));
             d.cells(k).normPerimeter = d.cells(k).perimeter;
-            d.cells(k) = set_empty_cell_properties(d.cells(k));
+%             d.cells(k) = set_empty_cell_properties(d.cells(k));
             
             % get the division time for the old cell (either based on the
             % predefined values or random values)
-            if d.simset.uniformDivision
-                d.cells(k).division.time = time + d.spar.divisionTimeMean + d.simset.divisionRandomNumbers(d.simset.divisionNumberCounter)*d.spar.divisionTimeSD;
-                d.simset.divisionNumberCounter = d.simset.divisionNumberCounter + 1;
+            if d.simset.division.uniform
+                d.cells(k).division.time = time + d.spar.divisionTimeMean + d.simset.division.randomNumbers(d.simset.division.counter)*d.spar.divisionTimeSD;
+                d.simset.division.counter = d.simset.division.counter + 1;
             else
                 d.cells(k).division.time = time + d.spar.divisionTimeMean + randn*d.spar.divisionTimeSD;
             end

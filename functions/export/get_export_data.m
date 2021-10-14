@@ -85,11 +85,11 @@ for k = 1:length(d.cells)
         end
     end
     
-    % input the cortical tension data
-    if d.ex.corticalTensions
-        exportMatrices.vertexCorticalTensions(1:export.nVertices(k),k) = d.cells(k).vertexCorticalTensions;
-        exportMatrices.corticalTensions(1,k) = d.cells(k).corticalTension;
-        exportMatrices.perimeterConstants(1,k) = d.cells(k).perimeterConstant; 
+    % input the cortical data
+    if d.ex.corticalStrengths
+        exportMatrices.cortex.vertexMultipliers(1:export.nVertices(k),k) = d.cells(k).cortex.vertexMultipliers;
+        exportMatrices.corticalStrengths(1,k) = d.cells(k).cortex.fCortex;
+        exportMatrices.perimeterConstants(1,k) = d.cells(k).cortex.perimeterConstant; 
     end
     
     % input lineage data

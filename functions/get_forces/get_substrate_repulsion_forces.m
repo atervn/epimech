@@ -13,8 +13,8 @@ function [repulsionForcesX,repulsionForcesY] = get_substrate_repulsion_forces(d,
 %   by Aapo Tervonen, 2021
 
 % get the vectors between the neighboring point and the current point
-repulsionVectorsX = subTemp.vectorsX(d.sub.repulsionVectorsIdx);
-repulsionVectorsY = subTemp.vectorsY(d.sub.repulsionVectorsIdx);
+repulsionVectorsX = subTemp.vectorsX(d.sub.repulsionVectors1Idx);
+repulsionVectorsY = subTemp.vectorsY(d.sub.repulsionVectors1Idx);
 
 % get the unit vectors between two neighboring points (between which the
 % line segment is)
@@ -26,8 +26,8 @@ repsulsionUnitVectorsY = subTemp.unitVectorsY(d.sub.repulsionVectors2Idx);
 temp = (repsulsionUnitVectorsX.*repulsionVectorsY - repsulsionUnitVectorsY.*repulsionVectorsX).*d.sub.repulsionChangeSigns;
 
 % get the vectors for the repulsion
-orthogonalLinkX = -temp.*repsulsionUnitVectorsY;
-orthogonalLinkY = temp.*repsulsionUnitVectorsX;
+orthogonalInteractionX = -temp.*repsulsionUnitVectorsY;
+orthogonalInteractionY = temp.*repsulsionUnitVectorsX;
 
 % get the distances of the points from the line segments
 orthogonalLength = abs(temp);
@@ -43,8 +43,8 @@ reciprocalOrthogonalLength = 1./orthogonalLength(tooClose);
 forceStrengths = d.sub.repulsionSpringConstants(tooClose).*(orthogonalLength(tooClose) - (d.spar.repulsionLength)^2.*reciprocalOrthogonalLength).*reciprocalOrthogonalLength;
 
 % get the components for the repulsion forces
-repulsionForcesLinX = forceStrengths.*orthogonalLinkX(tooClose);
-repulsionForcesLinY = forceStrengths.*orthogonalLinkY(tooClose);
+repulsionForcesLinX = forceStrengths.*orthogonalInteractionX(tooClose);
+repulsionForcesLinY = forceStrengths.*orthogonalInteractionY(tooClose);
 
 % initialize a matrix for the total forca calculations (with 6 rows for the
 % maximum number of repulsive interactions) and columns equal to the number

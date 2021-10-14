@@ -8,7 +8,9 @@ folderExists = exist([app.plotImport(app.selectedFile).folderName '/areas'],'dir
 
 if ~folderExists
     
-    cells = import_cells(app,'post_plotting');
+    d = [];
+    
+    cells = import_cells(app,d,'post_plotting');
     
     tempAreas = zeros(1,length(cells));
     for k = 1:length(cells)

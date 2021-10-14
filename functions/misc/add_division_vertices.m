@@ -121,22 +121,22 @@ for i = 1:2
         d.cells(k).junctions.cells = [d.cells(k).junctions.cells(1:vertexIdx(i),:) ; [0 0] ; d.cells(k).junctions.cells(vertexIdx(i)+1:end,:)];
         d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(1:vertexIdx(i),:) ; [0 0] ; d.cells(k).junctions.vertices(vertexIdx(i)+1:end,:)];
 
-        % modify the vertex cortical tensions
-        originals = d.cells(k).vertexCorticalTensions;
+        % modify the vertex cortical multipliers
+        originals = d.cells(k).cortex.vertexMultipliers;
         
         % if first index
         if vertexIdx(i) == 1
             
-            % modify the cortical tensions of the vertices on both sides of
-            % the new vertex
-            d.cells(k).vertexCorticalTensions = [(originals(end) + originals(1))./2 ; (originals(end) + originals(1))./2 ; d.cells(k).vertexCorticalTensions(2:end)];
+            % modify the cortical multipliers of the vertices on both sides
+            % of the new vertex
+            d.cells(k).cortex.vertexMultipliers = [(originals(end) + originals(1))./2 ; (originals(end) + originals(1))./2 ; d.cells(k).cortex.vertexMultipliers(2:end)];
         
         % otherwise
         else
             
-            % modify the cortical tensions of the vertices on both sides of
-            % the new vertex
-            d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(1:vertexIdx(i)-1) ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; d.cells(k).vertexCorticalTensions(vertexIdx(i)+1:end)];
+            % modify the cortical multipliers of the vertices on both sides
+            % of the new vertex
+            d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers(1:vertexIdx(i)-1) ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; d.cells(k).cortex.vertexMultipliers(vertexIdx(i)+1:end)];
         end
     
     % last vertex in the cell
@@ -153,12 +153,12 @@ for i = 1:2
         d.cells(k).junctions.cells = [d.cells(k).junctions.cells ; [0 0]];
         d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices ; [0 0]];
 
-        % modify the cortical tensions on both sides of the new vertex by
-        % setting them to the average of the two cortical links that span
-        % over the new vertex
-        originals = d.cells(k).vertexCorticalTensions;
-        d.cells(k).vertexCorticalTensions(end) = (originals(end-1) + originals(end))./2;
-        d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions ; (originals(end-1) + originals(end))./2;];
+        % modify the cortical multipliers on both sides of the new vertex
+        % by setting them to the average of the two cortical links that
+        % span over the new vertex
+        originals = d.cells(k).cortex.vertexMultipliers;
+        d.cells(k).cortex.vertexMultipliers(end) = (originals(end-1) + originals(end))./2;
+        d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers ; (originals(end-1) + originals(end))./2;];
         
     end
     

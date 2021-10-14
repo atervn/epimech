@@ -4,7 +4,7 @@ endLoop = 0;
 
 try
     coordsTemp = ginput(1);
-    app.cellCenters(end+1,:) = coordsTemp;
+    app.cellCenters(end+1,:) = coordsTemp.*d.spar.scalingLength;
 catch
     try
         if ~isempty(app.cellCenters)
@@ -18,7 +18,7 @@ catch
 end
 
 if check_placement(app,d)
-    d = single_cell_initialization(d,app.cellCenters(end,:));
+    d = create_cell(d,app.cellCenters(end,:),'simple_plot');
 else
     app.cellCenters(end,:) = [];
 end

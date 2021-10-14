@@ -62,22 +62,22 @@ while longLengths ~= 0
                     d.cells(k).junctions.cells = [d.cells(k).junctions.cells(1:longIdx(i),:) ; [0 0] ; d.cells(k).junctions.cells(longIdx(i)+1:end,:)];
                     d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(1:longIdx(i),:) ; [0 0] ; d.cells(k).junctions.vertices(longIdx(i)+1:end,:)];
                     
-                    % modify the vertex cortical tensions
-                    originals = d.cells(k).vertexCorticalTensions;
+                    % modify the vertex cortical multipliers
+                    originals = d.cells(k).cortex.vertexMultipliers;
                     
                     % if first index
                     if longIdx(i) == 1
                         
-                        % modify the cortical tensions of the vertices on both sides of
-                        % the new vertex
-                        d.cells(k).vertexCorticalTensions = [(originals(end) + originals(1))./2 ; (originals(end) + originals(1))./2 ; d.cells(k).vertexCorticalTensions(2:end)];
+                        % modify the cortical multipliers of the vertices
+                        % on both sides of the new vertex
+                        d.cells(k).cortex.vertexMultipliers = [(originals(end) + originals(1))./2 ; (originals(end) + originals(1))./2 ; d.cells(k).cortex.vertexMultipliers(2:end)];
                         
                         % otherwise
                     else
                         
-                        % modify the cortical tensions of the vertices on both sides of
-                        % the new vertex
-                        d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions(1:longIdx(i)-1) ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; d.cells(k).vertexCorticalTensions(longIdx(i)+1:end)];
+                        % modify the cortical multipliers of the vertices 
+                        % on both sides of the new vertex
+                        d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers(1:longIdx(i)-1) ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; (originals(longIdx(i)-1) + originals(longIdx(i)))./2 ; d.cells(k).cortex.vertexMultipliers(longIdx(i)+1:end)];
                     end
                     
                     % with optogenetic or stretching simulation, update the
@@ -107,9 +107,9 @@ while longLengths ~= 0
                     d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices ; [0 0]];
                     
                     % comment later
-                    originals = d.cells(k).vertexCorticalTensions;
-                    d.cells(k).vertexCorticalTensions(end) = (originals(end-1) + originals(end))./2;
-                    d.cells(k).vertexCorticalTensions = [d.cells(k).vertexCorticalTensions ; (originals(end-1) + originals(end))./2;];
+                    originals = d.cells(k).cortex.vertexMultipliers;
+                    d.cells(k).cortex.vertexMultipliers(end) = (originals(end-1) + originals(end))./2;
+                    d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers ; (originals(end-1) + originals(end))./2;];
                     
                     % with optogenetic or stretching simulation, update the
                     % focal adhesions and edge vertices

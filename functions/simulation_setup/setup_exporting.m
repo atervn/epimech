@@ -1,4 +1,12 @@
-function ex = setup_exporting(app,d,startingTime)
+function ex = setup_exporting(app,d,varargin)
+
+
+% get the simulation starting time
+if numel(varargin) > 0
+    startingTime = varargin{1};
+else
+    startingTime = clock;
+end
 
 ex = initialize_export_options_structure;
 
@@ -90,8 +98,8 @@ if app.ExportdataCheckBox.Value
     if ex.normProperties
         mkdir(folderPath, 'norm_properties');
     end
-    if ex.corticalTensions
-        mkdir(folderPath, 'cortical_tension');
+    if ex.corticalStrengths
+        mkdir(folderPath, 'cortex');
     end
     if ex.lineage
         mkdir(folderPath, 'lineage');
@@ -370,13 +378,13 @@ if app.ExportdataCheckBox.Value
         writematrix(d.sub.interactionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/interaction_lin_idx.csv']);
         writematrix(d.sub.counterInteractionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/counter_interaction_lin_idx.csv']);
         writematrix(d.sub.repulsionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_lin_idx.csv']);
-        writematrix(d.sub.repulsionVectorsIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors_idx.csv']);
+        writematrix(d.sub.repulsionVectors1Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors1_idx.csv']);
         writematrix(d.sub.repulsionVectors2Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
         writematrix(d.sub.repulsionChangeSigns, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_change_signs.csv']);
         writematrix(d.sub.springMultipliers, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/spring_multipliers.csv']);
         writematrix(d.sub.edgePoints, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/edge_points.csv']);
         writematrix(d.sub.restorativeSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/restorative_spring_constant.csv']);
-        writematrix(d.sub.centralInteractionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/central_interaction_spring_constant.csv']);
+        writematrix(d.sub.centralSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/central_spring_constant.csv']);
         writematrix(d.sub.repulsionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
         writematrix(app.fFAInfo, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/focal_adhesion_strengths.csv']);
     end
@@ -442,7 +450,7 @@ if app.ExportdataCheckBox.Value
     % SIZE TYPE
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    csvwrite([app.defaultPath 'Results/' ex.exportName '/size_type.csv'],d.simset.sizeType);
+    csvwrite([app.defaultPath 'Results/' ex.exportName '/size_type.csv'],d.simset.division.sizeType);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % POINTLIKE DATA

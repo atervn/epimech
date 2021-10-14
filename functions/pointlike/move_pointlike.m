@@ -1,4 +1,4 @@
-function pointlike = move_pointlike(time,dt,pointlike)
+function d = move_pointlike(d, time, dt)
 % MOVE_POINTLIKE Move the micromanipulated cell
 %   The functions moves the micromanipulated cell according to the
 %   predefined movement.
@@ -18,38 +18,38 @@ if d.simset.simulationType == 2
     
     % get the previous and nex time points where there are changes in the
     % movement
-    previousTime = max(pointlike.movementTime(pointlike.movementTime <= time));
-    nextTime = min(pointlike.movementTime(pointlike.movementTime > time));
+    previousTime = max(d.simset.pointlike.movementTime(d.simset.pointlike.movementTime <= time));
+    nextTime = min(d.simset.pointlike.movementTime(d.simset.pointlike.movementTime > time));
     
     % get the indices of the these changes in the movement change vectors
-    previousIdx = find(pointlike.movementTime == previousTime);
-    nextIdx = find(pointlike.movementTime == nextTime);
+    previousIdx = find(d.simset.pointlike.movementTime == previousTime);
+    nextIdx = find(d.simset.pointlike.movementTime == nextTime);
     
     % if the time is exactly at a time point where the pipette location is
     % defined
     if previousTime == time
         
         % get the displacement from the initial position
-        displacementY = pointlike.movementY(previousIdx);
+        displacementY = d.simset.pointlike.movementY(previousIdx);
         
     % otherwise
     else
         
         % interpolate the displacement from the initial position
-        displacementY = pointlike.movementY(previousIdx) + (pointlike.movementY(nextIdx) - pointlike.movementY(previousIdx))*(time - pointlike.movementTime(previousIdx))/(pointlike.movementTime(nextIdx) - pointlike.movementTime(previousIdx));
+        displacementY = d.simset.pointlike.movementY(previousIdx) + (d.simset.pointlike.movementY(nextIdx) - d.simset.pointlike.movementY(previousIdx))*(time - d.simset.pointlike.movementTime(previousIdx))/(d.simset.pointlike.movementTime(nextIdx) - d.simset.pointlike.movementTime(previousIdx));
     end
     
     % calculate a multiplier that assumes that the final position of the
     % pipette is at the boundary of the manipulated cell (this the cell is only
     % moved by (maximum pipette movement - (distance between cell center and
     % the boundary at the direction of the movement))/ maximum pipette movement
-    multiplier = (max(pointlike.movementY) - abs(max(pointlike.vertexOriginalY) - pointlike.originalY))/max(pointlike.movementY);
+    multiplier = (max(d.simset.pointlike.movementY) - abs(max(d.simset.pointlike.vertexOriginalY) - d.simset.pointlike.originalY))/max(d.simset.pointlike.movementY);
     
     % move the pipette (used for visualization purposes mostly
-    pointlike.pointY = pointlike.originalY + displacementY;
+    d.simset.pointlike.pointY = d.simset.pointlike.originalY + displacementY;
     
     % move the virtual image of the manipulated cell
-    pointlike.vertexY = pointlike.vertexOriginalY + displacementY.*multiplier;
+    d.simset.pointlike.vertexY = d.simset.pointlike.vertexOriginalY + displacementY.*multiplier;
 end
 
 end

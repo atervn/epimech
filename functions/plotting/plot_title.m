@@ -9,7 +9,7 @@ function plot_title(d,time,loopTime)
 %   by Aapo Tervonen, 2021
 
 % get the time string
-timeString = separate_times(d,time*d.spar.scalingTime);
+timeString = get_time_string(d,time*d.spar.scalingTime,0);
 
 % which title type
 switch d.pl.titleType

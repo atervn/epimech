@@ -1,4 +1,4 @@
-function cells = get_cell_cortical_forces(cells,spar)
+function cells = get_cell_cortical_forces(cells)
 % GET_CORTICAL_FORCE Calculate the forces from actin cortex
 %   The function calculates the forces that originate from the cortical
 %   actin and are defined between every other vertex. If a vertex is
@@ -10,14 +10,13 @@ function cells = get_cell_cortical_forces(cells,spar)
 %   vertex outwards at the same time
 %   INPUTS:
 %       cells: single cell data structure
-%       spar: scaled parameter structure
 %   OUTPUT:
 %       cells: single cell data structure
 %   by Aapo Tervonen, 2021
 
 % calculate the magnitude of each cortical force based on the perimeter
 % strain
-tempMagnitude = (1 + cells.perimeterConstant.*(cells.perimeter - cells.normPerimeter)/cells.normPerimeter).*spar.fCortex;
+tempMagnitude = (1 + cells.cortex.perimeterConstant.*(cells.perimeter - cells.normPerimeter)/cells.normPerimeter).*cells.cortex.fCortex;
 
 % make a vector with the vertex indices
 cellIdx= uint32(1:cells.nVertices);
@@ -46,7 +45,7 @@ leftConcaveForcesX = leftConvexForcesX; leftConcaveForcesY = leftConvexForcesX;
 % find the concave vertices
 middleConcaveIdx = cells.outsideAngles < pi;
 
-multipliersTemp = cells.vertexCorticalTensions;
+multipliersTemp = cells.cortex.vertexMultipliers;
 
 % if there are concave vertices
 if any(middleConcaveIdx)
@@ -79,7 +78,7 @@ if any(middleConcaveIdx)
     % multiplier as the that on the other side of the concave vertex due to
     % the indexing: the first element of both rightSideConcaveIdx and
     % leftSideConcaveIdx both correspond to the same middleConcaveIdx
-    % vertex -> they both share the same tension multiplier)
+    % vertex -> they both share the same multiplier)
     forceMagnitudes = tempMagnitude.*leftMultipliers./concaveLeftLengths.*totalConcaveDistance;
     
     % calculate the cortex forces for vertices with right side concave

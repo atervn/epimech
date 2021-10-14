@@ -3,8 +3,8 @@ function write_area_perimeter(app)
 folderExists = exist([app.plotImport(app.selectedFile).folderName '/areas'],'dir') == 7;
 
 if ~folderExists
-    
-    cells = import_cells(app,'post_plotting');
+    d = [];
+    cells = import_cells(app,d,'post_plotting');
     
     tempAreas = zeros(1,length(cells));
     for k = 1:length(cells)
@@ -19,7 +19,8 @@ folderExists2 = exist([app.plotImport(app.selectedFile).folderName '/perimeters'
 if ~folderExists2
     
     if ~folderExists
-        cells = import_cells(app,'post_plotting');
+        d = [];
+        cells = import_cells(app,d,'post_plotting');
     end
     tempPerimeters = zeros(1,length(cells));
     cells = get_boundary_vectors(cells);
@@ -40,8 +41,8 @@ app.PerimeterValueLabel.Text = [num2str(round(mean(tempPerimeters),2),'%6.2f') '
 
 folderExists3 = exist([app.plotImport(app.selectedFile).folderName '/junctions'],'dir') == 7;
 if folderExists3
-    
-    cells = import_cells(app,'get_neighbors');
+    d = [];
+    cells = import_cells(app,d,'get_neighbors');
     nNeighbors = zeros(length(cells),1);
     for k = 1:length(cells)
         % only take the internal cells with max 20 % non junction points

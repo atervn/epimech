@@ -36,12 +36,12 @@ switch app.appTask
         
         app.ScalebarsettingsMenu.Enable = 'On';
         
-        if strcmp(app.modelCase,'loaded')
+        if strcmp(app.modelCase,'import')
             app.TimetoloadDropDown.Items = {};
             
             d.spar = app.import.scaledParameters;
             numTemp = num2cell(1:app.import.nTimePoints);
-            timeStrings = cellfun(@(i) separate_times(d,convert_import_time(app,i,'numberToTime')),numTemp,'UniformOutput',false);
+            timeStrings = cellfun(@(i) get_time_string(d,convert_import_time(app,i,'numberToTime'),0),numTemp,'UniformOutput',false);
             app.TimetoloadDropDown.Items = timeStrings;
             app.TimetoloadDropDown.Value = app.TimetoloadDropDown.Items(end);
         end
@@ -63,7 +63,7 @@ switch app.appTask
         end
         
         
-        if strcmp(app.modelCase,'loaded') && strcmp(app.simulationType,'pointlike') && strcmp(app.import.simulationType,'pointlike')
+        if strcmp(app.modelCase,'import') && strcmp(app.simulationType,'pointlike') && strcmp(app.import.simulationType,'pointlike')
             if exist([app.import.folderName '/pointlike/'],'file') == 7
                 app.UseimportedmovementdataCheckBox.Value = 1;
                 app.UseimportedmovementdataCheckBox.Enable = 'On';
@@ -114,7 +114,7 @@ switch app.appTask
         
         d.spar = app.plotImport(app.selectedFile).scaledParameters;
         numTemp = num2cell(1:app.plotImport(app.selectedFile).nTimePoints);
-        timeStrings = cellfun(@(i) separate_times(d,convert_import_time(app,i,'numberToTime')),numTemp,'UniformOutput',false);
+        timeStrings = cellfun(@(i) get_time_string(d,convert_import_time(app,i,'numberToTime'),0),numTemp,'UniformOutput',false);
         app.TimepointDropDown.Items = timeStrings;
         app.TimepointDropDown.Value = app.TimepointDropDown.Items(end);
         
@@ -158,7 +158,7 @@ switch app.appTask
         
         d.spar = app.plotImport(app.selectedFile).scaledParameters;
         numTemp = num2cell(1:app.plotImport(app.selectedFile).nTimePoints);
-        timeStrings = cellfun(@(i) separate_times(d,convert_import_time(app,i,'numberToTime')),numTemp,'UniformOutput',false);
+        timeStrings = cellfun(@(i) get_time_string(d,convert_import_time(app,i,'numberToTime'),0),numTemp,'UniformOutput',false);
         app.StartDropDown.Items = timeStrings;
         app.EndDropDown.Items = timeStrings;
         app.StartDropDown.Value = app.StartDropDown.Items(1);
