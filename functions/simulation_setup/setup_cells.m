@@ -54,6 +54,11 @@ switch app.modelCase
         d = edit_division_properties(d);
 end
 
+% if the cell centering is selected
+if app.CentercellsCheckBox.Value
+    d.cells = center_cells(d.cells);
+end
+
 % get edge vertices for simulations with substrate
 d = get_edge_vertices(d);
 

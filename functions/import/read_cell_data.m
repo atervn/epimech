@@ -45,8 +45,8 @@ if strcmp(option, 'simulation')
     if exist([app.import.folderName '/cortex/'],'file') == 7
         
         % import the cortical and cell tensions
-        importedData.vertexMultipliers = csvread([folderName '/cortex/vertex_cortical_tensions_' num2str(timePoint), '.csv']);
-        importedData.corticalStrengths = csvread([folderName '/cortex/cortical_tensions_' num2str(timePoint), '.csv']);
+        importedData.vertexMultipliers = csvread([folderName '/cortex/vertex_cortical_multipliers_' num2str(timePoint), '.csv']);
+        importedData.corticalStrengths = csvread([folderName '/cortex/cortical_strengths_' num2str(timePoint), '.csv']);
         importedData.perimeterConstants = csvread([folderName '/cortex/perimeter_constants_' num2str(timePoint), '.csv']);
 
     % old naming

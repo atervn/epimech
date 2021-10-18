@@ -38,15 +38,15 @@ if ~isstruct(d); return; end
 d = setup_pointlike_settings(d,app);
 
 % setup optogenetics
-d = setup_optogenetics(app,d);
+d = setup_optogenetic_settings(app,d);
 
 % frame settings
 d = setup_frame(d);
 
 % plotting settings
-d = setup_plotting_options(app,'simulate',d);
+d = setup_plotting_options(app,d,'simulate');
 
 % export settings
-d.ex = setup_exporting(app,d);
+d = setup_exporting(app,d);
 
 end

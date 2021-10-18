@@ -37,7 +37,7 @@ end
 
 % temporary struct to indicate if focal adhesions, junctions and lineage
 % are imported
-importTemp.focalAdhesions = (strcmp(option, 'simulation') && (strcmp(app.import.simulationType,'pointlike') || strcmp(app.import.simulationType,'opto') || strcmp(app.import.simulationType,'stretch')) && app.UseimportedData.substratedataCheckBox.Value) || (strcmp(option, 'post_plotting') && app.importPlottingOptions.focalAdhesions);
+importTemp.focalAdhesions = (strcmp(option, 'simulation') && (strcmp(app.import.simulationType,'pointlike') || strcmp(app.import.simulationType,'opto') || strcmp(app.import.simulationType,'stretch')) && app.UseimportedsubstratedataCheckBox.Value) || (strcmp(option, 'post_plotting') && app.importPlottingOptions.focalAdhesions);
 importTemp.junctions = strcmp(option, 'simulation') || (strcmp (option, 'post_plotting') && (app.importPlottingOptions.junctions || app.importPlottingOptions.cellStyle == 3 || app.importPlottingOptions.cellStyle == 5)) || strcmp(option,'get_neighbors') || strcmp(option,'opto_analysis');
 importTemp.lineage = strcmp(option, 'simulation') || strcmp(app.SpecialplotDropDown.Value,'Show lineage');
 

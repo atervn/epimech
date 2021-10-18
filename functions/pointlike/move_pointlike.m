@@ -40,9 +40,10 @@ if d.simset.simulationType == 2
     end
     
     % calculate a multiplier that assumes that the final position of the
-    % pipette is at the boundary of the manipulated cell (this the cell is only
-    % moved by (maximum pipette movement - (distance between cell center and
-    % the boundary at the direction of the movement))/ maximum pipette movement
+    % pipette is at the boundary of the manipulated cell (the cell is only
+    % moved by (maximum pipette movement - (distance between cell center
+    % and the boundary at the direction of the movement))/ maximum pipette
+    % movement 
     multiplier = (max(d.simset.pointlike.movementY) - abs(max(d.simset.pointlike.vertexOriginalY) - d.simset.pointlike.originalY))/max(d.simset.pointlike.movementY);
     
     % move the pipette (used for visualization purposes mostly

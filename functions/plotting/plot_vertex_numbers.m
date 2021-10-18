@@ -35,13 +35,13 @@ if d.pl.vertexNumbers && d.pl.cellStyle ~= 0
     scaledLengthPerPixels = figureSizeinScaled/axisSizeInPixels;
     
     % get how many pixels the normal cell radius is
-    cellDiamaterInPixels = d.spar.rCell/scaledLengthPerPixels;
+    cellRadiusInPixels = d.spar.rCell/scaledLengthPerPixels;
     
     % go through the vertex indices
     for i = 1:length(txt)
         
         % if the radius is pixels is less than 200 pixels
-        if cellDiamaterInPixels < 200
+        if cellRadiusInPixels < 200
             
             % hide the index
             txt(i).Visible = 'Off';
@@ -54,7 +54,7 @@ if d.pl.vertexNumbers && d.pl.cellStyle ~= 0
             
             % set the index font size as one fiftieth of the cell diameter
             % in pixels
-            fontSize = cellDiamaterInPixels/50;
+            fontSize = cellRadiusInPixels/50;
             
             % if the fontSize is not between 7 and 20, set it to the
             % closest limit

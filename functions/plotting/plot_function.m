@@ -41,6 +41,9 @@ if d.pl.plot
             nCells = length(d.cells);
         end
         
+        % set automatic size
+        set_automatic_plot_size(d);
+        
         % if simulation
         if d.pl.plotType == 1
             
@@ -125,9 +128,6 @@ if d.pl.plot
         
         % plot title
         plot_title(d,time,loopTime);
-        
-        % set automatic size
-        set_automatic_plot_size(d);
         
         % define scale bar
         plot_scale_bar(d);

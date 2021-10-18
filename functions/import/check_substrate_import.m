@@ -44,7 +44,7 @@ function available = check_substrate_import(app)
             end
         end
         % LEGACY
-        if exist([folderName '/substrate_auxiliary/repulsion_vectors_idx.csv']) ~= 2 %#ok<*EXIST>
+        if exist([folderName '/substrate_auxiliary/repulsion_vectors1_idx.csv']) ~= 2 %#ok<*EXIST>
             if exist([folderName '/substrate_auxiliary/boundary_repulsion_vectors_idx.csv']) ~= 2 %#ok<*EXIST>
                 available = false;
                 return
@@ -73,14 +73,14 @@ function available = check_substrate_import(app)
             return
         end
         % LEGACY
-        if exist([folderName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']) ~= 2 %#ok<*EXIST>
+        if exist([folderName '/substrate_auxiliary/repulsion_spring_constant.csv']) ~= 2 %#ok<*EXIST>
             if exist([folderName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']) ~= 2 %#ok<*EXIST>
                 available = false;
                 return
             end
         end
         % LEGACY
-        if exist([folderName '/substrate_auxiliary/central_interaction_spring_constant.csv']) ~= 2 %#ok<*EXIST>
+        if exist([folderName '/substrate_auxiliary/central_spring_constant.csv']) ~= 2 %#ok<*EXIST>
             if exist([folderName '/substrate_auxiliary/direct_interaction_spring_constant.csv']) ~= 2 %#ok<*EXIST>
                 available = false;
                 return
@@ -94,5 +94,4 @@ function available = check_substrate_import(app)
             available = false;
             return
         end
-
 end

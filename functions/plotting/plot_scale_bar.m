@@ -12,10 +12,10 @@ function plot_scale_bar(d)
 if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
     
     % get the image width in scale length units
-    figureSizeScaled = d.pl.axesHandle.XLim(2) - d.pl.axesHandle.XLim(1);
+    axisSizeScaled = d.pl.axesHandle.XLim(2) - d.pl.axesHandle.XLim(1);
     
     % get the image width in micrometers
-    figureSizeUm = figureSizeScaled*d.spar.scalingLength*1e6;
+    axisSizeUm = axisSizeScaled*d.spar.scalingLength*1e6;
     
     % get the ranges for the different scale bar lengths
     figureSizeRanges = d.pl.scaleBar.lengths(:,2:3);
@@ -24,7 +24,7 @@ if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
     possibleBarLengths = d.pl.scaleBar.lengths(:,1);
     
     % get the correct based on the image width
-    selectedBarLength = logical((figureSizeUm > figureSizeRanges(:,1)).*(figureSizeUm <= figureSizeRanges(:,2)));
+    selectedBarLength = logical((axisSizeUm > figureSizeRanges(:,1)).*(axisSizeUm <= figureSizeRanges(:,2)));
 
     % get the bar length label and length in scaled length units
     barLengthLabel = possibleBarLengths(selectedBarLength);
@@ -34,7 +34,7 @@ if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
     axisSizePixels = d.pl.figureHandle.Position(4)*d.pl.axesHandle.Position(4);
     
     % get how pixel size in scaled length units
-    scaledLengthPerPixels = figureSizeScaled/axisSizePixels;
+    scaledLengthPerPixels = axisSizeScaled/axisSizePixels;
     
     % define the left, right, and bottom limits of the box surrounding the
     % scale bar
@@ -43,10 +43,10 @@ if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
     boxPositionBottom = 10*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
     
     % set the font size for the length text based on the axis size in
-    % pixels (and make sure that it is between 10 and 18)
+    % pixels (and make sure that it is between 10 and 15)
     fontSize = axisSizePixels/40;
-    if fontSize > 18
-        fontSize = 18;
+    if fontSize > 15
+        fontSize = 15;
     elseif fontSize < 10
         fontSize = 10;
     end
@@ -57,7 +57,7 @@ if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
     
     % calculate the limits for the scale bar itself
     barPositionBottom = 20*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
-    barPositionTop = barPositionBottom + figureSizeScaled.*0.02;
+    barPositionTop = barPositionBottom + axisSizeScaled.*0.02;
     barPositionRight = d.pl.axesHandle.XLim(2) - 20*scaledLengthPerPixels;
     barPositionLeft = barPositionRight - currentBarLength;
     

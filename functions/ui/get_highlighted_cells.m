@@ -3,7 +3,6 @@ function d = get_highlighted_cells(app,d)
 switch app.SpecialplotDropDown.Value
     case 'Normal'
         d.pl.highlightType = 0;
-        d.pl.highlightedCells = [];
     case 'Highlight cells'
         d.pl.highlightType = 1;
         d.pl.highlightedCells = app.ChoosecellstohighlightListBox.Value;

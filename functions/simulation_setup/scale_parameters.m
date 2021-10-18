@@ -77,7 +77,9 @@ elseif strcmp(app.simulationType,'stretch')
     d.spar.maxMembraneAngle = app.specificCellParameters.maxMembraneAngle; % radians
     d.spar.maxJunctionAngleConstant = app.specificCellParameters.maxJunctionAngleConstant; % dimensionless
     d.spar.junctionModificationTimeStep = app.systemParameters.junctionModificationTimeStep/app.systemParameters.scalingTime; % T^-1
-    
+
+% scale the opto-specific parameters (or parameters whose values are
+% simulation specific)  
 elseif strcmp(app.simulationType,'opto')
     d.spar.fMembrane = app.specificCellParameters.fMembrane*app.systemParameters.scalingTime/app.systemParameters.eta; % T*eta^-1
     d.spar.fEdgeCell = app.specificCellParameters.fEdgeCell*app.systemParameters.scalingTime/app.systemParameters.eta; % T*eta^-1

@@ -64,6 +64,27 @@ if any(d.simset.simulationType == [2,3,5])
         % if the creation is canceled, return
         if ~isstruct(d); return; end
         
+        % if stretch simulation
+        if d.simset.simulationType == 3
+            
+            % if uniaxial stretch
+            if d.simset.stretch.axis == 1
+                
+                % stretch the x-coordinates of the substrate based on the
+                % initial stretch multiplier
+                d.sub.pointsX = d.sub.pointsX.*d.simset.stretch.values(1);
+                
+            % if biaxial stretch
+            elseif d.simset.stretch.axis == 2
+                
+                % stretch the x and y-coordinates of the substrate based on
+                % the initial stretch multiplier
+                d.sub.pointsX = d.sub.pointsX.*d.simset.stretch.values(1);
+                d.sub.pointsY = d.sub.pointsY.*d.simset.stretch.values(1);
+            end
+            
+        end
+        
         % save the square substrate
         subTemp = d.sub;
         

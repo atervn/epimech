@@ -1,29 +1,4 @@
 function d = setup_stretching_settings(app,d)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % SETUP_STRETCHING_SETTINGS Setup settings for lateral compression or
 % stretching
 %   The function defines the settings for the lateral compression or
@@ -73,18 +48,5 @@ if d.simset.simulationType == 3
             d.simset.stretch.axis = 2;
     end
 end
-
-
-if d.simset.simulationType == 3
-
-    if d.simset.stretch.axis == 1
-        d.sub.pointsX = d.sub.pointsX.*d.simset.stretch.values(1);
-    elseif d.simset.stretch.axis == 2
-        d.sub.pointsX = d.sub.pointsX.*d.simset.stretch.values(1);
-        d.sub.pointsY = d.sub.pointsY.*d.simset.stretch.values(1);
-    end
-    
-end
-
 
 end

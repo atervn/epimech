@@ -38,7 +38,7 @@ for k = 1:length(d.cells)
     d.cells(k).division.newAreas = d.cells(k).division.newAreas*app.import.scaledParameters.scalingLength^2/app.systemParameters.scalingLength^2;
     
     % rescale the focal adhesion strengths
-    if (strcmp(app.import.simulationType,'pointlike') || strcmp(app.import.simulationType,'opto') || strcmp(app.import.simulationType,'stretch')) && app.UseimportedData.substratedataCheckBox.Value
+    if (strcmp(app.import.simulationType,'pointlike') || strcmp(app.import.simulationType,'opto') || strcmp(app.import.simulationType,'stretch')) && app.UseimportedsubstratedataCheckBox.Value
         d.cells(k).substrate.fFocalAdhesions = d.cells(k).substrate.fFocalAdhesions.*app.import.systemParameters.eta./app.import.systemParameters.scalingTime.*app.systemParameters.scalingTime./app.systemParameters.eta/app.import.scaledParameters.membraneLength*d.spar.membraneLength;
     end
 end

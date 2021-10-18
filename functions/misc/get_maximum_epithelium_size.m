@@ -8,7 +8,7 @@ function maxSize = get_maximum_epithelium_size(d)
 %       maxSize: maximum size
 %   by Aapo Tervonen, 2021
 
-% initialize the maximum and minumum coordinate vectors
+% initialize the maximum and minimum coordinate vectors
 maxPointX = zeros(1,length(d.cells));
 minPointX = maxPointX;
 maxPointY = maxPointX;

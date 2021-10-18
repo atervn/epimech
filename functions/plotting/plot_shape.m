@@ -5,22 +5,9 @@ function plot_shape(d)
 %   INPUTS:
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021
-
-% if substrate is visualized
-if d.pl.plotType == 4
-    
-    % get the half of the substrate size
-    halfSize = d.simset.substrateSize/2;
-    
-    % create coordinate vectors
-    cornersX = [-halfSize halfSize halfSize -halfSize -halfSize];
-    cornersY = [-halfSize -halfSize halfSize halfSize -halfSize];
-    
-    % plot the shape
-    plot(d.pl.axesHandle,cornersX,cornersY, '--r', 'LineWidth',2)
     
 % if cell removal with shape
-elseif d.pl.plotType == 3
+if d.pl.plotType == 2
     
     % which shape
     switch d.pl.shape
@@ -48,6 +35,19 @@ elseif d.pl.plotType == 3
             % plot the circle
             plot(d.pl.axesHandle,coordsX,coordsY,'-c','LineWidth',5)
     end
+
+% if substrate is visualized
+elseif d.pl.plotType == 3
+    
+    % get the half of the substrate size
+    halfSize = d.simset.substrateSize/2;
+    
+    % create coordinate vectors
+    cornersX = [-halfSize halfSize halfSize -halfSize -halfSize];
+    cornersY = [-halfSize -halfSize halfSize halfSize -halfSize];
+    
+    % plot the shape
+    plot(d.pl.axesHandle,cornersX,cornersY, '--r', 'LineWidth',2)
 end
 
 end

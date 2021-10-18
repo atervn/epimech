@@ -16,7 +16,7 @@ if any(d.simset.simulationType == [2,5])
     if d.pl.substrateForcesCentral
         
         % if only the magnitude is plotted
-        if d.pl.plotType == 10
+        if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.centralX.^2 + d.sub.forces.centralY.^2);
             
         % if arrow plot
@@ -29,7 +29,7 @@ if any(d.simset.simulationType == [2,5])
     if d.pl.substrateForcesRepulsion
         
         % if only the magnitude is plotted
-        if d.pl.plotType == 10
+        if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.repulsionX.^2 + d.sub.forces.repulsionY.^2);
             
         % if arrow plot
@@ -42,7 +42,7 @@ if any(d.simset.simulationType == [2,5])
     if d.pl.substrateForcesRestoration
         
         % if only the magnitude is plotted
-        if d.pl.plotType == 10
+        if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.restorativeX.^2 + d.sub.forces.restorativeY.^2);
             
         % if arrow plot
@@ -55,7 +55,7 @@ if any(d.simset.simulationType == [2,5])
     if d.pl.substrateForcesFocalAdhesions
         
         % if only the magnitude is plotted
-        if d.pl.plotType == 10
+        if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.focalAdhesionsX.^2 + d.sub.forces.focalAdhesionsY.^2);
             
         % if arrow plot
@@ -68,7 +68,7 @@ if any(d.simset.simulationType == [2,5])
     if d.pl.substrateForcesTotal
         
         % if only the magnitude is plotted
-        if d.pl.plotType == 10
+        if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.totalX.^2 + d.sub.forces.totalY.^2);
             
         % if arrow plot
@@ -78,7 +78,7 @@ if any(d.simset.simulationType == [2,5])
     end
     
     % if only the magnitude is plotted
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         scatter(d.pl.axesHandle, d.sub.pointsX, d.sub.pointsY,d.pl.markerSize,magnitudes,'filled');
         
         % set the colorbar limits and show the colorbar

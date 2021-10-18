@@ -15,7 +15,7 @@ for k = 1:length(d.cells)
     if d.simset.simulationType == 1
         
         % if division until end or dividion until a time that is nonzero
-        if simset.division.type == 1 || (simset.division.type == 2 && d.spar.stopDivisionTime > 0)
+        if d.simset.division.type == 1 || (simset.division.type == 2 && d.spar.stopDivisionTime > 0)
             
             % if division state is 0
             if d.cells(k).division.state == 0
@@ -36,13 +36,13 @@ for k = 1:length(d.cells)
         % if division state from the imported simulation is nonzero (e.g.
         % if a cell at the end of the previous simulation was dividing at
         % the end)
-        if d.cells(k).division.state ~= 0
+        if d.cells(k).division.state > 0
             
             % set the division state to -1 and the normal area based on the
             % the current cell area times a multiplier to account for the
             % cortical contractility
             d.cells(k).division.state = -1;
-            d.cells(k).normArea = d.cells(k).area*d.spar.newCellAreaConstant;
+            d.cells(k).normArea = d.cells(k).area*1.1;
         end
     end
 end

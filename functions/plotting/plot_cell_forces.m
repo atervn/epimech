@@ -13,7 +13,7 @@ function plot_cell_forces(d,forcePlot)
 if d.pl.cellForcesCortical
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesCortical(:,3).^2 + forcePlot.cellForcesCortical(:,4).^2);
@@ -33,7 +33,7 @@ end
 if d.pl.cellForcesJunctions
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesJunctions(:,3).^2 + forcePlot.cellForcesJunctions(:,4).^2);
@@ -53,7 +53,7 @@ end
 if d.pl.cellForcesDivision
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesDivision(:,3).^2 + forcePlot.cellForcesDivision(:,4).^2);
@@ -73,7 +73,7 @@ end
 if d.pl.cellForcesMembrane
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesMembrane(:,3).^2 + forcePlot.cellForcesMembrane(:,4).^2);
@@ -93,7 +93,7 @@ end
 if d.pl.cellForcesContact
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesContact(:,3).^2 + forcePlot.cellForcesContact(:,4).^2);
@@ -113,7 +113,7 @@ end
 if d.pl.cellForcesArea
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesArea(:,3).^2 + forcePlot.cellForcesArea(:,4).^2);
@@ -133,7 +133,7 @@ end
 if d.pl.cellForcesPointlike && d.simset.simulationType == 2
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesPointlike(:,3).^2 + forcePlot.cellForcesPointlike(:,4).^2);
@@ -153,7 +153,7 @@ end
 if d.pl.cellForcesFocalAdhesions && any(d.simset.simulationType == [2,3])
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesFocalAdhesions(:,3).^2 + forcePlot.cellForcesFocalAdhesions(:,4).^2);
@@ -173,7 +173,7 @@ end
 if d.pl.cellForcesTotal
     
     % if this is a magnitude plot
-    if d.pl.plotType == 10
+    if d.pl.plotType == 4
         
         % calculate the magnitude
         magnitudes = sqrt(forcePlot.cellForcesTotal(:,3).^2 + forcePlot.cellForcesTotal(:,4).^2);
@@ -190,7 +190,7 @@ if d.pl.cellForcesTotal
 end
 
 % if magnitude plot
-if d.pl.plotType == 10
+if d.pl.plotType == 4
     
     % set the colorbar settings
     caxis([d.pl.minMagnitude d.pl.maxMagnitude]);

@@ -1,467 +1,749 @@
-function ex = setup_exporting(app,d,varargin)
+function d = setup_exporting(app,d,varargin)
+% SETUP_EXPORTING Setup exporting for simulation
+%   The function setups the settings for simulation exporting, creates the
+%   folders, exports all parameter data, and static data related to
+%   substrate, pointlike, and opto.
+%   INPUT:
+%       app: main application structure
+%       d: main simulation data structure
+%       varargin: can be used to give startingTime that was defined before
+%       calling the function
+%   OUTPUT:
+%       d: main simulation data structure
+%   by Aapo Tervonen, 2021
 
-
-% get the simulation starting time
+% get the simulation starting time, the starting time is given either by
+% the varargin or taken as a new value
 if numel(varargin) > 0
     startingTime = varargin{1};
 else
     startingTime = clock;
 end
 
-ex = initialize_export_options_structure;
-
+% if the exporting is selected
 if app.ExportdataCheckBox.Value
     
-    ex.export = 1;
-    ex.exportDt = app.customExportOptions.exportDtMultiplier*d.spar.maximumTimeStep;
+    % read export settings
+    d.ex= read_export_settings(app);
     
-    switch app.ExporteddataDropDown.Value
-        case 'Suitable for import'
-            switch app.simulationType
-                case 'growth'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_import_growth.txt']);
-                case 'pointlike'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_import_pointlike.txt']);
-                case 'stretch'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_import_stretching.txt']);
-                case 'opto'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_import_optogenetics.txt']);
-            end
-        case 'Suitable for basic plotting'
-            switch app.simulationType
-                case 'growth'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_plotting_growth.txt']);
-                case 'pointlike'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_plotting_pointlike.txt']);
-                case 'stretch'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_plotting_stretching.txt']);
-                case 'opto'
-                    exTemp = import_settings([app.defaultPath 'settings/export/export_options_plotting_optogenetics.txt']);
-            end
-        case 'Full export'
-            exTemp = import_settings([app.defaultPath 'settings/export/export_options_full.txt']);
-        case 'Custom export'
-            exTemp = app.customExportOptions;
-    end
+    % set exporting to 1 and calculate the export time step
+    d.ex.export = 1;
+    d.ex.exportDt = app.customExportOptions.exportDtMultiplier*d.spar.maximumTimeStep;
+      
+    % get the default path
+    d.ex.defaultPath = app.defaultPath;
     
-    fieldNames = fieldnames(exTemp);
-    
-    if exist('results') ~= 7 %#ok<EXIST>
-        mkdir('results');
-    end
-    
-    for i = 1:length(fieldNames)
-        ex.(fieldNames{i}) = exTemp.(fieldNames{i});
-    end
-    
-    ex.defaultPath = app.defaultPath;
-    
+    % get the export date and time
     exportDate = datestr(startingTime, 'yyyymmdd');
     exportTime = datestr(startingTime, 'HHMMSS');
+    
+    % if the name in the simulation/video field is the default "Give name",
+    % give the video the name of "simulation"
     if strcmp(app.SimulationnameEditField.Value,'Give name')
-        ex.exportName = [exportDate '_' exportTime '_simulation'];
+        d.ex.exportName = [exportDate '_' exportTime '_simulation'];
     else
-        ex.exportName = [exportDate '_' exportTime '_' app.SimulationnameEditField.Value];
+        d.ex.exportName = [exportDate '_' exportTime '_' app.SimulationnameEditField.Value];
     end
     
+    % if the results folder in the epimech root does not exist, create it
     if exist([app.defaultPath 'results']) ~= 7 %#ok<EXIST>
         mkdir(app.defaultPath, 'results');
     end
     
-    mkdir([app.defaultPath 'results/'], ex.exportName);
-    folderPath = [app.defaultPath 'results/' ex.exportName];
+    % create the folder for the simulation export and get its path
+    mkdir([app.defaultPath 'results/'], d.ex.exportName);
+    folderPath = [app.defaultPath 'results/' d.ex.exportName];
     
-    if ex.vertices
-        mkdir(folderPath, 'vertices');
-    end
-    if ex.vertexStates
-        mkdir(folderPath, 'vertex_states');
-    end
-    if ex.division
-        mkdir(folderPath, 'division');
-    end
-    if ex.cellStates
-        mkdir(folderPath, 'cell_states');
-    end
-    if ex.junctions
-        mkdir(folderPath, 'junctions');
-    end
-    if ex.boundaryLengths
-        mkdir(folderPath, 'boundary_lengths');
-    end
-    if ex.areas
-        mkdir(folderPath, 'areas');
-    end
-    if ex.perimeters
-        mkdir(folderPath, 'perimeters');
-    end
-    if ex.normProperties
-        mkdir(folderPath, 'norm_properties');
-    end
-    if ex.corticalStrengths
-        mkdir(folderPath, 'cortex');
-    end
-    if ex.lineage
-        mkdir(folderPath, 'lineage');
-    end
-    if ex.pointlike && d.simset.simulationType == 2
-        mkdir(folderPath, 'pointlike');
-        
-        pointlikeTemp = d.simset.pointlike;
-        pointlikeTemp = rmfield(pointlikeTemp,{'pointX','pointY','vertexOriginalX','vertexOriginalY','vertexX','vertexY','movementTime','movementY'});
-        
-        fieldNames = fieldnames(pointlikeTemp);
-        pointlikeCell = cell2mat(struct2cell(pointlikeTemp));
-        fileID = fopen([app.defaultPath 'Results/' ex.exportName '/pointlike/pointlike_data.csv'], 'w');
-        % go through the parameters
-        for i = 1:length(pointlikeCell)
-            fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(pointlikeCell(i)));
-        end
-        fclose(fileID);
-        
-        csvwrite([app.defaultPath 'Results/' ex.exportName '/pointlike/original_vertex_locations.csv'],[d.simset.pointlike.vertexOriginalX d.simset.pointlike.vertexOriginalY]);
-        
-        if size(app.pointlikeProperties.movementTime,1) == 1
-            movementData = [d.simset.pointlike.movementTime'  d.simset.pointlike.movementY'];
-        else
-            movementData = [d.simset.pointlike.movementTime d.simset.pointlike.movementY];
-        end
-        csvwrite([app.defaultPath 'Results/' ex.exportName '/pointlike/movement_data.csv'],movementData);
+    % create folders for exported data
+    create_export_folders(d, folderPath);
 
-    end
+    % export cell parameters
+    export_cell_parameters(app,folderPath);
     
-    if ex.opto && d.simset.simulationType == 5
-        mkdir(folderPath, 'opto');
-        csvwrite([app.defaultPath 'Results/' ex.exportName '/opto/opto_times.csv'],d.simset.opto.times);
-        csvwrite([app.defaultPath 'Results/' ex.exportName '/opto/opto_levels.csv'],d.simset.opto.levels);
-        csvwrite([app.defaultPath 'Results/' ex.exportName '/opto/opto_shapes.csv'],d.simset.opto.shapes);
-    end
+    % export specific cell parameters
+    export_specific_cell_parameters(app,folderPath);
     
-    if or(ex.substratePlot,ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
-        mkdir(folderPath, 'substrate');
-        mkdir(folderPath, 'substrate_auxiliary');
-        mkdir(folderPath, 'focal_adhesions');
-    end
-    if ex.cellForcesArea
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'area');
-    end
-    if ex.cellForcesCortical
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'cortical');
-    end
-    if ex.cellForcesJunctions
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'junction');
-    end
-    if ex.cellForcesDivision && d.simset.simulationType == 1
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'division');
-    end
-    if ex.cellForcesMembrane
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'membrane');
-    end
-    if ex.cellForcesFocalAdhesions && any(d.simset.simulationType == [2,3,5])
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'focal_adhesion');
-    end
-    if ex.cellForcesPointlike && d.simset.simulationType == 2
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'pointlike');
-    end
-    if ex.cellForcesContact
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'contact');
-    end
-    if ex.cellForcesTotal
-        if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'cell_forces');
-        end
-        mkdir([folderPath '/cell_forces'], 'total');
-    end
-    if ex.substrateForcesCentral && any(d.simset.simulationType == [2 5])
-        if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'substrate_forces');
-        end
-        mkdir([folderPath '/substrate_forces'], 'central');
-    end
-    if ex.substrateForcesRepulsion && any(d.simset.simulationType == [2 5])
-        if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'substrate_forces');
-        end
-        mkdir([folderPath '/substrate_forces'], 'repulsion');
-    end
-    if ex.substrateForcesRestoration && any(d.simset.simulationType == [2 5])
-        if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'substrate_forces');
-        end
-        mkdir([folderPath '/substrate_forces'], 'restoration');
-    end
-    if ex.substrateForcesFocalAdhesions && any(d.simset.simulationType == [2 5])
-        if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'substrate_forces');
-        end
-        mkdir([folderPath '/substrate_forces'], 'focal_adhesion');
-    end
-    if ex.substrateForcesTotal && any(d.simset.simulationType == [2 5])
-        if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
-            mkdir(folderPath, 'substrate_forces');
-        end
-        mkdir([folderPath '/substrate_forces'], 'total');
-    end
-    
+    % export system parameters
+    export_system_parameters(app,folderPath);
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % CELL PARAMETERS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % export substrate parameters
+    export_substrate_parameters(app,d,folderPath);
+    
+    % export scaled parameters
+    export_scaled_parameters(d,folderPath);
+    
+    % export export settings
+    export_export_setting(d,folderPath);
+
+    % export auxiliary substrate data
+    export_auxiliary_substrate_data(app,d)
+    
+    % export simulation type
+    export_simulation_type(d, folderPath);
+    
+    % export the cell size type
+    csvwrite([app.defaultPath 'Results/' d.ex.exportName '/size_type.csv'],d.simset.division.sizeType);
+    
+    % export pointlike data
+    export_pointlike_data(d,folderPath);
+
+    % export opto settings
+    export_opto_settings(d,folderPath);
+else
+    d.ex.export = 0;
+end
+
+end
+
+function ex = read_export_settings(app)
+% READ_EXPORT_SETTINGS Read export settings from file
+%   The function reads the export settings from file based on the user
+%   preference.
+%   INPUT:
+%       d: main simulation data structure
+%   OUTPUT:
+%       ex: export settings
+%   by Aapo Tervonen, 2021
+
+% get the choice for the extension of the export
+switch app.ExporteddataDropDown.Value
+
+    % export suitable for import
+    case 'Suitable for import'
+        
+        % depending on the simulation type, read to corresponding
+        % export settings
+        switch app.simulationType
+            case 'growth'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_import_growth.txt']);
+            case 'pointlike'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_import_pointlike.txt']);
+            case 'stretch'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_import_stretching.txt']);
+            case 'opto'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_import_optogenetics.txt']);
+        end
+        
+        % export suitable for basic plotting
+    case 'Suitable for basic plotting'
+        
+        % depending on the simulation type, read to corresponding
+        % export settings
+        switch app.simulationType
+            case 'growth'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_growth.txt']);
+            case 'pointlike'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_pointlike.txt']);
+            case 'stretch'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_stretching.txt']);
+            case 'opto'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_optogenetics.txt']);
+        end
+        
+        % full export
+    case 'Full export'
+        
+        % read the full export settings
+        ex = import_settings([app.defaultPath 'settings/export/export_options_full.txt']);
+        
+        % custom export
+    case 'Custom export'
+        
+        % assign the custom export settings
+        ex = app.customExportOptions;
+end
+
+end
+
+function create_export_folders(d, folderPath)
+% CREATE_EXPORT_FOLDER Create folders for exported data
+%   The function creates the folders for the chosen exported features
+%   INPUT:
+%       d: main simulation data structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% if vertex coordinates are exported, create the folder for them
+if d.ex.vertices
+    mkdir(folderPath, 'vertices');
+end
+
+% if vertex states are exported, create the folder for them
+if d.ex.vertexStates
+    mkdir(folderPath, 'vertex_states');
+end
+
+% if division data is exported, create the folder for them
+if d.ex.division
+    mkdir(folderPath, 'division');
+end
+
+% if cell states are exported, create the folder for them
+if d.ex.cellStates
+    mkdir(folderPath, 'cell_states');
+end
+
+% if junction data is exported, create the folder for them
+if d.ex.junctions
+    mkdir(folderPath, 'junctions');
+end
+
+% if boundary lengths are exported, create the folder for them
+if d.ex.boundaryLengths
+    mkdir(folderPath, 'boundary_lengths');
+end
+
+% if cell areas are exported, create the folder for them
+if d.ex.areas
+    mkdir(folderPath, 'areas');
+end
+
+% if cell perimeters are exported, create the folder for them
+if d.ex.perimeters
+    mkdir(folderPath, 'perimeters');
+end
+
+% if normal area and perimeters are exported, create the folder for
+% them
+if d.ex.normProperties
+    mkdir(folderPath, 'norm_properties');
+end
+
+% if cortical strength data is exported, create the folder for them
+if d.ex.corticalStrengths
+    mkdir(folderPath, 'cortex');
+end
+
+% if lineage data is exported, create the folder for them
+if d.ex.lineage
+    mkdir(folderPath, 'lineage');
+end
+
+% if pointlike data is exported and pointlike simulation, create the
+% folder
+if d.ex.pointlike && d.simset.simulationType == 2
+    mkdir(folderPath, 'pointlike');
+end
+
+% if opto data is exported and optosimulation, create the folder
+if d.ex.opto && d.simset.simulationType == 5
+    mkdir(folderPath, 'opto');
+end
+
+% if substrate is exported and substrate is included in the simulation,
+% create folders for substrate data, auxiliary data, and focal
+% adhesions
+if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
+    mkdir(folderPath, 'substrate');
+    mkdir(folderPath, 'substrate_auxiliary');
+    mkdir(folderPath, 'focal_adhesions');
+end
+
+% if cell area forces are exported, create a folder for them under cell
+% forces folder (also, if the cell forces does not exist, create it
+% also)
+if d.ex.cellForcesArea
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'area');
+end
+
+% if cell cortical forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesCortical
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'cortical');
+end
+
+% if cell junction forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesJunctions
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'junction');
+end
+
+% if cell division forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesDivision && d.simset.simulationType == 1
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'division');
+end
+
+% if cell membrane forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesMembrane
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'membrane');
+end
+
+% if cell focal adhesion forces are exported and substrate is include
+% in the simulation, create a folder for them under cell forces folder
+% (also, if the cell forces does not exist, create it also)
+if d.ex.cellForcesFocalAdhesions && any(d.simset.simulationType == [2,3,5])
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'focal_adhesion');
+end
+
+% if cell pointlike forces are exported and simulation is a pointlike
+% simulation, create a folder for them under cell forces folder (also,
+% if the cell forces does not exist, create it also)
+if d.ex.cellForcesPointlike && d.simset.simulationType == 2
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'pointlike');
+end
+% if cell contact forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesContact
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'contact');
+end
+
+% if cell total forces are exported, create a folder for them under
+% cell forces folder (also, if the cell forces does not exist, create
+% it also)
+if d.ex.cellForcesTotal
+    if exist([folderPath '/cell_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'cell_forces');
+    end
+    mkdir([folderPath '/cell_forces'], 'total');
+end
+
+% if substrate central forces are exported and the substrate is solved,
+% create a folder for them under substrate forces folder (also, if the
+% substrate forces does not exist, create it also)
+if d.ex.substrateForcesCentral && any(d.simset.simulationType == [2 5])
+    if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'substrate_forces');
+    end
+    mkdir([folderPath '/substrate_forces'], 'central');
+end
+
+% if substrate repulsion forces are exported and the substrate is
+% solved, create a folder for them under substrate forces folder (also,
+% if the substrate forces does not exist, create it also)
+if d.ex.substrateForcesRepulsion && any(d.simset.simulationType == [2 5])
+    if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'substrate_forces');
+    end
+    mkdir([folderPath '/substrate_forces'], 'repulsion');
+end
+
+% if substrate restoration forces are exported and the substrate is
+% solved, create a folder for them under substrate forces folder (also,
+% if the substrate forces does not exist, create it also)
+if d.ex.substrateForcesRestoration && any(d.simset.simulationType == [2 5])
+    if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'substrate_forces');
+    end
+    mkdir([folderPath '/substrate_forces'], 'restoration');
+end
+
+% if substrate focal adhesion forces are exported and the substrate is
+% solved, create a folder for them under substrate forces folder (also,
+% if the substrate forces does not exist, create it also)
+if d.ex.substrateForcesFocalAdhesions && any(d.simset.simulationType == [2 5])
+    if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'substrate_forces');
+    end
+    mkdir([folderPath '/substrate_forces'], 'focal_adhesion');
+end
+
+% if substrate total forces are exported and the substrate is solved,
+% create a folder for them under substrate forces folder (also, if the
+% substrate forces does not exist, create it also)
+if d.ex.substrateForcesTotal && any(d.simset.simulationType == [2 5])
+    if exist([folderPath '/substrate_forces']) ~= 7 %#ok<EXIST>
+        mkdir(folderPath, 'substrate_forces');
+    end
+    mkdir([folderPath '/substrate_forces'], 'total');
+end
+
+end
+
+function export_cell_parameters(app,folderPath)
+% EXPORT_CELL_PARAMETERS Export cell parameters
+%   The function exports the cell parameters into a file with field names
+%   and values
+%   INPUT:
+%       app: main application structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% get the parameter field names
+fieldNames = fieldnames(app.cellParameters);
+
+% get the parameter values
+cellParameterMatrix = cell2mat(struct2cell(app.cellParameters));
+
+% create the export file
+fileID = fopen([folderPath '/cell_parameters.csv'], 'w');
+
+% go through the parameters
+for i = 1:length(cellParameterMatrix)
+    
+    % write the parameter name and value
+    fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(cellParameterMatrix(i)));
+end
+
+% close the file
+fclose(fileID);
+
+end
+
+function export_specific_cell_parameters(app,folderPath)
+% EXPORT_SPECIFIC_CELL_PARAMETERS Export specific cell parameters
+%   The function exports the specific cell parameters into a file with
+%   field names and values
+%   INPUT:
+%       app: main application structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% get the parameter field names
+fieldNames = fieldnames(app.specificCellParameters);
+
+% get the parameter values
+specificCellParameterMatrix = cell2mat(struct2cell(app.specificCellParameters));
+
+% create the export file
+fileID = fopen([folderPath '/specific_cell_parameters.csv'], 'w');
+
+% go through the parameters
+for i = 1:length(specificCellParameterMatrix)
+    
+    % write the parameter name and value
+    fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(specificCellParameterMatrix(i)));
+end
+
+% close the file
+fclose(fileID);
+
+end
+
+function export_system_parameters(app,folderPath)
+% EXPORT_SYSTEM_PARAMETERS Export system parameters
+%   The function exports the system parameters into a file with field names
+%   and values
+%   INPUT:
+%       app: main application structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% get the parameter field names
+fieldNames = fieldnames(app.systemParameters);
+
+% get the parameter values
+systemParameterMatrix = cell2mat(struct2cell(app.systemParameters));
+
+% create the export file
+fileID = fopen([folderPath '/system_parameters.csv'], 'w');
+
+% go through the parameters
+for i = 1:length(systemParameterMatrix)
+    
+    % write the parameter name and value
+    fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(systemParameterMatrix(i)));
+end
+
+% close the file
+fclose(fileID);
+ 
+end
+
+function export_substrate_parameters(app,d,folderPath)
+% EXPORT_SUBSTRATE_PARAMETERS Export substrate parameters
+%   The function exports the substrate parameters into a file with field
+%   names and values
+%   INPUT:
+%       app: main application structure
+%       d: main simulation data structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% if simulation includes substrate
+if any(d.simset.simulationType == [2,3,5])
+    
+    % if gradient simulation
+    if strcmp(app.StiffnessstyleButtonGroup.SelectedObject.Text,'Gradient')
+        
+        % remove the Young modulus from the parameters
+        substrateParameters = rmfield(app.substrateParameters,'youngsModulus');
+        
+    % otherwise
+    else
+        substrateParameters = app.substrateParameters;
+    end
     
     % get the parameter field names
-    fieldNames = fieldnames(app.cellParameters);
+    fieldNames = fieldnames(substrateParameters);
     
     % get the parameter values
-    cellParameterMatrix = cell2mat(struct2cell(app.cellParameters));
+    substrateParameterMatrix = cell2mat(struct2cell(substrateParameters));
     
     % create the export file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/cell_parameters.csv'], 'w');
+    fileID = fopen([folderPath '/substrate_parameters.csv'], 'w');
     
     % go through the parameters
-    for i = 1:length(cellParameterMatrix)
+    for i = 1:length(substrateParameterMatrix)
         
         % write the parameter name and value
-        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(cellParameterMatrix(i)));
+        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(substrateParameterMatrix(i)));
     end
     
     % close the file
     fclose(fileID);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SPECIFIC CELL PARAMETERS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % get the parameter field names
-    fieldNames = fieldnames(app.specificCellParameters);
-    
-    % get the parameter values
-    specificCellParameterMatrix = cell2mat(struct2cell(app.specificCellParameters));
-    
-    % create the export file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/specific_cell_parameters.csv'], 'w');
-    
-    % go through the parameters
-    for i = 1:length(specificCellParameterMatrix)
-        
-        % write the parameter name and value
-        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(specificCellParameterMatrix(i)));
-    end
-    
-    % close the file
-    fclose(fileID);
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SYSTEM PARAMETERS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % get the parameter field names
-    fieldNames = fieldnames(app.systemParameters);
-    
-    % get the parameter values
-    systemParameterMatrix = cell2mat(struct2cell(app.systemParameters));
-    
-    % create the export file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/system_parameters.csv'], 'w');
-    
-    % go through the parameters
-    for i = 1:length(systemParameterMatrix)
-        
-        % write the parameter name and value
-        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(systemParameterMatrix(i)));
-    end
-    
-    % close the file
-    fclose(fileID);
-    
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SUBSTRATE PARAMETERS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    if strcmp(app.simulationType,'pointlike') || strcmp(app.simulationType,'opto') 
-        
-        if strcmp(app.StiffnessstyleButtonGroup.SelectedObject.Text,'Gradient')
-            substrateParameters = rmfield(app.substrateParameters,'youngsModulus');
-        else
-            substrateParameters = app.substrateParameters;
-        end
-        
-        % get the parameter field names
-        fieldNames = fieldnames(substrateParameters);
-        
-        % get the parameter values
-        substrateParameterMatrix = cell2mat(struct2cell(substrateParameters));
-        
-        % create the export file
-        fileID = fopen([app.defaultPath 'Results/' ex.exportName '/substrate_parameters.csv'], 'w');
-        
-        % go through the parameters
-        for i = 1:length(substrateParameterMatrix)
-            
-            % write the parameter name and value
-            fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(substrateParameterMatrix(i)));
-        end
-        
-        % close the file
-        fclose(fileID);
-        
-    end
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SCALED PARAMETERS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % get the field names
-    fieldNames = fieldnames(d.spar);
-    
-    % get the scaled parameter values
-    scaledParameterMatrix = cell2mat(struct2cell(d.spar));
-    
-    % create the export file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/scaled_parameters.csv'], 'w');
-    
-    % go through the scaled parameters
-    for i = 1:length(scaledParameterMatrix)
-        
-        % write the scaled parameter name and value
-        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(scaledParameterMatrix(i)));
-    end
-    
-    % clsoe the file
-    fclose(fileID);
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SUBSTRATE AUX
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    if any(d.simset.simulationType == [2,3,5]) && or(ex.substratePlot,ex.substrateFull)
-        writematrix(d.sub.pointsOriginalX, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/points_original_x.csv']);
-        writematrix(d.sub.pointsOriginalY, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/points_original_y.csv']);
-        writematrix(d.sub.interactionSelvesIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/interaction_selves_idx.csv']);
-        writematrix(d.sub.interactionPairsIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/interaction_pairs_idx.csv']);
-        fileID = fopen([app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/stiffness_type.csv'], 'w');
-        fprintf(fileID,app.StiffnessstyleButtonGroup.SelectedObject.Text);
-        % close the file
-        fclose(fileID);
-        switch app.StiffnessstyleButtonGroup.SelectedObject.Text
-            case 'Heterogeneous'
+end
 
-            case 'Gradient'
-                writematrix(app.stiffnessGradientInformation, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/gradient_information.csv']);
-        end
-    end
-    if any(d.simset.simulationType == [2,5]) && ex.substrateFull
-        writematrix(d.sub.interactionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/interaction_lin_idx.csv']);
-        writematrix(d.sub.counterInteractionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/counter_interaction_lin_idx.csv']);
-        writematrix(d.sub.repulsionLinIdx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_lin_idx.csv']);
-        writematrix(d.sub.repulsionVectors1Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors1_idx.csv']);
-        writematrix(d.sub.repulsionVectors2Idx, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
-        writematrix(d.sub.repulsionChangeSigns, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/repulsion_change_signs.csv']);
-        writematrix(d.sub.springMultipliers, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/spring_multipliers.csv']);
-        writematrix(d.sub.edgePoints, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/edge_points.csv']);
-        writematrix(d.sub.restorativeSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/restorative_spring_constant.csv']);
-        writematrix(d.sub.centralSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/central_spring_constant.csv']);
-        writematrix(d.sub.repulsionSpringConstants, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/boudary_repulsion_spring_constant.csv']);
-        writematrix(app.fFAInfo, [app.defaultPath 'Results/' ex.exportName '/substrate_auxiliary/focal_adhesion_strengths.csv']);
-    end
+end
+
+function  export_scaled_parameters(d,folderPath)
+% EXPORT_SCALED_PARAMETERS Export scaled parameters
+%   The function exports the scaled parameters into a file with field
+%   names and values
+%   INPUT:
+%       d: main simulation data structure
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% get the field names
+fieldNames = fieldnames(d.spar);
+
+% get the scaled parameter values
+scaledParameterMatrix = cell2mat(struct2cell(d.spar));
+
+% create the export file
+fileID = fopen([folderPath '/scaled_parameters.csv'], 'w');
+
+% go through the scaled parameters
+for i = 1:length(scaledParameterMatrix)
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % EXPORT OPTIONS
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % write the scaled parameter name and value
+    fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(scaledParameterMatrix(i)));
+end
+
+% clsoe the file
+fclose(fileID);
+
+end
+
+function export_export_setting(d,folderPath)
+% EXPORT_SCALED_PARAMETERS Export export settings
+%   The function exports the export settings into a file with field
+%   names and values
+%   INPUT:
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% remove the export name field from the export options
+exportOptions = rmfield(d.ex,{'exportName','defaultPath'});
+
+% get the field names
+fieldNames = fieldnames(exportOptions);
+
+% get the export values
+exportMatrix = structfun(@(a) double(a), exportOptions);
+
+% create the file
+fileID = fopen([folderPath '/export_options.csv'], 'w');
+
+% go through the export options
+for i = 1:length(exportMatrix)
     
-    % remove the export name field from the export options
-    exportOptions = rmfield(ex,{'exportName','defaultPath'});
-    
-    % get the field names
-    fieldNames = fieldnames(exportOptions);
-    
-    % get the export values
-    exportMatrix = structfun(@(a) double(a), exportOptions);
-    
-    % create the file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/export_options.csv'], 'w');
-    
-    % go through the export options
-    for i = 1:length(exportMatrix)
+    %if the fieldname is exportoptions
+    if strcmp(fieldNames{i},'exportDt')
         
-        %if the fieldname is exportoptions
-        if strcmp(fieldNames{i},'exportDt')
-            
-            % write the with higher accuracy
-            fprintf(fileID,'%s,%.8f\r\n', fieldNames{i}, exportMatrix(i));
-            
-            % if not
-        else
-            
-            % write the fieldname and value
-            fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(exportMatrix(i)));
-        end
+        % write the with higher accuracy
+        fprintf(fileID,'%s,%.8f\r\n', fieldNames{i}, exportMatrix(i));
+        
+        % if not
+    else
+        
+        % write the fieldname and value
+        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(exportMatrix(i)));
     end
+end
+
+% close the file
+fclose(fileID);
+
+end
+
+function export_auxiliary_substrate_data(app,d, folderPath)
+% EXPORT_AUXILIARY_SUBSTRATE_DATA Export the auxiliary substrate data
+%   The function export the static substrate data.
+%   INPUT:
+%       app: main application structure
+%       d: main simulation data structure
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% if simulation included the substrate and if substrate is exported for
+% plotting or fully
+if any(d.simset.simulationType == [2,3,5]) && or(d.ex.substratePlot,d.ex.substrateFull)
     
-    % close the file
+    % export the original point coordinates
+    writematrix(d.sub.pointsOriginalX, [folderPath '/substrate_auxiliary/points_original_x.csv']);
+    writematrix(d.sub.pointsOriginalY, [folderPath '/substrate_auxiliary/points_original_y.csv']);
+    
+    % export the interaction "selves" and pairs
+    writematrix(d.sub.interactionSelvesIdx, [folderPath '/substrate_auxiliary/interaction_selves_idx.csv']);
+    writematrix(d.sub.interactionPairsIdx, [folderPath '/substrate_auxiliary/interaction_pairs_idx.csv']);
+    
+    % export the stiffness type
+    fileID = fopen([folderPath '/substrate_auxiliary/stiffness_type.csv'], 'w');
+    fprintf(fileID,app.StiffnessstyleButtonGroup.SelectedObject.Text);
     fclose(fileID);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SIMULATION TYPE
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    % create the file
-    fileID = fopen([app.defaultPath 'Results/' ex.exportName '/simulation_type.csv'], 'w');
-    
-    switch d.simset.simulationType
-        case 1
-            fprintf(fileID,'growth');
-        case 2
-            fprintf(fileID,'pointlike');
-        case 3
-            fprintf(fileID,'stretch');
-        case 5
-            fprintf(fileID,'opto');
+    % for heterogeneous and gradient stiffness, export the data that
+    % describes the stiffness profile
+    switch app.StiffnessstyleButtonGroup.SelectedObject.Text
+        case 'Heterogeneous'
+            writematrix(app.heterogenousStiffness, [folderPath '/substrate_auxiliary/heterogeneous_information.csv']);
+        case 'Gradient'
+            writematrix(app.stiffnessGradientInformation, [folderPath '/substrate_auxiliary/gradient_information.csv']);
     end
+end
+
+% if simulation included the substrate and if substrate is exported fully
+if any(d.simset.simulationType == [2,5]) && d.ex.substrateFull
     
-    % close the file
+    % export unique and counter interaction indices
+    writematrix(d.sub.interactionLinIdx, [folderPath '/substrate_auxiliary/interaction_lin_idx.csv']);
+    writematrix(d.sub.counterInteractionLinIdx, [folderPath '/substrate_auxiliary/counter_interaction_lin_idx.csv']);
+    
+    % export repulsion force index data and change signs
+    writematrix(d.sub.repulsionLinIdx, [folderPath '/substrate_auxiliary/repulsion_lin_idx.csv']);
+    writematrix(d.sub.repulsionVectors1Idx, [folderPath '/substrate_auxiliary/repulsion_vectors1_idx.csv']);
+    writematrix(d.sub.repulsionVectors2Idx, [folderPath '/substrate_auxiliary/repulsion_vectors2_idx.csv']);
+    writematrix(d.sub.repulsionChangeSigns, [folderPath '/substrate_auxiliary/repulsion_change_signs.csv']);
+    
+    % export honeycomb spring multipliers
+    writematrix(d.sub.springMultipliers, [folderPath '/substrate_auxiliary/spring_multipliers.csv']);
+    
+    % export edge points
+    writematrix(d.sub.edgePoints, [folderPath '/substrate_auxiliary/edge_points.csv']);
+    
+    % export restorative, central, and repulsion spring constants
+    writematrix(d.sub.restorativeSpringConstants, [folderPath '/substrate_auxiliary/restorative_spring_constant.csv']);
+    writematrix(d.sub.centralSpringConstants, [folderPath '/substrate_auxiliary/central_spring_constant.csv']);
+    writematrix(d.sub.repulsionSpringConstants, [folderPath '/substrate_auxiliary/repulsion_spring_constant.csv']);
+    
+    % export the focal adhesion data
+    writematrix(app.fFAInfo, [folderPath '/substrate_auxiliary/focal_adhesion_strengths.csv']);
+end
+
+end
+
+function export_simulation_type(d, folderPath)
+% EXPORT_SIMULATION_TYPE Export simulation type
+%   The function export the static substrate data.
+%   INPUT:
+%       app: main application structure
+%       d: main simulation data structure
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% create the file
+fileID = fopen([folderPath '/simulation_type.csv'], 'w');
+
+% check with type and write it to file
+switch d.simset.simulationType
+    case 1
+        fprintf(fileID,'growth');
+    case 2
+        fprintf(fileID,'pointlike');
+    case 3
+        fprintf(fileID,'stretch');
+    case 4
+        fprintf(fileID,'frame');
+    case 5
+        fprintf(fileID,'opto');
+end
+
+% close the file
+fclose(fileID);
+
+end
+
+function export_pointlike_data(d,folderPath)
+% EXPORT_POINTLIKE_DATA Export pointlike data
+%   The function export the static pointlike data
+%   INPUT:
+%       d: main simulation data structure
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% check if pointlike is exported and if simulation type is pointlike
+if d.ex.pointlike && d.simset.simulationType == 2
+    
+    % get the pointlike data, and remove some fields
+    pointlikeTemp = d.simset.pointlike;
+    pointlikeTemp = rmfield(pointlikeTemp,{'pointX','pointY','vertexOriginalX','vertexOriginalY','vertexX','vertexY','movementTime','movementY'});
+    
+    % get the names of the remaining fields
+    fieldNames = fieldnames(pointlikeTemp);
+    
+    % convert the struct to cell
+    pointlikeCell = cell2mat(struct2cell(pointlikeTemp));
+    
+    % create the file, write the properties, and close the file
+    fileID = fopen([folderPath '/pointlike/pointlike_data.csv'], 'w');
+    % go through the parameters
+    for i = 1:length(pointlikeCell)
+        fprintf(fileID,'%s,%s\r\n', fieldNames{i}, num2str(pointlikeCell(i)));
+    end
     fclose(fileID);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % SIZE TYPE
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % write the original vertex coordinates
+    csvwrite([folderPath '/pointlike/original_vertex_locations.csv'],[d.simset.pointlike.vertexOriginalX d.simset.pointlike.vertexOriginalY]);
+
+    % write the movement data
+    csvwrite([folderPath '/pointlike/movement_data.csv'],[d.simset.pointlike.movementTime' d.simset.pointlike.movementY']);
+end
+
+end
+
+function export_opto_settings(d,folderPath)
+% EXPORT_OPTO_DATA Export opto data
+%   The function export the opto data, including the activation behavior
+%   and the activation region shapes
+%   INPUT:
+%       d: main simulation data structure
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% if opto is exported and simualtion type is opto
+if d.ex.opto && d.simset.simulationType == 5
     
-    csvwrite([app.defaultPath 'Results/' ex.exportName '/size_type.csv'],d.simset.division.sizeType);
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % POINTLIKE DATA
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    if ex.pointlike && d.simset.simulationType == 2
-        fileID = fopen([app.defaultPath 'Results/' ex.exportName '/pointlike_properties.csv'], 'w');
-        fprintf(fileID,'Cell,%s\r\n', num2str(d.simset.pointlike.cell));
-        fprintf(fileID,'originalX,%s\r\n', num2str(d.simset.pointlike.originalX));
-        fprintf(fileID,'originalY,%s\r\n', num2str(d.simset.pointlike.originalY));
-        fclose(fileID);
-    end
-    
+    % export activation data and activation regions
+    csvwrite([folderPath '/opto/opto_activation.csv'],[d.simset.opto.times d.simset.opto.levels]);
+    csvwrite([folderPath '/opto/opto_shapes.csv'],d.simset.opto.shapes);
+end
+
 end

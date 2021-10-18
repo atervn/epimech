@@ -72,6 +72,7 @@ switch app.appTask
                 app.SelectcellButton.Enable = 'Off';
                 app.SelectedcellEditField.Enable = 'Off';
                 app.CentercellsCheckBox.Enable = 'Off';
+                app.CentercellsCheckBox.Value = 0;
                 pointlikeData = import_settings([app.import.folderName '/pointlike/pointlike_data.csv']);
                 app.SelectedcellEditField.Value = pointlikeData.cell;
             end
