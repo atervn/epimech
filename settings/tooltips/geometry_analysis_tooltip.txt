@@ -1,0 +1,7 @@
+GEOMETRY ANALYSIS
+
+- Area: show the area distribution in the time point selected in the "Plot" panel
+- Perimeter: show the perimeter distribution in the time point selected in the "Plot" panel
+- Neighbors: show the number of neighbors distribution in the time point selected in the "Plot" panel
+- Area vs time: show the area distribution as a function of time during the simulation
+- Perimeter vs time: show the perimeter distribution as a function of time during the simulation

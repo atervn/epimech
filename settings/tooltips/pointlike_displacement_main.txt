@@ -1,0 +1,10 @@
+POINTLIKE DISPLACEMENT ANALYSIS
+
+- Start: select the displacement starting time point from the dropdown
+- End: select the displacement ending time point from the dropdown
+- Window size: size of the visualized area in the area plot or in the 1D plot along the junctions
+- Max displacement: define the upper limit of the shown displacement range
+- Simulation selection box: select the imported simulation(s) to analyse
+- Save button: save the data from the current 1D plot to a csv file
+- Remove last plot: remove the last plotted curve from the 1D plot
+- Close (bottom): close the dialog

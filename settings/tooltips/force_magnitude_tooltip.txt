@@ -1,0 +1,6 @@
+FORCE MAGNITUDE PLOTTING
+
+- Force: select a force from the dropdown whose magnitude is to be shown for each cell vertex or substrate point. Only the force available in the imported results are shown.
+- Marker size: define the size of the scatter point in the force magnitude plot. Selecting a suitable value can be done via trial-and-error
+- Minimum magnitude: the lower limit for the force magnitude color range. Selecting a suitable value can be done via trial-and-error
+- Maximum magnitude: the upper limit for the force magnitude color range. Selecting a suitable value can be done via trial-and-error

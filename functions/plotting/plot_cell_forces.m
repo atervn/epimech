@@ -150,7 +150,7 @@ if d.pl.cellForcesPointlike && d.simset.simulationType == 2
 end
 
 % if focal adhesion forces are plotted
-if d.pl.cellForcesFocalAdhesions && any(d.simset.simulationType == [2,3])
+if d.pl.cellForcesFocalAdhesions && d.simset.substrateIncluded
     
     % if this is a magnitude plot
     if d.pl.plotType == 4

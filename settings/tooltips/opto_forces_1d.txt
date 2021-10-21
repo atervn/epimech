@@ -1,0 +1,5 @@
+DISPLACEMENT PLOT ALONG JUNCTIONS
+
+- Line width: define the width of the line along the junction for which to calculate the average over
+- Legend: give a name for the force curve
+- Plot: show the plot

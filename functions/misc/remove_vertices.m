@@ -161,7 +161,7 @@ for k = length(d.cells):-1:1
     end
     
     % get the linear indeces of the substrate stuff
-    if any(d.simset.simulationType == [2,3,5])
+    if d.simset.substrateIncluded
         d.cells(k).substrate.pointsLin = d.cells(k).substrate.points(:);
         d.cells(k).substrate.weightsLin = d.cells(k).substrate.weights(:);
     end

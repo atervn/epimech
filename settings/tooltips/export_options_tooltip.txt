@@ -1,0 +1,6 @@
+EXPORT OPTIONS
+
+- Export data: select to export data for the simulation, give a name for the simulation in the "Simulation name" in the "Simulation settings" panel
+- Export step: set a multiplier based on which it is determined how often the export occurs during the simulation
+- Export type dropdown: select the extent of the export based on the use case of the exported data
+- Edit export options: open a table to edit the custom export options

@@ -1,0 +1,12 @@
+PLOTTING OPTIONS
+
+- Scale bar: select to show the scale bar during the simulation, the scale bar settings can be edited from the "Extra" menu.
+- Plotting step: set a multiplier based on which it is determined how often the plotting occurs during the simulation
+- Cell style: select the cell style for the animation
+- Substrate style: select the substrate style if it is included in the simulation:
+- Window size: select the size of the visualized region (the slider is limted to value between 40 and 800 um)
+- Automatic size: the visualized region is automatically determined so that all cells are visible
+- Middle point: move the middle point of the visualized region to the given coordinates
+- Reset button: reset the window size and middle point based on the default plotting options file
+- Plotting options: open a table to edit the plotting options
+- Default: set the plotting options back to default options

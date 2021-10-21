@@ -81,18 +81,18 @@ if isfield(pl,'scaleBar') && pl.scaleBar.show
     barLengthLabel = possibleBarLengths(selectedBarLength);
     currentBarLength = possibleBarLengths(selectedBarLength)*1e-6/spar.scalingLength;
     
-    % define the left, right, bottom, and top limits of the box surrounding the
-    % scale bar
-    barBoxPositionRight = axesHandle.XLim(2) - 10*scaledLengthPerPixels;
-    barBoxPositionLeft = barBoxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
-    barBoxPositionBottom = 10*scaledLengthPerPixels + axesHandle.YLim(1);
-    barBoxPositionTop = barBoxPositionBottom + 10*scaledLengthPerPixels + 3.7*scaledLengthPerPixels*fontSize;
-    
     % calculate the limits for the scale bar itself
     barPositionBottom = 20*scaledLengthPerPixels + axesHandle.YLim(1);
     barPositionTop = barPositionBottom + axisSizeinScaled.*0.02;
     barPositionRight = axesHandle.XLim(2) - 20*scaledLengthPerPixels;
     barPositionLeft = barPositionRight - currentBarLength;
+    
+    % define the left, right, bottom, and top limits of the box surrounding the
+    % scale bar
+    barBoxPositionRight = axesHandle.XLim(2) - 10*scaledLengthPerPixels;
+    barBoxPositionLeft = barBoxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
+    barBoxPositionBottom = 10*scaledLengthPerPixels + axesHandle.YLim(1);
+    barBoxPositionTop = barPositionTop + 10*scaledLengthPerPixels + 1.8*scaledLengthPerPixels*fontSize;
     
     %calculate the bar length in pixels
     barLengthInPixels = currentBarLength/scaledLengthPerPixels;
@@ -344,19 +344,20 @@ if isfield(pl,'scaleBar') && pl.scaleBar.show
         fontSize = 10;
     end
     
-    % define the left, right, bottom, and top limits of the box surrounding the
-    % scale bar
-    barBoxPositionRight = axesHandle.XLim(2) - 10*scaledLengthPerPixels;
-    barBoxPositionLeft = barBoxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
-    barBoxPositionBottom = 10*scaledLengthPerPixels + axesHandle.YLim(1);
-    barBoxPositionTop = barBoxPositionBottom + 10*scaledLengthPerPixels + 3.7*scaledLengthPerPixels*fontSize;
-
     % calculate the limits for the scale bar itself
     barPositionBottom = 20*scaledLengthPerPixels + axesHandle.YLim(1);
     barPositionTop = barPositionBottom + axisSizeinScaled.*0.02;
     barPositionRight = axesHandle.XLim(2) - 20*scaledLengthPerPixels;
     barPositionLeft = barPositionRight - currentBarLength;
-    
+        
+    % define the left, right, bottom, and top limits of the box surrounding the
+    % scale bar
+    barBoxPositionRight = axesHandle.XLim(2) - 10*scaledLengthPerPixels;
+    barBoxPositionLeft = barBoxPositionRight - currentBarLength - 20*scaledLengthPerPixels;
+    barBoxPositionBottom = 10*scaledLengthPerPixels + axesHandle.YLim(1);
+    barBoxPositionTop = barPositionTop + 10*scaledLengthPerPixels + 1.8*scaledLengthPerPixels*fontSize;
+
+
     %calculate the bar length in pixels
     barLengthInPixels = currentBarLength/scaledLengthPerPixels;
 end

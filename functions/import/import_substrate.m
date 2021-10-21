@@ -107,24 +107,27 @@ switch app.appTask
             d.sub.pointsX = importedPoints(:,1);
             d.sub.pointsY = importedPoints(:,2);
             
-            % get the initial substrate point coordinates
-            d.sub.pointsOriginalX = csvread([folderName '/substrate_auxiliary/points_original_x.csv']);
-            d.sub.pointsOriginalY = csvread([folderName '/substrate_auxiliary/points_original_y.csv']);
-            
-            % get the interaction "selves" and pairs for each substrate
-            % interactions
-            d.sub.interactionSelvesIdx = csvread([folderName '/substrate_auxiliary/interaction_selves_idx.csv']);
-            d.sub.interactionPairsIdx = csvread([folderName '/substrate_auxiliary/interaction_pairs_idx.csv']);
-            
-            % import forces to be plotted
-            d = import_substrate_forces(d, folderName);
+            if ~strcmp(app.plotImport(app.selectedFile).simulationType,'stretch')
+                
+                % get the initial substrate point coordinates
+                d.sub.pointsOriginalX = csvread([folderName '/substrate_auxiliary/points_original_x.csv']);
+                d.sub.pointsOriginalY = csvread([folderName '/substrate_auxiliary/points_original_y.csv']);
+                
+                % get the interaction "selves" and pairs for each substrate
+                % interactions
+                d.sub.interactionSelvesIdx = csvread([folderName '/substrate_auxiliary/interaction_selves_idx.csv']);
+                d.sub.interactionPairsIdx = csvread([folderName '/substrate_auxiliary/interaction_pairs_idx.csv']);
+                
+                % import forces to be plotted
+                d = import_substrate_forces(app, d, folderName);
+            end
         end
-        
+            
 end
 
 end
 
-function d = import_substrate_forces(d, folderName)
+function d = import_substrate_forces(app, d, folderName)
 % IMPORT_SUBSTRATE_FORCES Import substrate forces for plotting and analysis
 %   The functions imports the required substrate forces for post plotting
 %   and analysis.

@@ -31,7 +31,7 @@ for k = 1:length(d.cells)
         end
        
     % if division is not included
-    elseif any(d.simset.simulationType == [2 3 5])
+    elseif d.simset.substrateIncluded
         
         % if division state from the imported simulation is nonzero (e.g.
         % if a cell at the end of the previous simulation was dividing at

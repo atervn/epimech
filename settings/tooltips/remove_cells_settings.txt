@@ -1,0 +1,11 @@
+REMOVE CELLS
+
+- Remove single cells: remove cells by selecting them one by one from the plot
+- Square/Circle: choose the shape to be used for removing cells outside the shape
+- Size: give the square side length or circle diameter for the shape
+- Visualize shape: shows the removal shape with the chosen settings with the cells outside the shape highlighted
+- Apply shape: remove the cells outside the defined shape
+- Load button: load a list of the removed cells
+- Save button: save the list of the removed cells
+- Reset button: reset the removed cells to none
+- Close: save and close the dialog

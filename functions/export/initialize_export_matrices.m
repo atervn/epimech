@@ -72,7 +72,7 @@ end
 
 % if focal adhesion data is exported (and if substrate is included in the
 % simulation)
-if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
+if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
     
     % this data is required for plotting the focal adhesions
     exportMatrices.focalAdhesionPoints = zeros([export.nVerticesMax export.nCells*3]);
@@ -81,7 +81,7 @@ if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [
     
     % this data is required to use this export as a starting point for new
     % simulation
-    if d.ex.substrateFull && any(d.simset.simulationType == [2,3,5])
+    if d.ex.substrateFull && d.simset.substrateIncluded
         exportMatrices.focalAdhesionMatrixIdx = zeros([export.nVerticesMax*3 export.nCells]);
         exportMatrices.focalAdhesionLinkCols = zeros([export.nVerticesMax export.nCells*3]);
         exportMatrices.focalAdhesionStrengths = zeros([export.nVerticesMax export.nCells]);
@@ -114,7 +114,7 @@ if d.ex.cellForcesMembrane
 end
 
 % if cell focal adhesion forces are exported
-if and(d.ex.cellForcesFocalAdhesions,any(d.simset.simulationType == [2,3,5]))
+if and(d.ex.cellForcesFocalAdhesions,d.simset.substrateIncluded)
     exportMatrices.cellForcesFocalAdhesions = zeros([export.nVerticesMax export.nCells*2]);
 end
 

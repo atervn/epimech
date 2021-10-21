@@ -51,15 +51,17 @@ if isfield(d.pl, 'scaleBar') && d.pl.scaleBar.show
         fontSize = 10;
     end
     
-    % set the top limit of the box surrounding the scale bar based on the
-    % font size
-    boxPositionTop = boxPositionBottom + 10*scaledLengthPerPixels + 3.7*scaledLengthPerPixels*fontSize;
-    
     % calculate the limits for the scale bar itself
     barPositionBottom = 20*scaledLengthPerPixels + d.pl.axesHandle.YLim(1);
     barPositionTop = barPositionBottom + axisSizeScaled.*0.02;
     barPositionRight = d.pl.axesHandle.XLim(2) - 20*scaledLengthPerPixels;
     barPositionLeft = barPositionRight - currentBarLength;
+    
+    
+    % set the top limit of the box surrounding the scale bar based on the
+    % font size
+    boxPositionTop = barPositionTop + 10*scaledLengthPerPixels + 1.8*scaledLengthPerPixels*fontSize;
+    
     
     % y-coordinate for the length text
     barTextPositionY = fontSize/2*scaledLengthPerPixels + barPositionTop;

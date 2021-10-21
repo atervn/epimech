@@ -1,0 +1,4 @@
+TABLE 
+
+- Table: the selected parameter values are displayed here
+- Close: close the table

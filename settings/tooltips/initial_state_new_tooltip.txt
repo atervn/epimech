@@ -1,0 +1,6 @@
+INITIAL STATE
+
+- Single cell: simulation starts from a single cell in the middle
+- Place multiple cells: Use the "Place cells" to place cell(s) in the simulation area (simulation cannot start before at least one cell has been placed)
+- Place cells: place cell graphically on the simulation area by clicking
+- Reset button: remove the placed cells

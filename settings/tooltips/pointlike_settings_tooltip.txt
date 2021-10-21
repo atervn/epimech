@@ -1,0 +1,7 @@
+POINTLIKE MICROMANIPULATION
+
+- Select cell: select cell to be moved
+- Selected cell: the cell can be defined manually, and the number of the cell selected via "Select cell" button is shown in the field
+- Select center cell: select the cell closest to the middle of the epithelium
+- Load movement: load a movement file other than the default movement for the micromanipulation
+- Use imported movement data: select to use the pointlike movement data from the imported pointlike simulation, when selected the movement will continue from the imported time

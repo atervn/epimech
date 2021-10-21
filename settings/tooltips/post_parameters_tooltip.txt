@@ -1,0 +1,4 @@
+PARAMETERS
+
+- Parameter dropdown: select the imported parameter structure to show
+- Show: show the selected parameter values from the imported simulation

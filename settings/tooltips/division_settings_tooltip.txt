@@ -1,0 +1,5 @@
+DIVISION SETTINGS
+
+- Normal division: divide untile the end of the simulation
+- Division until: stop dividing after the specified time
+- Uniform division times: check if you want the division to happen at the same times (mainly for optimization and debugging)

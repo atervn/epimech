@@ -1,0 +1,13 @@
+HETEROGENEOUS STIFFNESS SETTINGS
+
+- Base stiffness: define the mean stiffness value in kPa
+- Horizontal ACL: define the autocorrelation length in horizontal direction
+- Vertical ACL: define the autocorrelation length in vertical direction
+- RMS height: define the root mean square height of the heterogenous profile
+- Angle: define the angle clockwise to rotate the profile in degrees
+- Figure: visualize an example profile with the defined parameters in a region of 300 by 300 um
+- Load button: load profile parameters from a file
+- Save button: save profile parameters to a file
+- Reset button: reset the changes to the values before opening the dialog
+- Default: reset the parameters to the default profile file values
+- Close: close the dialog

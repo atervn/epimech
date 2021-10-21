@@ -44,6 +44,18 @@ switch app.appTask
             timeStrings = cellfun(@(i) get_time_string(d,convert_import_time(app,i,'numberToTime'),0),numTemp,'UniformOutput',false);
             app.TimetoloadDropDown.Items = timeStrings;
             app.TimetoloadDropDown.Value = app.TimetoloadDropDown.Items(end);
+            
+            [~,fileName,~] = fileparts(app.import.folderName);
+            app.ImportnameLabel.Text = fileName;
+            app.ImportnamestaticLabel.Text = 'Imported simulation:';
+            app.ImportnameLabel.Tooltip = fileName;
+            
+        else
+            
+            app.ImportnameLabel.Text = '';
+            app.ImportnamestaticLabel.Text = '';
+            app.ImportnameLabel.Tooltip = '';
+            
         end
         
         if strcmp(app.simulationType,'growth')
@@ -107,7 +119,7 @@ switch app.appTask
                 app.WindowsizeSlider_2.Value = sliderValue;
             end
             app.WindowsizeEditField_2.Value = round(app.importPlottingOptions.windowSize*1e6);
-            app.PlottingtimestepEditField_2.Value = app.importPlottingOptions.plotDtMultiplier;
+            app.PlottingstepEditField_2.Value = app.importPlottingOptions.plotDtMultiplier;
         end
         
      
@@ -126,7 +138,13 @@ switch app.appTask
             
             if exist([app.plotImport(app.selectedFile).folderName '/junctions/'],'dir') ~= 7
                 app.importPlottingOptions.cellStyle = 1;
+                set_cell_plotting_style(app,app.importPlottingOptions.cellStyle);
             end
+        end
+        
+        if strcmp(app.plotImport(app.selectedFile).simulationType, 'stretch') && app.importPlottingOptions.substrateStyle == 2
+            app.importPlottingOptions.substrateStyle = 1;
+            set_substrate_plotting_style(app,app.importPlottingOptions.substrateStyle);
         end
         
         app.ScalebarsettingsMenu.Enable = 'On';
@@ -134,6 +152,7 @@ switch app.appTask
             set_cell_plotting_style(app,app.importPlottingOptions.cellStyle);
             set_substrate_plotting_style(app,app.importPlottingOptions.substrateStyle);
         end
+        
         cellNumbers = num2cell(app.plotImport(app.selectedFile).cellNumbers);
         for i = 1:length(cellNumbers)
             cellNumbers{i} = num2str(cellNumbers{i});

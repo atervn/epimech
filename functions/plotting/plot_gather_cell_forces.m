@@ -49,7 +49,7 @@ end
 
 % if focal adhesion forces are plotted (if substrate is included in the
 % simulation)
-if d.pl.cellForcesFocalAdhesions && any(d.simset.simulationType == [2,3,5])
+if d.pl.cellForcesFocalAdhesions && d.simset.substrateIncluded
     forcePlot.cellForcesFocalAdhesions = [forcePlot.cellForcesFocalAdhesions; [d.cells(k).verticesX d.cells(k).verticesY d.cells(k).forces.substrateX d.cells(k).forces.substrateY]];
 end
 

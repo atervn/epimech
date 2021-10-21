@@ -1,0 +1,8 @@
+POINTLIKE ANALYSIS
+
+- Validation section: compare the simulation results to the experimental results
+    - Substrate stiffness: select the stiffness to compare against
+    - Single: plot the displacement in the selected simulation results along the micromanipulation axis compared to the experimental results
+    - All: plot the displacements in all the imported results along the micromanipulation axis compared to the experimental results
+    - Distribution: plot the displacement distribution in all the imported simulation results along the micromanipulation axis compared to the experimental results
+- Displacement & Force analysis: open a dialog for more extensive analysis on the cell and substrate diplacement and forces as a function of position from the initial pointlike pipette position

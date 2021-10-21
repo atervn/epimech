@@ -12,6 +12,7 @@ corticalStrengths,1
 lineage,1
 pointlike,1
 opto,0
+stretch,0
 substratePlot,1
 substrateFull,1
 cellForcesArea,0

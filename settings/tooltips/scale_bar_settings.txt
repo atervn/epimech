@@ -1,0 +1,6 @@
+SCALE BAR SETTINGS
+
+- Scale bar: select to enable to scale bar
+- Static bar: select to use scale bar with the length defined in "Scale bar length"
+- Scaling bar: select to autumatically define the scale bar length based on the window size ranges and value presented in the table
+- Close: save and close the dialog

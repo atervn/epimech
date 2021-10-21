@@ -1,0 +1,8 @@
+OPTOGENETIC ANALYSIS
+
+- Validation section: compare the junction length data against the experimental results
+    - Select cells: select two neighboring cells for which the junction length analysis is conducted for
+    - Copy the previous cell selections button: get the cells from the previous imported results
+    - Reset button: reset the selected cells
+    - Analyze junction length: analyze the junction length between the selected cells (inactive until the cells are selected)
+- Displacement % force analysis: open a dialog for more extensive analysis on the cell and substrate diplacement and forces as a function of position from the initial pointlike pipette position

@@ -204,8 +204,8 @@ outside = check_if_inside(cellsX,cellsY,d.sub.pointsX, d.sub.pointsY) == 0;
 % find the indices of the substrate points outside the shape
 points2Remove = find(outside);
 
-% if pointlike or optogenetics simulation
-if any(d.simset.simulationType == [2,5])
+% if substrate is solved
+if d.simset.substrateSolved
     
     % initialize vectors to indicate the interactions that have to be
     % removed
@@ -406,8 +406,8 @@ end
 % go throught the removed points (in reverse)
 for i = length(points2Remove):-1:1
     
-    % if pointlike or opto simulation
-    if any(d.simset.simulationType == [2,5])
+    % if substrate is solved
+    if d.simset.substrateSolved
         
         % reduce the indices of the interaction "selves" and pairs by one
         % if they have higher index than the removed point
@@ -431,8 +431,8 @@ end
 % update the number of points
 d.sub.nPoints = length(d.sub.pointsX);
 
-% if pointlike or opto simulation
-if any(d.simset.simulationType == [2,5])
+% if substrate is solved
+if d.simset.substrateSolved
     
     % remove the remove interactions from the both index vectors and the
     % spring multiplier vectors

@@ -26,12 +26,12 @@ heterogenous 4500 ./settings/misc/default_heterogeneous_data.csv ./substrate_par
 40 m 1 s
 
 % simulation specific input
-./settings/misc/default_optogenetic_activation.csv ./settings/misc/test_area.csv
+./settings/misc/default_opto_activation.csv ./settings/misc/test_area.csv
 
 % parameter study
 
 % export settings
-30 ./settings/export/export_options_import_optogenetics.txt
+30 ./settings/export/export_options_import_opto.txt
 
 % simulation names
 test2

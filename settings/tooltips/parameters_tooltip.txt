@@ -1,0 +1,4 @@
+PARAMETERS
+
+- Edit cell parameters: open a table to edit the parameters related to cells
+- Edit system parameters: open a table to edit the parameters related to simulation settings

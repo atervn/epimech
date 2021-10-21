@@ -77,7 +77,7 @@ if d.ex.pointlike && d.simset.simulationType == 2
 end
 
 % write the focal adhesion data to file (for plotting)
-if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
+if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
     write_file(d.ex,exportMatrices.substratePoints, 'substrate_points', exportNumber, 'substrate');
     write_file(d.ex,exportMatrices.focalAdhesionPoints, 'focal_adhesion_points', exportNumber, 'focal_adhesions');
     write_file(d.ex,exportMatrices.focalAdhesionConnected, 'focal_adhesion_connected', exportNumber, 'focal_adhesions');
@@ -85,7 +85,7 @@ if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [
 end
 
 % write the focal adhesion data to file (for import)
-if d.ex.substrateFull && any(d.simset.simulationType == [2,3,5])
+if d.ex.substrateFull && d.simset.substrateIncluded
     write_file(d.ex,exportMatrices.substrateAdhesionNumbers, 'substrate_adhesion_numbers', exportNumber, 'substrate');
     write_file(d.ex,exportMatrices.focalAdhesionMatrixIdx, 'focal_adhesion_matrix_idx', exportNumber, 'focal_adhesions');
     write_file(d.ex,exportMatrices.focalAdhesionLinkCols, 'focal_adhesion_link_cols', exportNumber, 'focal_adhesions');
@@ -118,7 +118,7 @@ if d.ex.cellForcesMembrane
 end
 
 % write cell focal adhesion forces to file
-if and(d.ex.cellForcesFocalAdhesions,any(d.simset.simulationType == [2,3,5]))
+if and(d.ex.cellForcesFocalAdhesions,d.simset.substrateIncluded)
     write_file(d.ex, exportMatrices.cellForcesFocalAdhesions, 'focal_adhesion', exportNumber, 'cell_forces/focal_adhesion');
 end
 
@@ -138,27 +138,27 @@ if d.ex.cellForcesTotal
 end
 
 % write substrate central forces to file
-if d.ex.substrateForcesCentral && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesCentral && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesCentral, 'central', exportNumber, 'substrate_forces/central');
 end
 
 % write substrate repulsion forces to file
-if d.ex.substrateForcesRepulsion && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesRepulsion && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesRepulsion, 'repulsion', exportNumber, 'substrate_forces/repulsion');
 end
 
 % write substrate restoration forces to file
-if d.ex.substrateForcesRestoration && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesRestoration && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesRestoration, 'restoration', exportNumber, 'substrate_forces/restoration');
 end
 
 % write substrate focal adhesion forces to file
-if d.ex.substrateForcesFocalAdhesions && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesFocalAdhesions && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesFocalAdhesions, 'focal_adhesion', exportNumber, 'substrate_forces/focal_adhesion');
 end
 
 % write substrate total forces to file
-if d.ex.substrateForcesTotal && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesTotal && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesTotal, 'total', exportNumber, 'substrate_forces/total');
 end
     

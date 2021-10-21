@@ -6,7 +6,12 @@ switch app.appTask
             case 1
                 app.SubstratestyleDropDown.Value = 'Simple';
             case 2
-                app.SubstratestyleDropDown.Value = 'With lines';
+                if strcmp(app.simulationType,'stretch')
+                    app.SubstratestyleDropDown.Value = 'Simple';
+                    app.plottingOptions.substrateStyle = 1;
+                else
+                    app.SubstratestyleDropDown.Value = 'With lines';
+                end
             case 0
                 app.SubstratestyleDropDown.Value = 'No substrate';
         end
@@ -15,7 +20,12 @@ switch app.appTask
             case 1
                 app.SubstratestyleDropDown_2.Value = 'Simple';
             case 2
-                app.SubstratestyleDropDown_2.Value = 'With lines';
+                if strcmp(app.plotImport(app.selectedFile).simulationType,'stretch')
+                    app.SubstratestyleDropDown_2.Value = 'Simple';
+                    app.importPlottingOptions.substrateStyle = 1;
+                else
+                    app.SubstratestyleDropDown.Value = 'With lines';
+                end
             case 0
                 app.SubstratestyleDropDown_2.Value = 'No substrate';
         end

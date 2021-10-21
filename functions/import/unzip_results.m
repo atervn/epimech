@@ -92,10 +92,6 @@ switch app.appTask
         
     case 'plotAndAnalyze'
         
-%         if ~strcmp(app.plotImport.folderName,'')
-%             remove_folder_function(app.plotImport.folderName);
-%             app.plotImport.folderName = '';
-%         end
 
         if ischar(fileNameZip)
             fileNameZip = {fileNameZip};

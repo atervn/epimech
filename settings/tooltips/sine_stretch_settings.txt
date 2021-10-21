@@ -1,0 +1,14 @@
+LATERAL COMPRESSION OR STRECH SETTINGS
+
+- Stretch type: select between the two stretch types
+- Piecewice: select to define the stretch as a piecewise function
+- Sine: select to define the stretch as a sine wave
+- Amplitude: give the amplitude for the stretch sine wave
+- Frequency: set the frequancy for the stretch sine wave in Hz
+- Starting phase: use the slider to set the initial phase for the stretch function
+- Figure: visualization of the stretch function
+- Load button: load a stretch function from a file
+- Save button: save the current stretch function into a file
+- Reset button: reset the stretch function back to the values before calling the dialog
+- Default: restore the default piecewise function from the file
+- Close: save changes and close the dialog

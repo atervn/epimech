@@ -4,7 +4,6 @@ switch app.plotImport(app.selectedFile).simulationType
     case 'growth'
         app.PointlikeAnalysisPanel.Visible = 'Off';
         app.DropDown2.Items(strcmp(app.DropDown2.Items,'Pointlike analysis')) = [];
-        app.DropDown2.Items(strcmp(app.DropDown2.Items,'Pointlike validation')) = [];
         app.DropDown2.Items(strcmp(app.DropDown2.Items,'Optogenetic analysis')) = [];
         if ~any(strcmp(app.DropDown2.Items,'Geometry'))
             app.DropDown2.Items = [app.DropDown2.Items, 'Geometry'];
@@ -16,6 +15,7 @@ switch app.plotImport(app.selectedFile).simulationType
         app.GeometryAnalysisPanel.Visible = 'On';
         app.CellForcesAnalysisPanel.Visible = 'Off';
         app.OptogeneticAnalysisPanel.Visible = 'Off';
+        app.PointlikeAnalysisPanel.Visible = 'Off';
         
         app.DropDown2.Value = 'Geometry';
         

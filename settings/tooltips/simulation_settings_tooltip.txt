@@ -1,0 +1,14 @@
+SIMULATION SETTINGS
+
+- Simulation time: define the maximum time for the simulation
+- Time step: define the maximum cell time step for the simulation
+- Solver: select the solver to be used for the cells
+- Simulation name: define the name for the video and/or export (if no name given, name "simulation" will be used
+- Reset button: reset the simulation name
+- Progress bar: select to show a progress bar in the main window during the simulation
+- Time simulation: select to use Matlab's profiler to time the simulation
+- Stop and pause: select to enable simulation stopping or pausing
+- Time step plot: select to plot the time step during the simulation after the simulation
+- Simulate: start the simulation
+- Pause button: pause the simulation if possible
+- Stop button: stop the simulation if possible

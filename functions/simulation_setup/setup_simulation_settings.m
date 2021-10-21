@@ -13,14 +13,24 @@ function d = setup_simulation_settings(app,d)
 switch app.simulationType
     case 'growth'
         d.simset.simulationType = 1;
+        d.simset.substrateIncluded = 0;
+        d.simset.substrateSolved = 0;
     case 'pointlike'
         d.simset.simulationType = 2;
+        d.simset.substrateIncluded = 1;
+        d.simset.substrateSolved = 1;
     case 'stretch'
         d.simset.simulationType = 3;
+        d.simset.substrateIncluded = 1;
+        d.simset.substrateSolved = 0;
     case 'edge'
         d.simset.simulationType = 4;
+        d.simset.substrateIncluded = 0;
+        d.simset.substrateSolved = 0;
     case 'opto'
         d.simset.simulationType = 5;
+        d.simset.substrateIncluded = 1;
+        d.simset.substrateSolved = 1;
 end
 
 % set the cell solver

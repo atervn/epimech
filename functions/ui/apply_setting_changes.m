@@ -30,7 +30,7 @@ switch app.tableData
                 
             case 'plotAndAnalyze'
                 app.importPlottingOptions = table_to_struct(app.UITable.Data);
-                app.PlottingtimestepEditField_2.Value = app.importPlottingOptions.plotDtMultiplier;
+                app.PlottingstepEditField_2.Value = app.importPlottingOptions.plotDtMultiplier;
                 sliderValue = log((app.importPlottingOptions.windowSize/1e-6-30)/10)/log(77);
                 if ~isreal(sliderValue) || sliderValue <= 0
                     app.WindowsizeSlider_2.Value = 0;
@@ -52,4 +52,6 @@ switch app.tableData
         app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
     case 'fFAInfo'
         app.fFAInfo = cell2mat(app.UITable.Data);
+end
+
 end

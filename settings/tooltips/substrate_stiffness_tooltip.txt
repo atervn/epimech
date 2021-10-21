@@ -1,0 +1,8 @@
+SUBSTRATE STIFFNESS
+
+- Young's modulus: the stiffness of the substrate in kPa
+- Contant: substrate stiffness is uniform
+- Heterogeneous: substrate stiffness is heterogeneous and the stiffness profile can be defined via the "Edit" button
+- Gradient: substrate stiffness is defined based on piecewise gradients and the gradient profile can be defined via the "Edit" button
+- Edit: edit the heterogeneous or gradient stiffness profiles
+- Use imported substrate data: select to use the stiffness data from the imported simulation

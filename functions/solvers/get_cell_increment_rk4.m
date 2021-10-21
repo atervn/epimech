@@ -108,7 +108,7 @@ for k = 1:nCells
     end
     
     % if the simulation includes substrate
-    if any(d.simset.simulationType == [2 3 5])
+    if d.simset.substrateIncluded
         
         % calculate the focal adhesion force for the cells
         tempCells(k) = get_cell_focal_adhesion_forces(tempCells(k),d.sub);

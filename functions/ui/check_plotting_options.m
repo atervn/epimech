@@ -70,3 +70,32 @@ if plottingOptions.opto
        plottingOptions.opto = false;
    end
 end
+
+% LEGACY
+if plottingOptions.substrateForcesCentral
+    if exist([folderName '/substrate_forces/central/'],'dir') ~= 7
+        if exist([folderName '/substrate_forces/direct/'],'dir') ~= 7
+            plottingOptions.substrateForcesCentral = false;
+        end
+    end
+end
+if plottingOptions.substrateForcesRepulsion
+    if exist([folderName '/substrate_forces/repulsion/'],'dir') ~= 7
+        plottingOptions.substrateForcesRepulsion = false;
+    end
+end
+if plottingOptions.substrateForcesRestoration
+    if exist([folderName '/substrate_forces/restoration/'],'dir') ~= 7
+        plottingOptions.substrateForcesRestoration = false;
+    end
+end
+if plottingOptions.substrateForcesFocalAdhesions
+    if exist([folderName '/substrate_forces/focal_adhesion/'],'dir') ~= 7
+        plottingOptions.substrateForcesFocalAdhesions = false;
+    end
+end
+if plottingOptions.substrateForcesTotal
+    if exist([folderName '/substrate_forces/total/'],'dir') ~= 7
+        plottingOptions.substrateForcesTotal = false;
+    end
+end

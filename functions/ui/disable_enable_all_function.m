@@ -3,11 +3,16 @@ function disable_enable_all_function(app,option)
 if isvalid(app)
     
     if strcmp(option,'Off')
-        try
-            app.enabledObjects = findobj(app.EpiMechUIFigure,'Enable','On');
-        catch
-            app.enabledObjects = findobj(app.UIFigure,'Enable','On');
+        if isprop(app, 'EpiMechUIFigure')
+            app.enabledObjects = findobj(app.EpiMechUIFigure,'Enable','on');
+        elseif isprop(app, 'OptogeneticdisplacementandforcesUIFigure')
+            app.enabledObjects = findobj(app.OptogeneticdisplacementandforcesUIFigure,'Enable','On');
+        elseif isprop(app, 'RemovecellsUIFigure')
+            app.enabledObjects = findobj(app.RemovecellsUIFigure,'Enable','On');
+        elseif isprop(app, 'PointlikedisplacementandforcesUIFigure')
+            app.enabledObjects = findobj(app.PointlikedisplacementandforcesUIFigure,'Enable','On');
         end
+
     end
     
     if app.enabledObjects ~= 0
@@ -18,4 +23,5 @@ if isvalid(app)
         end
     end
 end
+
 end

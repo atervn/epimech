@@ -1,0 +1,11 @@
+ANIMATION
+
+- Save video: select to save the animation as a video
+- Compress video: use ffmpeg to compress the video after the simulation (ffmpeg has to be installed and available in the PATH)
+- Video name: define the video name. If no name is given, the name simulation is used.
+- Reset button: reset the video name
+- Start: select the animation starting time from the dropdown list
+- End: select the animation ending time from the dropdown list
+- Play button: start the animation
+- Pause button: pause the animation
+- Stop button: stop the animation

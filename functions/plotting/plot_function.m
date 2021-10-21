@@ -57,7 +57,7 @@ if d.pl.plot
             
             % get the substrate point coordinates from before the next
             % positions were solved
-            if any(d.simset.simulationType == [2 3 5])
+            if d.simset.substrateIncluded
                 d.sub.pointsX = d.sub.previousPointsX;
                 d.sub.pointsY = d.sub.previousPointsY;
             end

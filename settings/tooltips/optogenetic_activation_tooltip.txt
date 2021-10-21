@@ -1,0 +1,7 @@
+OPTOGENETICS
+
+- Activation profile: open a dialog to define the optogenetic activation profile
+- Activation area: select the activated region(s)
+- Save button: save the current activation regions
+- Load button: load activation regions from a file
+- Reset button: remove the activated regions 

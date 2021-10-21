@@ -26,7 +26,11 @@ if strcmp(plotCase,'simulate') && ~app.ShowanimationCheckBox.Value
 end
 
 % set the plot specific plotting options
-d = setup_specific_plotting_options(app, plotCase,d,varargin);
+if numel(varargin) > 0
+    d = setup_specific_plotting_options(app, plotCase,d,varargin);
+else
+    d = setup_specific_plotting_options(app, plotCase,d);
+end
 
 % set the plotting to true
 d.pl.plot = true;
@@ -559,11 +563,13 @@ end
 % during plotting
 if ~isfield(d,'simset')
     d.simset.simulationType = 0;
+    d.simset.substrateIncluded = 0;
+    d.simset.substrateSolved = 0;
 end
 
 % if the simulation type does not have substrate, set the substrate style
 % to hidden (0)
-if ~any(d.simset.simulationType == [2 3 5])
+if ~d.simset.substrateIncluded
     d.pl.substrateStyle = 0;
 end
 

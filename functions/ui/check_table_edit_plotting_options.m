@@ -29,33 +29,37 @@ switch tempTableData{eventdata.Indices(1),1}
         elseif eventdata.NewData <= 0
             restore_previous_value('windowSize must have a value above zero.',eventdata,tempTableData,app);
         end
-    case 'plotCellStyle'
+    case 'cellStyle'
         switch app.appTask
             case 'simulate'
                 if isnan(eventdata.NewData)
                     restore_previous_value('plotCellStyle must be numeric.',eventdata,tempTableData,app)
-                elseif ~any(eventdata.NewData == [0:5])
+                elseif ~any(eventdata.NewData == 0:5)
                     restore_previous_value('plotCellStyle must be 0, 1, 2, 3, 4, or 5.',eventdata,tempTableData,app);
                 end
             case 'plotAndAnalyze'
                 if isnan(eventdata.NewData)
-                    restore_previous_value('plotCellStyle must be numeric.',eventdata,tempTableData,app)
-                elseif ~any(eventdata.NewData == [0:5])
-                    restore_previous_value('plotCellStyle must be 0, 1, 2, 3, 4, or 5.',eventdata,tempTableData,app);
+                    restore_previous_value('cellStyle must be numeric.',eventdata,tempTableData,app)
+                elseif ~any(eventdata.NewData == 0:5)
+                    restore_previous_value('cellStyle must be 0, 1, 2, 3, 4, or 5.',eventdata,tempTableData,app);
                 elseif exist([app.plotImport(app.selectedFile).folderName '/junctions/'],'dir') ~= 7
                     restore_previous_value('No junction data, so number of neighbors cannot be determined.',eventdata,tempTableData,app);
                 end
         end
-    case 'plotSubstrateStyle'
+    case 'substrateStyle'
         switch app.appTask
             case 'simulate'
-                if isnan(eventdata.NewData)
-                    restore_previous_value('plotSubstrateStyle must be numeric.',eventdata,tempTableData,app)
+                if strcmp(app.simulationType,'stretch') && eventdata.NewData == 2
+                    restore_previous_value('substareStyle cannot be 2 for stretch simulation (point interaction data not present).',eventdata,tempTableData,app)
+                elseif isnan(eventdata.NewData)
+                    restore_previous_value('substrateStyle must be numeric.',eventdata,tempTableData,app)
                 elseif ~any(eventdata.NewData == [0 1 2])
-                    restore_previous_value('plotSubstrateStyle must be 0, 1, or 2.',eventdata,tempTableData,app);
+                    restore_previous_value('substrateStyle must be 0, 1, or 2.',eventdata,tempTableData,app);
                 end
             case 'plotAndAnalyze'
-                if isnan(eventdata.NewData)
+                if strcmp(app.plotImport(app.selectedFile).simulationType,'stretch') && eventdata.NewData == 2
+                    restore_previous_value('substareStyle cannot be 2 for stretch simulation (point interaction data not present).',eventdata,tempTableData,app)
+                elseif isnan(eventdata.NewData)
                     restore_previous_value('plotSubstrateStyle must be numeric.',eventdata,tempTableData,app)
                 elseif ~any(eventdata.NewData == [0 1 2])
                     restore_previous_value('plotSubstrateStyle must be 0, 1 or 2.',eventdata,tempTableData,app);

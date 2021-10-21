@@ -1,0 +1,3 @@
+SHOW LINEAGE
+
+- Show cell lineage: select the cells whose children are shown. If multiple cells are selected and one cell is part of the other lineage, the children of younger cell show the color of that cell rather than the shared older cell.

@@ -10,7 +10,7 @@ function d = setup_substrate(app,d)
 %   by Aapo Tervonen, 2021
 
 % if the simulation requires a substrate
-if any(d.simset.simulationType == [2,3,5])
+if d.simset.substrateIncluded
     
     % if new substrate is created
     if strcmp(app.modelCase,'new') ||...
@@ -104,7 +104,7 @@ if any(d.simset.simulationType == [2,3,5])
             
             % if the simulation is pointlike or optogenetic, ge the
             % substrate spring constants and edge points
-            if any(d.simset.simulationType == [2,5])
+            if d.simset.substrateSolved
                 d = get_substrate_spring_constants(d,app);
                 d = get_substrate_edge_points(d);
             end

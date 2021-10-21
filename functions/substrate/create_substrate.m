@@ -107,7 +107,7 @@ d.sub.pointsOriginalY = d.sub.pointsY;
 
 % define the substrate point interactions for pointlike and optogenetic
 % simulations
-if any(d.simset.simulationType == [2,5])
+if d.simset.substrateSolved
     d = get_substrate_interactions(app,d,nX,nY);
     if ~isstruct(d); return; end
 end

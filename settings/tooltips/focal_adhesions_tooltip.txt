@@ -1,0 +1,5 @@
+FOCAL ADHESIONS
+
+- Edit focal adhesions: edit the focal adhesion strengths
+- Load button: load focal adhesion strength data from a file
+- Reset button: reset the focal adhesion strength data to the default value defined in the default value file

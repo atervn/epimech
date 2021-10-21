@@ -12,7 +12,7 @@ function d = get_edge_vertices(d)
 %   by Aapo Tervonen, 2021
 
 % if the simulation requires edge vertices
-if any(d.simset.simulationType == [2,3,5])
+if d.simset.substrateIncluded
     
     % go through the cells
     for k = 1:length(d.cells)
@@ -24,7 +24,7 @@ if any(d.simset.simulationType == [2,3,5])
             d.cells(k).edgeVertices = [];
 
             % create a vertex index vector
-            idx = [1:d.cells(k).nVertices]';
+            idx = (1:d.cells(k).nVertices)';
             
             % find the indices where there are changed between the
             % vertexStates ( add zeros to each end to separate the sections

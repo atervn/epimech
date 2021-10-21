@@ -1,0 +1,11 @@
+OPTOGENETIC ACTIVATION
+
+- Table: modify the changes in activation and the corresponding times
+- Add a row button: add a row at the end of the table
+- Remove a row button: remove a row from the end of the table
+- Figure: visualization of the activation
+- Load button: load a activation from a file
+- Save button: save the activation into a file
+- Reset button: reset the activation back to the values before calling the dialog
+- Default: restore the default activation from the file
+- Close: save changes and close the dialog

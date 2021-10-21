@@ -1,0 +1,7 @@
+INITIAL STATE
+
+- Time to load: select the time point from the imported simulation for the initial state of the new simulation
+- Plot: visualize the epithelium at the selected time point (arrow keys can be used to browse between time points while in the plot window). The GUI is disabled while browsing, either close the window or press Enter to enable the GUI. Note that the chosen time point also changes while browsing in the plot.
+- Center cells: center the cells at the selected time point before starting a simulation
+- Remove cells: open a dialog to remove cells from the imported time point
+- Reset button: reset the removed cells to none

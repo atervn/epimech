@@ -1,0 +1,3 @@
+FORCE AREA PLOT
+
+- Area plot: plot the area plot with the selected force settings

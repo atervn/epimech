@@ -1,0 +1,4 @@
+CELL SIZE SETTINGS
+
+- Uniform sizing: all cells have the same size as defined by the cell radius parameter
+- MDCK sizing: cell areas are obtained from the MDCK size distribution rather than using the cell radius parameter

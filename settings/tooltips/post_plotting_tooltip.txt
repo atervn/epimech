@@ -1,0 +1,5 @@
+PLOT
+
+- Time point: select a time point for plotting
+- Browse time points: visualize the selected time point with the browsing enable (arrow keys can be used to browse between time points while in the plot window). The GUI is disabled while browsing, either close the window or press Enter to enable the GUI. Note that the chosen time point also changes while browsing in the plot.
+- Single time point: visualize the selected time point

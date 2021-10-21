@@ -1,0 +1,11 @@
+DISPLACEMENT 1D PLOTS
+
+- Vertical half: select to plot the displacement in the negative vertical direction from the initial pipette position
+- Vertical fulll: select to plot the displacement in the vertical direction along a line that goes through the initial pipette position
+- Horizontal: select to also plot the displacement horizonatally from the initial pipette position
+- Log Y axis: show y-axis with log10
+- Colorpicker: select to manually choose a color for the plot
+- New plot: select to reset the current 1D figure and to plot the new displacement plot into an empty figure
+- Legend: give a name for the plotted curve
+- Plot all: plot all the selected imported simulation displacement as separate curves with the same color
+- Plot distribution: plot the mean with standard deviation of the the selected imported simulations displacements

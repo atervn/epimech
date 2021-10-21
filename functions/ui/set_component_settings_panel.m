@@ -6,17 +6,20 @@ if numel(varargin) > 0 && strcmp(varargin{1},'reset')
             app.DivisionsettingsPanel.Visible = 'Off';
             app.SubstrateSizePanel.Visible = 'Off';
             app.PointlikesettingsPanel.Visible = 'Off';
-            app.CompressionSettingsPanel.Visible = 'Off';
+            app.StretchSettingsPanel.Visible = 'Off';
             app.CellsizesettingsPanel.Visible = 'Off';
             app.SubstrateStiffnessPanel.Visible = 'Off';
             app.FocalAdhesionsPanel.Visible = 'Off';
             app.ComponentsettingsDropdown.Items = {};
+            
+            set_object_properties_function(app,{'ParameterstipsImage','ComponentstipsImage','InitialstatetipsImage','PlottingtipsImage_1','ExportoptionsImage','SimulationsettingstipsImage'},'Visible',{'Off'})
+            
         case 'plotAndAnalyze'
 
             app.SpecialplotDropDown.Value = {'Normal'};
             set_object_properties_function(app,{'HighlightcellsPanel', 'ShowcelllineagePanel','ForcemagnitudeplottingPanel','CellshapedescriptorsPanel'},'Visible',{'Off'})
-            set_object_properties_function(app,{'BrowsetimepointsButton','PlottingtimestepEditField_2',...
-                'PlottingtimestepEditField_2Label','xdtLabel_3','CellstyleDropDown_2','CellstyleDropDown_2Label','EditButton','AutomaticsizeCheckBox_2','SavevideoCheckBox_2','AnimateButton'},'Enable',{'On'})
+            set_object_properties_function(app,{'BrowsetimepointsButton','PlottingstepEditField_2',...
+                'PlottingstepEditField_2','xdtLabel_3','CellstyleDropDown_2','CellstyleDropDown_2Label','PlottingoptionsButton_2','AutomaticsizeCheckBox_2','SavevideoCheckBox_2','AnimateButton'},'Enable',{'On'})
             if app.AutomaticsizeCheckBox_2.Value
                 set_object_properties_function(app,{'WindowsizeSlider_2','WindowsizeSlider_2Label','WindowsizeEditField_2','WindowsizeText_2'},'Enable',{'Off'})
             end
@@ -28,7 +31,9 @@ if numel(varargin) > 0 && strcmp(varargin{1},'reset')
             app.PointlikeAnalysisPanel.Visible = 'Off';
             app.OptogeneticAnalysisPanel.Visible = 'Off';
             app.ParametersPanel_2.Visible = 'Off';
-%             app.DropDown2.Items = {};
+            
+            set_object_properties_function(app,{'AnalysistipsImage','SpecialplottingtipsImage','PostparameterstipsImage','PostplottingtipsImage','PostplottingoptionstipsImage','AnimationtipsImage'},'Visible',{'Off'})
+            
             
     end
 else
@@ -58,8 +63,10 @@ else
                     app.SubstrateStiffnessPanel.Visible = 'Off';
                     app.FocalAdhesionsPanel.Visible = 'Off';
                     app.PointlikesettingsPanel.Visible = 'Off';
-                    app.CompressionSettingsPanel.Visible = 'Off';
+                    app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
+
+                    
                 case 'Pointlike micromanipulation'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Cell size')) = [];
@@ -84,7 +91,7 @@ else
                     app.SubstrateStiffnessPanel.Visible = 'Off';
                     app.FocalAdhesionsPanel.Visible = 'Off';
                     app.PointlikesettingsPanel.Visible = 'On';
-                    app.CompressionSettingsPanel.Visible = 'Off';
+                    app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
                 case 'Lateral compression and stretching'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
@@ -107,7 +114,7 @@ else
                     app.SubstrateStiffnessPanel.Visible = 'Off';
                     app.FocalAdhesionsPanel.Visible = 'Off';
                     app.PointlikesettingsPanel.Visible = 'Off';
-                    app.CompressionSettingsPanel.Visible = 'On';
+                    app.StretchSettingsPanel.Visible = 'On';
                     app.OptogeneticsPanel.Visible = 'Off';
                 case 'Edge compression'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Substrate size')) = [];
@@ -125,7 +132,7 @@ else
                     app.SubstrateSizePanel.Visible = 'Off';
                     app.FocalAdhesionsPanel.Visible = 'Off';
                     app.PointlikesettingsPanel.Visible = 'Off';
-                    app.CompressionSettingsPanel.Visible = 'Off';
+                    app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
                 case 'Optogenetic activation'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
@@ -148,10 +155,15 @@ else
                     app.SubstrateStiffnessPanel.Visible = 'Off';
                     app.FocalAdhesionsPanel.Visible = 'Off';
                     app.PointlikesettingsPanel.Visible = 'Off';
-                    app.CompressionSettingsPanel.Visible = 'Off';
+                    app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'On';
             end
+            
+            change_panel_tooltips(app,'all')
+            
         case 'plotAndAnalyze'
             change_analysis_panels(app);
+            
+            change_panel_tooltips(app,'all')
     end
 end

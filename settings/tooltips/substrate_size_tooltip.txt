@@ -1,0 +1,9 @@
+SUBSTRATE SIZE
+
+- Fitted: substrate size is defined to fit the epithelium
+- Square: square substrate that by default fits the epithelium
+- Manual size: select to set the square size manually
+- Size field: define the manual size of the square substrate
+- Substrate parameters: open a table to edit  substrate parameter values
+- Compare: visualize the substrate size in relation to the epithelium
+- Use imported substrate data: select to use the imported substrate from imported simulation with a substrate

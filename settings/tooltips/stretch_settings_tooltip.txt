@@ -1,0 +1,5 @@
+LATERAL COMPRESSION AND STRETCHING
+
+- Edit stretch: open a dialog to define the compression or stretch behavior
+- Uniaxial: compression or stretch only in horizontal direction
+- Biaxial: compression or stretch both in horizontal and vertical directions

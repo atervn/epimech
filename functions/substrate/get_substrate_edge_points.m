@@ -9,7 +9,7 @@ function d = get_substrate_edge_points(d)
 %   by Aapo Tervonen, 2021
 
 % if pointlike or optogenetic simulation
-if any(d.simset.simulationType == [2,5])
+if d.simset.substrateSolved
     
     % create a temporary empty matrix
     tempMat = d.sub.emptyMatrix;

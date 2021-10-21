@@ -51,6 +51,7 @@ switch settingsType
         settings.substrateForcesTotal = logical(settings.substrateForcesTotal);
         settings.pointlike = logical(settings.pointlike);
         settings.opto = logical(settings.opto);
+        settings.stretch = logical(settings.stretch);
         settings.lineage = logical(settings.lineage);
         settings.corticalStrengths = logical(settings.corticalStrengths);
 end

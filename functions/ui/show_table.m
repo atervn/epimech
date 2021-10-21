@@ -6,7 +6,7 @@ app.enabledObjects = findobj(app.EpiMechUIFigure,'Enable','On');
 disable_enable_all_function(app,'Off')
 drawnow()
 
-set_object_properties_function(app,{'SavetofileButton','SavechangesButton','DiscardchangesButton','UITable'},'Enable',{'On'})
+set_object_properties_function(app,{'SavetofileButton','SavechangesButton','DiscardchangesButton','ResettodefaultButton','UITable','tableTipsImage'},'Enable',{'On'})
 
 switch app.appTask
     case 'simulate'
@@ -72,15 +72,19 @@ if strcmp(inputStruct,'cellParametersImport') || strcmp(inputStruct,'substratePa
     app.SavechangesButton.Visible = 'Off';
     app.DiscardchangesButton.Visible = 'Off';
     app.SavetofileButton.Visible = 'Off';
+    app.ResettodefaultButton.Visible = 'Off';
     app.CloseButton.Visible = 'On';
     app.CloseButton.Position(1:2) = app.SavechangesButton.Position(1:2);
     app.UITable.ColumnEditable = logical([0 0 0]);
+    app.tableTipsImage.Tooltip = fileread([app.defaultPath 'settings/tooltips/table_post_settings.txt']);
 else
     app.SavechangesButton.Visible = 'On';
     app.DiscardchangesButton.Visible = 'On';
     app.SavetofileButton.Visible = 'On';
+    app.ResettodefaultButton.Visible = 'On';
     app.CloseButton.Visible = 'Off';
     app.UITable.ColumnEditable = logical([0 1 0]);
+    app.tableTipsImage.Tooltip = fileread([app.defaultPath 'settings/tooltips/table_simulation_settings.txt']);
 end
 
 

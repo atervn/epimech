@@ -1,0 +1,6 @@
+DISPLACEMENT AREA PLOT
+
+- Cells: select to plot the cell center displacement
+- Substrate: select to plot the substrate displacement
+- Countours: select to display the displacement with the levels specified in the tex field (separated by spaces) instead of continuous value
+- Area plot: plot the area plot with the selected settings as the spatial average of the selected imported simulations

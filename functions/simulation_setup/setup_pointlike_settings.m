@@ -56,6 +56,17 @@ if d.simset.simulationType == 2
         % read the pointlike movement data
         movementData = csvread([app.import.folderName '/pointlike/movement_data.csv']);
         
+        % scale the movement data
+        % LEGACY (old import were scaled, so have to scaled them to
+        % dimensional values)
+        if max(movementData(:,2)) > 0.01
+            movementData(:,1) = movementData(:,1).*app.import.systemParameters.scalingTime./d.spar.scalingTime;
+            movementData(:,2) = movementData(:,2).*app.import.systemParameters.scalingLength./d.spar.scalingLength;
+        else
+            movementData(:,1) = movementData(:,1)./d.spar.scalingTime;
+            movementData(:,2) = movementData(:,2)./d.spar.scalingLength;
+        end
+        
         % set the pointlike time and movement values and add values to end
         % of both to make sure there are always values for the current
         % simulation time point (hence the large time value added)

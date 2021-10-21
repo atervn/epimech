@@ -1,0 +1,3 @@
+HIGHLIGHT CELLS
+
+- Choose cells to highlight: choose cells to be highlighter during visualization

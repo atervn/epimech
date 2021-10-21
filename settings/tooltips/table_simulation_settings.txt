@@ -1,0 +1,7 @@
+TABLE
+
+- Table: edit the selected parameters/settings here. The values of the parameters/settings are restricted based on predefined limits depending on the parameters/setting
+- Save changes: apply the modifications and enable the main window
+- Discard changes: discard the modifications and enable the main window
+- Save to file: save the modifications to the default parameters/settings file
+- Reset to default: read the default parameter or setting values from the files. For imported parameters the default parameters are read from the imported parameters

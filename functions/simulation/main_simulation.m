@@ -19,7 +19,7 @@ time = 0;
 dt = d.spar.maximumTimeStep;
 
 % if substrate is solved, set the initial substrate time step
-if any(d.simset.simulationType == [2 5]) 
+if d.simset.substrateSolved
     subDt = d.spar.maximumTimeStep;
 end
 
@@ -62,7 +62,7 @@ while time - d.spar.simulationTime <= 1e-8
     d.cells = get_vertex_angles(d.cells);
     
     % check if focal adhesions are to be removed
-    if any(d.simset.simulationType == [2 3 5])
+    if d.simset.substrateIncluded
         d = remove_focal_adhesions(d);
     % define a frame around the cells (simulation type currently disabled)
     elseif d.simset.simulationType == 4
@@ -115,7 +115,7 @@ while time - d.spar.simulationTime <= 1e-8
         d.cells(k).previousVerticesX = d.cells(k).verticesX;
         d.cells(k).previousVerticesY = d.cells(k).verticesY;
     end
-    if any(d.simset.simulationType == [2 3 5])
+    if d.simset.substrateIncluded
         d.sub.previousPointsX = d.sub.pointsX;
         d.sub.previousPointsY = d.sub.pointsY;
     end
@@ -141,7 +141,7 @@ while time - d.spar.simulationTime <= 1e-8
     end
     
     %% solve substrate
-    if any(d.simset.simulationType == [2 5])
+    if d.simset.substrateSolved
         
         % solve using 4th order Runge Kutta solver
         [d,subDt] = solve_substrate(d,dt,subDt);

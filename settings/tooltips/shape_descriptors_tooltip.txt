@@ -1,0 +1,5 @@
+CELL SHAPE DESCRIPTORS
+
+- Descriptor: select the descriptor to plot from the dropdown list
+- Minimum magnitude: the lower limit for the force magnitude color range. Default values are given for each descriptor.
+- Maximum magnitude: the upper limit for the force magnitude color range. Default values are given for each descriptor.

@@ -12,6 +12,8 @@ else
     app.CallingApp.plotHandle = figure(1);
 end
 
+d.pl.nTitleLines = 1;
+
 d.pl.axesHandle = axes;
 
 figureSize = d.pl.figureHandle.Position(3:4);

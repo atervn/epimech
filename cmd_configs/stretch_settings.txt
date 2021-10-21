@@ -31,7 +31,7 @@ uni piecewise ./settings/misc/default_piecewise_stretch.csv
 % parameter study
 
 % export settings
-30 ./settings/export/export_options_import_optogenetics.txt
+30 ./settings/export/export_options_import_stretch.txt
 
 % simulation names
 test2

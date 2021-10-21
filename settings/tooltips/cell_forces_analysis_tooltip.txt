@@ -1,0 +1,6 @@
+CELL FORCES
+
+- Force: select the force to analyze
+- Type: select the value of the force to show
+- Cells: select the cells for which the selected force values are shown as a function time (multiple cells can be selected either by Ctrl or Shift)
+- Plot: visualize the force magnitudes for the selected cells

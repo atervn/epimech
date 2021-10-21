@@ -138,47 +138,47 @@ for k = 1:nCells
     if strcmp (option, 'post_plotting')
         
         if app.importPlottingOptions.cellForcesTotal
-            tempData = importedTotalForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.totalForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.totalX = tempData(:,1);
             cells(k).forces.totalY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesCortical
-            tempData = importedCorticalForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.corticalForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.corticalX = tempData(:,1);
             cells(k).forces.corticalY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesJunctions
-            tempData = importedJunctionForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.junctionForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.junctionX = tempData(:,1);
             cells(k).forces.junctionY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesDivision
-            tempData = importedDivisionForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.divisionForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.divisionX = tempData(:,1);
             cells(k).forces.divisionY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesMembrane
-            tempData = importedMembraneForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.membraneForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.membraneX = tempData(:,1);
             cells(k).forces.membraneY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesContact
-            tempData = importedContactForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.contactForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.contactX = tempData(:,1);
             cells(k).forces.contactY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesArea
-            tempData = importedAreaForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.areaForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.areaX = tempData(:,1);
             cells(k).forces.areaY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesPointlike
-            tempData = importedPointlikeForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.pointlikeForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.pointlikeX = tempData(:,1);
             cells(k).forces.pointlikeY = tempData(:,2);
         end
         if app.importPlottingOptions.cellForcesFocalAdhesions
-            tempData = importedSubstrateForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
+            tempData = importedData.substrateForces(1:cells(k).nVertices,1+2*(k-1):2+2*(k-1));
             cells(k).forces.substrateX = tempData(:,1);
             cells(k).forces.substrateY = tempData(:,2);
         end

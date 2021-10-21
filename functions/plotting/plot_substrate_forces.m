@@ -10,7 +10,9 @@ function plot_substrate_forces(d)
 
 % if the simulation can contain substrate forces (i.e. pointlike or
 % optogenetic)
-if any(d.simset.simulationType == [2,5])
+if d.simset.substrateSolved
+    
+    plotForceMagnitude = 0;
     
     % if central forces are plotted
     if d.pl.substrateForcesCentral
@@ -18,6 +20,7 @@ if any(d.simset.simulationType == [2,5])
         % if only the magnitude is plotted
         if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.centralX.^2 + d.sub.forces.centralY.^2);
+             plotForceMagnitude = 1;
             
         % if arrow plot
         else
@@ -31,6 +34,7 @@ if any(d.simset.simulationType == [2,5])
         % if only the magnitude is plotted
         if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.repulsionX.^2 + d.sub.forces.repulsionY.^2);
+             plotForceMagnitude = 1;
             
         % if arrow plot
         else
@@ -44,6 +48,7 @@ if any(d.simset.simulationType == [2,5])
         % if only the magnitude is plotted
         if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.restorativeX.^2 + d.sub.forces.restorativeY.^2);
+             plotForceMagnitude = 1;
             
         % if arrow plot
         else
@@ -57,6 +62,7 @@ if any(d.simset.simulationType == [2,5])
         % if only the magnitude is plotted
         if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.focalAdhesionsX.^2 + d.sub.forces.focalAdhesionsY.^2);
+             plotForceMagnitude = 1;
             
         % if arrow plot
         else
@@ -70,6 +76,7 @@ if any(d.simset.simulationType == [2,5])
         % if only the magnitude is plotted
         if d.pl.plotType == 4
             magnitudes = sqrt(d.sub.forces.totalX.^2 + d.sub.forces.totalY.^2);
+             plotForceMagnitude = 1;
             
         % if arrow plot
         else
@@ -78,7 +85,7 @@ if any(d.simset.simulationType == [2,5])
     end
     
     % if only the magnitude is plotted
-    if d.pl.plotType == 4
+    if d.pl.plotType == 4 && plotForceMagnitude
         scatter(d.pl.axesHandle, d.sub.pointsX, d.sub.pointsY,d.pl.markerSize,magnitudes,'filled');
         
         % set the colorbar limits and show the colorbar

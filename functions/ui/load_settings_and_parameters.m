@@ -20,6 +20,54 @@ if option == 1
                         disable_enable_all_function(app,'On')
                         figure(app.EpiMechUIFigure)
                         return;
+                    elseif strcmp(app.import.simulationType,'opto') && strcmp(app.SimulationtypeDropDown.Value,'Epithelial growth')
+                        uialert(app.EpiMechUIFigure,'Optogenetic activation simulation cannot be used as the initial state of a growth simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'stretch') && strcmp(app.SimulationtypeDropDown.Value,'Epithelial growth')
+                        uialert(app.EpiMechUIFigure,'Lateral compression or stretching simulation cannot be used as the initial state of a growth simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'opto') && strcmp(app.SimulationtypeDropDown.Value,'Pointlike micromanipulation')
+                        uialert(app.EpiMechUIFigure,'Optogenetic activation simulation cannot be used as the initial state of a pointlike micromanipulation simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'stretch') && strcmp(app.SimulationtypeDropDown.Value,'Pointlike micromanipulation')
+                        uialert(app.EpiMechUIFigure,'Lateral compression or stretching simulation cannot be used as the initial state of a pointlike micromanipulation simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'pointlike') && strcmp(app.SimulationtypeDropDown.Value,'Optogenetic activation')
+                        uialert(app.EpiMechUIFigure,'Pointlike simulation cannot be used as the initial state of an optogenetic activation simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'stretch') && strcmp(app.SimulationtypeDropDown.Value,'Optogenetic activation')
+                        uialert(app.EpiMechUIFigure,'Lateral compression or stretching simulation cannot be used as the initial state of an optogenetic activation simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'pointlike') && strcmp(app.SimulationtypeDropDown.Value,'Lateral compression and stretching')
+                        uialert(app.EpiMechUIFigure,'Pointlike simulation cannot be used as the initial state of a lateral compression or stretching simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
+                    elseif strcmp(app.import.simulationType,'opto') && strcmp(app.SimulationtypeDropDown.Value,'Lateral compression and stretching')
+                        uialert(app.EpiMechUIFigure,'Optogenetic activation simulation cannot be used as the initial state of a lateral compression or stretching simulation.','Bad Input');
+                        folderLoaded = 0;
+                        disable_enable_all_function(app,'On')
+                        figure(app.EpiMechUIFigure)
+                        return;
                     end
                     
                     incomplete = check_loaded_simulation(app);
@@ -91,8 +139,11 @@ if option == 1
                         app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_pointlike.txt']);
                         app.importPlottingOptions = settings_to_logical(app.importPlottingOptions,'plot');
                     case 'stretch'
-                        app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_stretching.txt']);
+                        app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_stretch.txt']);
                         app.importPlottingOptions = settings_to_logical(app.importPlottingOptions,'plot');
+                        if app.importPlottingOptions.substrateStyle == 2
+                            app.importPlottingOptions.substrateStyle = 1;
+                        end
                     case 'opto'
                         app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_opto.txt']);
                         app.importPlottingOptions = settings_to_logical(app.importPlottingOptions,'plot');
@@ -128,7 +179,7 @@ if strcmp(app.appTask,'simulate')
     
     app.stiffnessGradientInformation = csvread([app.defaultPath 'settings/misc/default_stiffness_gradient.csv']);
     app.fFAInfo = csvread([app.defaultPath 'parameters/focal_adhesion_parameters.csv']);
-    app.optoActivation = csvread([app.defaultPath 'settings/misc/default_optogenetic_activation.csv']);
+    app.optoActivation = csvread([app.defaultPath 'settings/misc/default_opto_activation.csv']);
     app.stretch.piecewise = csvread([app.defaultPath 'settings/misc/default_piecewise_stretch.csv']);
     app.stretch.sine = csvread([app.defaultPath 'settings/misc/default_sine_stretch.csv']);
     app.stretch.type = 1;
@@ -273,10 +324,12 @@ if strcmp(app.appTask,'simulate')
         case 'Lateral compression and stretching'
             
             if app.firstStartup || ~strcmp(app.simulationType,'stretch')
-                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_stretching.txt']);
+                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_stretch.txt']);
                 app.plottingOptions = settings_to_logical(app.plottingOptions,'plot');
-                
-                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_stretching.txt']);
+                if app.plottingOptions.substrateStyle == 2
+                    app.plottingOptions.substrateStyle = 1;
+                end
+                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_stretch.txt']);
                 app.customExportOptions = settings_to_logical(app.customExportOptions,'export');
                 
                 
@@ -285,13 +338,13 @@ if strcmp(app.appTask,'simulate')
                 if strcmp(app.modelCase,'import') && strcmp(app.simulationType,app.import.simulationType)
                     app.specificCellParameters = app.import.specificCellParameters;
                 else
-                    app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_compression.txt']);
+                    app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_stretch.txt']);
                 end
                 
                 
                 
                 
-                app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_stretching.txt']);
+                app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_stretch.txt']);
                 app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
                 
                 
@@ -308,28 +361,28 @@ if strcmp(app.appTask,'simulate')
             end
         case 'Edge compression'
  
-            if app.firstStartup || ~strcmp(app.simulationType,'edge')
-                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_growth.txt']);
-                app.plottingOptions = settings_to_logical(app.plottingOptions,'plot');
-                
-                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_growth.txt']);
-                app.customExportOptions = settings_to_logical(app.customExportOptions,'export');
-                
-                app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_edge.txt']);
-                app.simulationType = 'edge';
-                set_object_properties_function(app,{'SubstratestyleDropDown','SubstratestyleLabel'},'Enable',{'Off'});
-                
-                app.SimulationtimeDropDown.Items = {'days','hours','mins','secs','msecs'};
-                app.SimulationtimeDropDown.Value = 'secs';
-                app.SimulationtimestepDropDown.Items = {'secs','msecs'};
-                app.SimulationtimestepDropDown.Value = 'msecs';
-            end
+%             if app.firstStartup || ~strcmp(app.simulationType,'edge')
+%                 app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_growth.txt']);
+%                 app.plottingOptions = settings_to_logical(app.plottingOptions,'plot');
+%                 
+%                 app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_growth.txt']);
+%                 app.customExportOptions = settings_to_logical(app.customExportOptions,'export');
+%                 
+%                 app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_edge.txt']);
+%                 app.simulationType = 'edge';
+%                 set_object_properties_function(app,{'SubstratestyleDropDown','SubstratestyleLabel'},'Enable',{'Off'});
+%                 
+%                 app.SimulationtimeDropDown.Items = {'days','hours','mins','secs','msecs'};
+%                 app.SimulationtimeDropDown.Value = 'secs';
+%                 app.SimulationtimestepDropDown.Items = {'secs','msecs'};
+%                 app.SimulationtimestepDropDown.Value = 'msecs';
+%             end
         case 'Optogenetic activation'
             if app.firstStartup || ~strcmp(app.simulationType,'opto')
-                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_optogenetics.txt']);
+                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_opto.txt']);
                 app.plottingOptions = settings_to_logical(app.plottingOptions,'plot');
                 
-                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_optogenetics.txt']);
+                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_opto.txt']);
                 app.customExportOptions = settings_to_logical(app.customExportOptions,'export');
                 
                 app.simulationType = 'opto';
@@ -341,6 +394,68 @@ if strcmp(app.appTask,'simulate')
                 end
                 
                 app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_opto.txt']);
+                
+                
+                if strcmp(app.modelCase,'import')
+                    switch app.import.simulationType
+                        case 'growth'
+                            set_object_properties_function(app,{'FittedButton','SquareButton', 'SubstrateparametersButton'},'Enable',{'On'});
+                            app.FittedButton.Value = 1;
+                            app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                            app.UseimportedsubstratedataCheckBox.Value = 0;
+                            app.UseimportedsubstratedataCheckBox.Visible = 'Off';
+                            app.UseimportedsubstratedataCheckBox_2.Value = 0;
+                            app.UseimportedsubstratedataCheckBox_2.Visible = 'Off';
+                            app.ConstantButton.Value = 1;
+                            set_object_properties_function(app,{'EditstiffnessButton'},'Enable',{'Off'});
+                            set_object_properties_function(app,{'ConstantButton','HeterogeneousButton','GradientButton','YoungsmodulusEditField', 'YoungsmodulusEditFieldLabel','kPaLabel'},'Enable',{'On'});
+                        case 'opto'
+                            if check_substrate_import(app)
+                                defaultSubstrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                                app.substrateParameters = import_settings([app.import.folderName '/substrate_parameters.csv']);
+                                app.UseimportedsubstratedataCheckBox.Value = 1;
+                                app.UseimportedsubstratedataCheckBox.Visible = 'On';
+                                set_object_properties_function(app,{'FittedButton','SquareButton', 'ManualsizeCheckBox','SubstratesizeEditField', 'SubstratesizeEditFieldLabel', 'mLabel','ComparesizeButton', 'SubstrateparametersButton'},'Enable',{'Off'});
+                                app.UseimportedsubstratedataCheckBox_2.Value = 1;
+                                app.UseimportedsubstratedataCheckBox_2.Visible = 'On';
+                                app.ConstantButton.Value = 1;
+                                set_object_properties_function(app,{'ConstantButton','HeterogeneousButton','GradientButton','YoungsmodulusEditField', 'YoungsmodulusEditFieldLabel','kPaLabel', 'EditstiffnessButton'},'Enable',{'Off'});
+                                fID = fopen([app.import.folderName '/substrate_auxiliary/stiffness_type.csv']);
+                                app.import.stiffnessType = fread(fID,'*char')';
+                                fclose(fID);
+                            else
+                                uialert(app.EpiMechUIFigure, 'Substrate data not available for the loaded simulation. New substrate is created', 'Substrate not found' ,'Icon', 'info');
+                                
+                                set_object_properties_function(app,{'FittedButton','SquareButton', 'SubstrateparametersButton'},'Enable',{'On'});
+                                app.FittedButton.Value = 1;
+                                app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                                app.UseimportedsubstratedataCheckBox.Value = 0;
+                                app.UseimportedsubstratedataCheckBox.Visible = 'Off';
+                                app.UseimportedsubstratedataCheckBox_2.Value = 0;
+                                app.UseimportedsubstratedataCheckBox_2.Visible = 'Off';
+                                app.ConstantButton.Value = 1;
+                                set_object_properties_function(app,{'EditstiffnessButton'},'Enable',{'Off'});
+                                set_object_properties_function(app,{'ConstantButton','HeterogeneousButton','GradientButton','YoungsmodulusEditField', 'YoungsmodulusEditFieldLabel','kPaLabel'},'Enable',{'On'});
+                                app.import.stiffnessType = '';
+                            end
+                    end
+                else
+                    set_object_properties_function(app,{'FittedButton','SquareButton', 'SubstrateparametersButton'},'Enable',{'On'});
+                    app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                    app.ConstantButton.Value = 1;
+                    set_object_properties_function(app,{'EditstiffnessButton'},'Enable',{'Off'});
+                    set_object_properties_function(app,{'ConstantButton','HeterogeneousButton','GradientButton','YoungsmodulusEditField', 'YoungsmodulusEditFieldLabel','kPaLabel'},'Enable',{'On'});
+                    app.UseimportedsubstratedataCheckBox.Value = 0;
+                    app.UseimportedsubstratedataCheckBox.Visible = 'Off';
+                    app.UseimportedsubstratedataCheckBox_2.Value = 0;
+                    app.UseimportedsubstratedataCheckBox_2.Visible = 'Off';
+                end
+                
+                if strcmp(app.modelCase,'opto') && strcmp(app.import.simulationType,'opto') && strcmp(app.import.stiffnessType,'Gradient')
+                    app.YoungsmodulusEditField.Value = defaultSubstrateParameters.youngsModulus/1000;
+                else
+                    app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
+                end
                 
                 set_object_properties_function(app,{'SubstratestyleDropDown','SubstratestyleLabel'},'Enable',{'On'});
                 

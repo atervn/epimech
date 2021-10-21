@@ -1,0 +1,11 @@
+OPTOGENETIC DISPLACEMENT ANALYSIS
+
+- Time point: select the time point to plot the forces for
+- Force: select which force is to be shown
+- Window size: size of the visualized area in the area plot or in the 1D plot along the junctions
+- Type: select from the dropdown how the force is described for each cell center
+- Simulation selection box: select the imported simulation to analyse
+- Select cells (bottom): select cells two neighboring junction analysis
+- Center to selection (bottom): center the area plot to the selected cells
+- Save button (bottom): save the data from the current 1D plot to a csv file
+- Close (bottom): close the dialog

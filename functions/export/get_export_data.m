@@ -69,7 +69,7 @@ for k = 1:length(d.cells)
     end
     
     % input the focal adhesion data
-    if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
+    if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
         
         % for plotting
         nConnected = size(d.cells(k).substrate.points,1);
@@ -78,7 +78,7 @@ for k = 1:length(d.cells)
         exportMatrices.focalAdhesionWeights(1:nConnected,idx3)  = d.cells(k).substrate.weights;
         
         % for import
-        if d.ex.substrateFull && any(d.simset.simulationType == [2,3,5])
+        if d.ex.substrateFull && d.simset.substrateIncluded
             exportMatrices.focalAdhesionMatrixIdx(1:nConnected*3,k) = d.cells(k).substrate.matrixIdx;
             exportMatrices.focalAdhesionLinkCols(1:nConnected,idx3) = d.cells(k).substrate.linkCols;
             exportMatrices.focalAdhesionStrengths(1:nConnected,k) = d.cells(k).substrate.fFocalAdhesions;
@@ -87,7 +87,7 @@ for k = 1:length(d.cells)
     
     % input the cortical data
     if d.ex.corticalStrengths
-        exportMatrices.cortex.vertexMultipliers(1:export.nVertices(k),k) = d.cells(k).cortex.vertexMultipliers;
+        exportMatrices.vertexCorticalMultipliers(1:export.nVertices(k),k) = d.cells(k).cortex.vertexMultipliers;
         exportMatrices.corticalStrengths(1,k) = d.cells(k).cortex.fCortex;
         exportMatrices.perimeterConstants(1,k) = d.cells(k).cortex.perimeterConstant; 
     end
@@ -123,7 +123,7 @@ for k = 1:length(d.cells)
     end
     
     % input cell focal adhesion force data
-    if and(d.ex.cellForcesFocalAdhesions,any(d.simset.simulationType == [2,3,5]))
+    if and(d.ex.cellForcesFocalAdhesions,d.simset.substrateIncluded)
         exportMatrices.cellForcesFocalAdhesions(1:export.nVertices(k),idx2) = [d.cells(k).forces.substrateX d.cells(k).forces.substrateY];
     end
     
@@ -145,37 +145,37 @@ end
 
 % input substrate point coordinates data if substrate is exported (and part
 % of the simulation)
-if or(d.ex.substratePlot,d.ex.substrateFull) && any(d.simset.simulationType == [2,3,5])
+if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
     exportMatrices.substratePoints = [d.sub.pointsX d.sub.pointsY];
 end
 
 % input the substrate adhesion number data (required for substrate import)
-if d.ex.substrateFull && any(d.simset.simulationType == [2,3,5])
+if d.ex.substrateFull && d.simset.substrateIncluded
     exportMatrices.substrateAdhesionNumbers = d.sub.adhesionNumbers;
 end
 
 % input the substrate central force data
-if d.ex.substrateForcesCentral && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesCentral && d.simset.substrateSolved
     exportMatrices.substrateForcesCentral = [d.sub.forces.centralX d.sub.forces.centralY];
 end
 
 % input the substrate repulsion force data
-if d.ex.substrateForcesRepulsion && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesRepulsion && d.simset.substrateSolved
     exportMatrices.substrateForcesRepulsion = [d.sub.forces.repulsionX d.sub.forces.repulsionY];
 end
 
 % input the substrate restoration force data
-if d.ex.substrateForcesRestoration && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesRestoration && d.simset.substrateSolved
     exportMatrices.substrateForcesRestoration = [d.sub.forces.restorativeX d.sub.forces.restorativeY];
 end
 
 % input the substrate focal adhesion force data
-if d.ex.substrateForcesFocalAdhesions && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesFocalAdhesions && d.simset.substrateSolved
     exportMatrices.substrateForcesFocalAdhesions = [d.sub.forces.focalAdhesionsX d.sub.forces.focalAdhesionsY];
 end
 
 % input the substrate total force data
-if d.ex.substrateForcesTotal && any(d.simset.simulationType == [2 5])
+if d.ex.substrateForcesTotal && d.simset.substrateSolved
     exportMatrices.substrateForcesTotal = [d.sub.forces.totalX d.sub.forces.totalY];
 end
 
