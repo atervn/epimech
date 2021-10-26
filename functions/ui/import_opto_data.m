@@ -22,7 +22,8 @@ if d.pl.opto
     
     
     d.simset.opto.shapes =  optoShapes;
-    d.simset.opto.times = csvread([folderName '/opto/opto_times.csv']);
-    d.simset.opto.levels = csvread([folderName '/opto/opto_levels.csv']);
+    optoActivation = csvread([folderName '/opto/opto_activation.csv']);
+    d.simset.opto.times = optoActivation(:,1);
+    d.simset.opto.levels = optoActivation(:,2);
     
 end

@@ -25,7 +25,7 @@ d.spar.perimeterModelingRate = app.cellParameters.perimeterModelingRate*app.syst
 if isfield(app.cellParameters,'minimumCellSize')
     d.spar.minimumCellSize = app.cellParameters.minimumCellSize/app.systemParameters.scalingLength^2; % L^-2
 else
-    d.spar.minimumCellSize = app.defaultCellParameters.minimumCellSize/app.systemParameters.scalingLength^2; % L^-2
+    d.spar.minimumCellSize = app.import.specificCellParameters.minimumCellSize/app.systemParameters.scalingLength^2; % L^-2
 end
     
 % scale the growth-specific parameters (or parameters whose values are

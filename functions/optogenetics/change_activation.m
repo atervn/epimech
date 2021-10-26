@@ -415,7 +415,7 @@ for k = 1:length(d.simset.opto.cells)
     else
         quarterActivated = [];
         halfActivated = [];
-        fullyActivated = 1:d.cells(k).nVertices;
+        fullyActivated = 1:d.cells(cellID).nVertices;
     end
     
     % assign the activation values based on the derived multipliers

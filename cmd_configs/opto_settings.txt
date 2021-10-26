@@ -17,7 +17,7 @@ opto
 ./parameters/cell_parameters.txt ./parameters/specific_parameters_opto.txt
 
 % substrate parameters
-heterogenous 4500 ./settings/misc/default_heterogeneous_data.csv ./substrate_parameters_1.txt ./parameters/focal_adhesion_parameters.csv
+heterogeneous 4500 ./settings/misc/default_heterogeneous_data.csv ./substrate_parameters_1.txt ./parameters/focal_adhesion_parameters.csv
 
 % initial state
 ./results/20210501_224240_g0501_1_D200.zip 0

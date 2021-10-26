@@ -46,11 +46,11 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         % calcualte the maximum substrate radius in um
         substrateRadius = ceil(1.05*sqrt(max(d.sub.pointsX.^2 + d.sub.pointsY.^2))*app.systemParameters.scalingLength*1e6);
         
-        % generate random heterogenous profile based on the parameter
+        % generate random heterogeneous profile based on the parameter
         % defined in the GUI or in the heterogeneous files, the resolution
         % is so that the stiffness values are defined in a grid with 1 um
         % distance between points
-        [gridValue,substrateGridX,substrateGridY] = rsgeng2D(2*substrateRadius,2*substrateRadius,app.heterogenousStiffness(3),app.heterogenousStiffness(1),app.heterogenousStiffness(2));
+        [gridValue,substrateGridX,substrateGridY] = rsgeng2D(2*substrateRadius,2*substrateRadius,app.heterogeneousStiffness(3),app.heterogeneousStiffness(1),app.heterogeneousStiffness(2));
         
         % scale the grid coordinates with the scaling length
         substrateGridX = substrateGridX.*1e-6/app.systemParameters.scalingLength;
@@ -59,12 +59,12 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         % create a meshgrid from the grid coordinates
         [substrateGridX, substrateGridY] = meshgrid(substrateGridX,substrateGridY);
         
-        % if the heterogenous profile is rotated with some nonzero angle
-        if app.heterogenousStiffness(4) ~= 0
+        % if the heterogeneous profile is rotated with some nonzero angle
+        if app.heterogeneousStiffness(4) ~= 0
             
             % rorate the coordinates with the defined angle using rotation
             % matrix
-            rotatedCoordinates = [cosd(-app.heterogenousStiffness(4)) -sind(-app.heterogenousStiffness(4)) ; sind(-app.heterogenousStiffness(4)) cosd(-app.heterogenousStiffness(4))]*[substrateGridX(:)' ; substrateGridY(:)'];
+            rotatedCoordinates = [cosd(-app.heterogeneousStiffness(4)) -sind(-app.heterogeneousStiffness(4)) ; sind(-app.heterogeneousStiffness(4)) cosd(-app.heterogeneousStiffness(4))]*[substrateGridX(:)' ; substrateGridY(:)'];
             
             % get the rotated coordinates
             substrateGridX = rotatedCoordinates(1,:)';

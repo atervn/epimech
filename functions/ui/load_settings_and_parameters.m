@@ -184,7 +184,7 @@ if strcmp(app.appTask,'simulate')
     app.stretch.sine = csvread([app.defaultPath 'settings/misc/default_sine_stretch.csv']);
     app.stretch.type = 1;
     app.optoActivation(app.optoActivation(:,2) > 1,2) = 1;
-    app.heterogenousStiffness = csvread([app.defaultPath 'settings/misc/default_heterogeneous_data.csv']);
+    app.heterogeneousStiffness = csvread([app.defaultPath 'settings/misc/default_heterogeneous_data.csv']);
     
     switch app.SimulationtypeDropDown.Value
         case 'Epithelial growth'

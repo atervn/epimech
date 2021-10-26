@@ -1,466 +1,158 @@
 function epimech_cmd(varargin)
+% EPIMECH_CMD Run the epimech using command line
+%   The function defines the simulations to run based on the user input in
+%   the config file.
+%   INPUT:
+%       varargin: used to provide the path to the simulation config file
+%       by Aapo Tervonen, 2021
 
+% if no input, start the GUI and return
 if numel(varargin) == 0
     epimech_gui;
     return
+    
+% otherwise
 else
+    
+    % save the input filename
     inputFile = varargin{1};
-    if exist(inputFile) ~= 2 %#ok<EXIST>
+    
+    % check if the config file exists
+    if exist(inputFile,'file') ~= 2
+        
+        % if not found, so error and stop
         disp('Config txt file not found.');
         return;
     end
 end
 
-app.defaultPath = [fileparts(mfilename('fullpath')) '/'];
-
-addpath(genpath([app.defaultPath '/functions']));
-
-data = get_simulation_settings(inputFile);
-
-if ~isstruct(data); return; end
-
-data = check_output_names(data);
-
-data = assign_simulation_settings(data);
-
+% get the root path for the model
 defaultPath = [fileparts(mfilename('fullpath')) '/'];
 
+% add the functions folder to the path
+addpath(genpath([defaultPath '/functions']));
+
+% collect the simulation settings data from the input file
+data = get_simulation_settings(inputFile);
+
+% if there were errors, return
+if ~isstruct(data); return; end
+
+% check that all simulation names are unique
+data = check_output_names(data);
+
+% if there were errors, return
+if ~isstruct(data); return; end
+
+% assign simulation settings for the simulations
+data = assign_simulation_settings(data);
+
+% if there were errors, return
+if ~isstruct(data); return; end
+
+% if there are initial state files
 if ~isempty(data.initialStateFiles)
+    
+    % go through the simulations
     for i = 1:data.nSimulations
+        
+        % get the file names of the initial state file
         [~,fileName,~] = fileparts(data.initialStateFiles{i});
-        
-        % define string for the imported folder
-        app.import.folderName = [defaultPath 'Results/' fileName];
-        
+                
+        % check if the results folder exists in the epimech root folder, if
+        % not, create it
         if exist([defaultPath 'results'],'dir') ~= 7
             mkdir(defaultPath, 'results');
         end
+        
+        % if the initial state for the current simulation has not been
+        % unzipper, unzip it to the results folder
         if exist([defaultPath  'results/' fileName],'dir') ~= 7
-            unzip(data.initialStateFiles{i},[app.defaultPath  'results/'])
+            unzip(data.initialStateFiles{i},[defaultPath  'results/'])
         end
     end
 end
 
+% get the default path of the epimech root
+defaultPath = [fileparts(mfilename('fullpath')) '/'];
+
+% start the overall timing clock
 overall = tic;
+
+% get the simulation starting time
 startingTime = clock;
-parforArg = start_parallel_pool(data);
 
-parfor (iLoop = 1:data.nSimulations, parforArg)
-    % for iLoop = data.nSimulations:-1:1
+% start the parallel pool
+nWorkers = start_parallel_pool(data);
+
+% go through the simulations
+parfor (iLoop = 1:data.nSimulations, nWorkers)
     
-%     try
+    % try to run the simulation (makes sure that if one simulation breaks
+    % down, the rest can run until the end)
+    try
         
+        % pause the simulation for a time that depends on the simulation
+        % iteration (this is to make sure that every simulation have their
+        % own rng seeds)
         pause(iLoop)
-        rng shuffle
         
+        % start timing for the simulation
         tic;
-            
-        switch data.simulationType
-            case 'growth'
-                d.simset.solver = 1;
-            case 'pointlike'
-                d.simset.solver = 2;
-            case 'opto'
-                d.simset.solver = 2;
-            case 'stretch'
-                d.simset.solver = 2;
-        end
         
-        if strcmp(data.simulationType,'growth')
-            d.simset.simulationType = 1;
-        elseif strcmp(data.simulationType,'pointlike')
-            d.simset.simulationType = 2;
-        elseif strcmp(data.simulationType,'opto')
-            d.simset.simulationType = 5;
-        elseif strcmp(data.simulationType,'stretch')
-            d.simset.simulationType = 3;
-        end
+        % creat the app structure and setup the parameter study
+        app = create_app_struct(data,iLoop);
         
-        d.simset.division.type = 1;
-        d.simset.progressBar = false;
-        d.simset.timeSimulation = false;
-        d.simset.simulating = 0;
-        d.simset.stopOrPause = false;
-        d.simset.dtPlot = 0;
-        
-        
-        app = struct();
-        app.defaultPath = [fileparts(mfilename('fullpath')) '/'];
-        app.systemParameters = import_settings(data.systemParameterFiles{iLoop});
-        
-        app.cellParameters = import_settings(data.cellParameterFiles{iLoop});
-        app.specificCellParameters = import_settings(data.specificCellParameterFiles{iLoop});
-        
-        if any(d.simset.simulationType == [2 3 5])
-            app.substrateParameters = import_settings(data.substrateParameterFiles{iLoop});
-            app.fFAInfo = csvread(data.fFAInfo{iLoop});
-            app.substrateParameters.youngsModulus = data.stiffness{iLoop};
-        end
-        
-        [app,stop] = setup_parameter_study(data,app,iLoop);
-        if ~stop
+        % if there were no problems setting up the parameter study
+        if isstruct(app)
             
-            app.systemParameters.simulationTime = data.simulationTime;
-            app.systemParameters.maximumTimeStep = data.maximumTimeStep;
-            if data.stopDivisionTime ~= 0
-                app.systemParameters.stopDivisionTime = data.stopDivisionTime;
-                d.simset.division.type = 2;
-            end
+            % setup the simulation
+            d = setup_simulation(app,startingTime);
             
-            app.customExportOptions = settings_to_logical(import_settings(data.exportSettings{iLoop}),'export');
-            
-            app.simulationType = data.simulationType;
-            
-            app.appTask = 'simulate';
-            
-            app.ExportdataCheckBox.Value = 1;
-            app.customExportOptions.exportDtMultiplier = data.exportDt;
-            app.ExporteddataDropDown.Value = 'Custom export';
-            app.SimulationnameEditField.Value = data.simulationNames{iLoop};
-            app.simulationClosed = 0;
-            app.simulationStopped = 0;
-            app.defaultPath = [fileparts(mfilename('fullpath')) '/'];
-            
-            d.spar = scale_parameters(app);
-            
-            if isempty(data.initialStateFiles)
-                app.modelCase = 'new';
-                d.cells = initialize_cells_struct;
-                d = create_cell(d,[0;0]);
-                if strcmp(data.simulationType,'growth')
-                    d.simset.division.sizeType = data.sizeType(iLoop);
-                elseif strcmp(data.simulationType,'pointlike')
-                    d.simset.division.sizeType = 0;
-                elseif strcmp(data.simulationType,'opto')
-                    d.simset.division.sizeType = 0;
-                end
-            else
-                app.modelCase = 'import';
-                app.import = struct();
-                [~,fileName,~] = fileparts(data.initialStateFiles{iLoop});
-                
-                % define string for the imported folder
-                app.import.folderName = [app.defaultPath 'Results/' fileName];
-                
-                app.import.nTimePoints = size(dir([app.import.folderName '/vertices/*.csv']),1);
-                fID = fopen([app.import.folderName '/simulation_type.csv']);
-                app.import.simulationType = fread(fID,'*char')';
-                fclose(fID);
-                app.import.currentTimePoint = app.import.nTimePoints;
-                app.import.systemParameters = import_settings([app.import.folderName '/system_parameters.csv']);
-                app.import.scaledParameters = import_settings([app.import.folderName '/scaled_parameters.csv']);
-                app.import.cellParameters = import_settings([app.import.folderName '/cell_parameters.csv']);
-                
-                
-                if data.loadedParameters(iLoop) == 1
-                    app.cellParameters = app.import.cellParameters;
-                    d.spar = scale_parameters(app);
-                end
-                
-                d.spar.normArea = app.import.scaledParameters.normArea;
-                d.spar.membraneLength = app.import.scaledParameters.membraneLength;
-                
-                if data.loadedParameters(iLoop) == 0
-                    d.spar.fArea = app.import.scaledParameters.fArea*app.systemParameters.scalingTime/app.systemParameters.eta/app.import.scaledParameters.scalingTime*app.import.systemParameters.eta;
-                end
-                
-                d = import_cells(app,d,'simulation');
-                
-                if ~isempty(data.removeCells.type)
-                    shapeSize = data.removeCells.size{iLoop}*1e-6/d.spar.scalingLength/2;
-                    
-                    outsideShape = [];
-                    for k = 1:length(d.cells)
-                        cellCenterX = mean(d.cells(k).verticesX);
-                        cellCenterY = mean(d.cells(k).verticesY);
-                        if strcmp(data.removeCells.type{iLoop},'s')
-                            if ~(cellCenterX > -shapeSize && cellCenterX < shapeSize && cellCenterY > -shapeSize && cellCenterY < shapeSize)
-                                outsideShape(end+1) = k;
-                            end
-                        elseif strcmp(data.removeCells.type{iLoop},'c')
-                            if ~(sqrt(cellCenterX^2 + cellCenterY^2) <= shapeSize)
-                                outsideShape(end+1) = k;
-                            end
-                        end
-                    end
-                    removedCells = outsideShape;
-                    
-                    for k = length(removedCells):-1:1
-                        d = remove_cell_and_links(d,removedCells(k));
-                    end
-                end
-                
-                d.cells = get_junction_data(d.cells);
-                
-                if d.simset.simulationType == 1
-                    d = edit_division_properties(d);
-                end
-                d.simset.division.sizeType = csvread([app.import.folderName '/size_type.csv']);
-                
-                if any(d.simset.simulationType == [2 3 5])
-                    for k = 1:length(d.cells)
-                        if d.cells(k).division.state ~= 0
-                            d.cells(k).division.state = 0;
-                            d.cells(k).normArea = d.cells(k).area*1.1;
-                        end
-                    end
-                    
-                end
-                
-            end
-            
-            d.cells = get_edge_vertices(d.cells);
-            
-            if d.simset.simulationType == 1 && d.simset.division.sizeType == 2
-
-                d.simset.newAreas = get_mdck_areas(d.spar)
-            end
-            
-            if any(d.simset.simulationType == [2,3,5])
-                
-                d.sub = initialize_substrate_structure;
-                
-                % find the square size that fits the epithelium
-                maxSize = get_maximum_epithelium_size(d);
-                
-                substrateSize = maxSize*2 + d.spar.rCell;
-                
-                if d.simset.simulationType == 3
-                    
-                    if data.stretching.type{iLoop} == 1
-                        
-                        piecewiseData = csvread(data.stretching.info{iLoop});
-                        
-                        d.simset.stretch.times = [piecewiseData(:,1); 2*d.spar.simulationTime]./d.spar.scalingTime;
-                        d.simset.stretch.values = [piecewiseData(:,2); piecewiseData(end,2)];
-                        
-                    else
-                        sineData = csvread(data.stretching.info{iLoop});
-                        dt = min(0.001,1./(sineData(2).*d.spar.scalingTime)./60);
-                        d.simset.stretch.times = 0:dt:(d.spar.simulationTime*1.1);
-                        d.simset.stretch.values = 1 + sineData(1).*sin(2.*pi.*sineData(2).*d.spar.scalingTime.*d.simset.stretch.times + sineData(3));
-                    end
-                    
-                    d.simset.stretch.axis = data.stretching.directions{iLoop};
-                end
-                
-                d = create_substrate(app,d,substrateSize);
-                
-                switch data.stiffnessType{iLoop}
-                    case 'uniform'
-                        app.StiffnessstyleButtonGroup.SelectedObject.Text = 'Constant';
-                    case 'gradient'
-                        app.StiffnessstyleButtonGroup.SelectedObject.Text = 'Gradient';
-                        app.stiffnessGradientInformation = csvread(data.stiffnessInfo{iLoop});
-                    case 'heterogenous'
-                        app.StiffnessstyleButtonGroup.SelectedObject.Text = 'Heterogeneous';
-                        app.heterogenousStiffness = csvread(data.stiffnessInfo{iLoop});
-                end
-                
-                expansionMultiplier = 1.5;
-                
-                while 1
-                    
-                    d = remove_substrate_points(d,app,expansionMultiplier);
-                    if any(d.simset.simulationType == [2,5])
-                        d = get_substrate_spring_constants(d,app);
-                        d = get_substrate_edge_points(d);
-                    end
-                    
-                    
-                    % define focal adhesions
-                    [d, ok] = create_focal_adhesions(d,app);
-                    if ~ok
-                        expansionMultiplier = expansionMultiplier*1.1;
-                    else
-                        break;
-                    end
-                end
-            end
-            
-            if d.simset.simulationType == 2
-                
-                
-                
-                if strcmp(app.import.simulationType,'pointlike')
-                    
-                    movementData = csvread([app.import.folderName '/pointlike/movement_data.csv']);
-                    d.simset.pointlike.movementTime = [movementData(:,1); movementData(end,1)];
-                    d.simset.pointlike.movementY = [movementData(:,2); 1e20];
-                    pointlikeData = import_settings([app.import.folderName '/pointlike/pointlike_data.csv']);
-                    
-                    d.simset.pointlike.cell = pointlikeData.cell;
-                    d.simset.pointlike.originalX = pointlikeData.originalX;
-                    d.simset.pointlike.originalY = pointlikeData.originalY;
-                    
-                    originalVertices = csvread([app.import.folderName '/pointlike/original_vertex_locations.csv']);
-                    d.simset.pointlike.vertexOriginalX = originalVertices(:,1);
-                    d.simset.pointlike.vertexOriginalY = originalVertices(:,2);
-                    
-                    time = convert_import_time(app,app.import.currentTimePoint,'numberToTime');
-                    
-                    previousTime = max(d.simset.pointlike.movementTime(d.simset.pointlike.movementTime <= time));
-                    nextTime = min(d.simset.pointlike.movementTime(d.simset.pointlike.movementTime > time));
-                    
-                    previousIdx = find(d.simset.pointlike.movementTime == previousTime);
-                    nextIdx = find(d.simset.pointlike.movementTime == nextTime);
-                    
-                    if previousTime == time
-                        displacementY = d.simset.pointlike.movementY(previousIdx);
-                    else
-                        displacementY = d.simset.pointlike.movementY(previousIdx) + (d.simset.pointlike.movementY(nextIdx) - d.simset.pointlike.movementY(previousIdx))*(time - d.simset.pointlike.movementY(previousIdx))/(d.simset.pointlike.movementTime(nextIdx) - d.simset.pointlike.movementTime(previousIdx));
-                    end
-                    
-                    
-                    d.simset.pointlike.movementTime = d.simset.pointlike.movementTime - time;
-                    tempIdx = find(d.simset.pointlike.movementTime <= 0);
-                    d.simset.pointlike.movementTime(tempIdx) = [];
-                    d.simset.pointlike.movementTime = [0 ; 2*d.simset.pointlike.movementTime];
-                    
-                    if max(tempIdx) > 1
-                        d.simset.pointlike.movementY(1:max(tempIdx)-1) = [];
-                        d.simset.pointlike.movementY = [displacementY ; d.simset.pointlike.movementY];
-                    else
-                        d.simset.pointlike.movementY(1) = displacementY;
-                    end
-                    
-                    multiplier = (2 - abs(max(d.simset.pointlike.vertexOriginalY) - d.simset.pointlike.originalY))/2;
-                    
-                    d.simset.pointlike.pointY = d.simset.pointlike.originalY + displacementY;
-                    
-                    d.simset.pointlike.vertexY = d.simset.pointlike.vertexOriginalY + displacementY.*multiplier;
-                    d.simset.pointlike.vertexX = d.simset.pointlike.vertexOriginalX;
-                    
-                    
-                    
-                else
-                    
-                    importedData = csvread(data.pointlike.pointlikeMovement{iLoop});
-                    
-                    app.pointlikeProperties.movementTime = importedData(:,1)./d.spar.scalingTime;
-                    app.pointlikeProperties.movementY = importedData(:,2)./d.spar.scalingLength;
-                    
-                    if data.pointlike.cell{iLoop} == 0
-                        d.simset.pointlike.cell = get_center_cell(d.cells);
-                    else
-                        d.simset.pointlike.cell = data.pointlike.cell{iLoop};
-                    end
-                    d.simset.pointlike.movementTime = app.pointlikeProperties.movementTime;
-                    d.simset.pointlike.movementY = app.pointlikeProperties.movementY;
-                    d.simset.pointlike.pointX = mean(d.cells(d.simset.pointlike.cell).verticesX);
-                    d.simset.pointlike.pointY = mean(d.cells(d.simset.pointlike.cell).verticesY);
-                    d.simset.pointlike.originalX = d.simset.pointlike.pointX;
-                    d.simset.pointlike.originalY = d.simset.pointlike.pointY;
-                    d.simset.pointlike.vertexX = d.cells(d.simset.pointlike.cell).verticesX;
-                    d.simset.pointlike.vertexY = d.cells(d.simset.pointlike.cell).verticesY;
-                    d.simset.pointlike.vertexOriginalX = d.cells(d.simset.pointlike.cell).verticesX;
-                    d.simset.pointlike.vertexOriginalY = d.cells(d.simset.pointlike.cell).verticesY;
-                end
-            elseif d.simset.simulationType == 5
-                
-                activationData = csvread(data.opto.activation{iLoop});
-                shapeData  = csvread(data.opto.shapes{iLoop});
-                
-                d.simset.opto.times = [activationData(:,1) ; 1e12]./d.spar.scalingTime;
-                d.simset.opto.levels = [activationData(:,2); activationData(end,2)].*d.spar.fullActivationConstant;
-                d.simset.opto.shapes = {};
-                nShapes = sum(shapeData(:,1) == 0)+1;
-                for i = 1:nShapes
-                    [~,idx] = find(shapeData(:,1) == 0);
-                    if isempty(idx)
-                        d.simset.opto.shapes{i} = shapeData;
-                        nextZero = 2;
-                    else
-                        nextZero = min(idx);
-                        d.simset.opto.shapes{i} = shapeData(1:nextZero-1,:);
-                    end
-                    shapeData(1:nextZero,:) = [];
-                end
-                
-                d.simset.opto.cells = [];
-                d.simset.opto.vertices = {};
-                d.simset.opto.currentTime = 1;
-            end
-            
-            d.ex = setup_exporting(app,d,startingTime);
-            
-            d.pl = struct();
-            d.pl.plot = 0;
-            d.pl.videoObject = 0;
-            
+            % run the simulation
             d = main_simulation(app,d);
             
-            
-            
+            % zip the results
             zip_results(d,app);
         end
-        dateVector = clock;
         
-        singleSimTime = toc;
+        % show the finishing message for the simulation
+        show_simulation_time(toc,1,iLoop);
         
-        % Formats the time
-        timeSimulationEnd = datestr(dateVector, 'HH:MM:SS');
-        dataSimulationEnd = datestr(dateVector, 'dd/mmm/yyyy');
-        runMessage = char(); %#ok<NASGU>
-        if singleSimTime >= 60
-            % Over an hour
-            if singleSimTime >= 3600
-                runMessage = sprintf('Simulation %.0f finished after %d h, %d min %.2f s at %s, %s', iLoop, floor(singleSimTime/3600), floor((singleSimTime - 3600*floor(singleSimTime/3600))/60), rem(singleSimTime - 3600*floor(singleSimTime/3600),60), timeSimulationEnd, dataSimulationEnd);
-                % Under an hour
-            else
-                runMessage = sprintf('Simulation %.0f finished after %d min %.2f s at %s, %s', iLoop, floor(singleSimTime/60), rem(singleSimTime,60), timeSimulationEnd, dataSimulationEnd);
-            end
-            % Under a minute
-        else
-            runMessage = sprintf('Simulation %.0f finished after %.2f s at %s, %s', iLoop, rem(singleSimTime,60), timeSimulationEnd, dataSimulationEnd);
-        end
+    % catch errors 
+    catch ME
         
-        % Display the message
-        disp(runMessage);
-%     catch ME
-%         runMessage = sprintf('Simulation %.0f failed', iLoop);
-%         disp(runMessage);
-%         fID = fopen(['simulation_' num2str(iLoop) '_error_log.txt'],'w');
-%         fprintf(fID,[ME.identifier '\n' ME.message '\n' ME.stack.file '\n' ME.stack.name '\n' ME.stack.line '\n']);
-%         fclose(fID);
-%     end
+        % print that there was an error
+        fprintf('Simulation %.0f failed\n', iLoop);
+        
+        % open an error log file to the root, write the error information
+        % and close the file
+        fID = fopen(['simulation_' num2str(iLoop) '_error_log.txt'],'w');
+        fprintf(fID,[ME.identifier '\n' ME.message '\n' ME.stack.file '\n' ME.stack.name '\n' ME.stack.line '\n']);
+        fclose(fID);
+    end
 end
 
+% if there were initial state files
 if ~isempty(data.initialStateFiles)
+    
+    % go through the simulations and remove the unzipped initial state
+    % files if they exist
     for i = 1:data.nSimulations
         [~,fileName,~] = fileparts(data.initialStateFiles{i});
-        folderName = [app.defaultPath  'results/' fileName];
+        folderName = [defaultPath  'results/' fileName];
         if exist(folderName,'dir') == 7
             remove_folder_function(folderName);
         end
     end
 end
 
+% if there was parallel pool, remove it
 if data.nCores > 1
     delete(gcp('nocreate'));
 end
 
-dateVector = clock;
+% show the finishing message for the all simulations
+show_simulation_time(toc(overall),2)
 
-totalTime = toc(overall);
-
-% Formats the time
-timeSimulationEnd = datestr(dateVector, 'HH:MM:SS');
-dataSimulationEnd = datestr(dateVector, 'dd/mmm/yyyy');
-
-if totalTime >= 60
-    % Over an hour
-    if totalTime >= 3600
-        message = sprintf('The run finished after %d h, %d min %.2f s at %s, %s', floor(totalTime/3600), floor((totalTime - 3600*floor(totalTime/3600))/60), rem(totalTime - 3600*floor(totalTime/3600),60), timeSimulationEnd, dataSimulationEnd);
-        % Under an hour
-    else
-        message = sprintf('The run finished after %d min %.2f s at %s, %s', floor(totalTime/60), rem(totalTime,60), timeSimulationEnd, dataSimulationEnd);
-    end
-    % Under a minute
-else
-    message = sprintf('The run finished after %.2f s at %s, %s', rem(totalTime,60), timeSimulationEnd, dataSimulationEnd);
 end
-
-% Display the message
-disp(message);
-

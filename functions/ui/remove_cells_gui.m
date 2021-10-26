@@ -10,6 +10,49 @@ function d = remove_cells_gui(app, d, option)
 %       cells: cell data structure
 %   by Aapo Tervonen, 2021
 
+% if the function is called for CMD simulation
+if isfield(app,'cmdRemovedCells')
+   
+    % if cells are removed
+    if app.cmdRemovedCells.size >= 0
+        
+        % get the size for the removal shape
+        shapeSize = app.cmdRemovedCells.size*1e-6/d.spar.scalingLength/2;
+        
+        % initialize cells outside the shape
+        outsideShape = [];
+        
+        % go through the cells
+        for k = 1:length(d.cells)
+            
+            % get the cell center
+            cellCenterX = mean(d.cells(k).verticesX);
+            cellCenterY = mean(d.cells(k).verticesY);
+            
+            % if the shape is square, find the cells outside
+            if strcmp(app.cmdRemovedCells.type,'s')
+                if ~(cellCenterX > -shapeSize && cellCenterX < shapeSize && cellCenterY > -shapeSize && cellCenterY < shapeSize)
+                    outsideShape(end+1) = k; %#ok<*AGROW>
+                end
+                
+            % if the shape is circle, find the cells outside
+            elseif strcmp(app.cmdRemovedCells.type,'c')
+                if ~(sqrt(cellCenterX^2 + cellCenterY^2) <= shapeSize)
+                    outsideShape(end+1) = k;
+                end
+            end
+        end
+        
+        % save the cell outside
+        app.import.removedCells = outsideShape;
+        
+    % otherwise, no cells removed
+    else
+        app.import.removedCells = [];
+    end
+
+end
+
 % if there are cells to remove
 if ~isempty(app.import.removedCells)
     
@@ -21,7 +64,7 @@ if ~isempty(app.import.removedCells)
     
     % remove the cells that do not exist (e.g. if the chosen time point
     % does not yet include some of the cells that have been removed)
-    removedCellsTemp(removedCellsTemp > max(app.import.nCells)) = [];
+    removedCellsTemp(removedCellsTemp > length(d.cells))= [];
     
     % go through the cells to remove (in reverse)
     for k = length(removedCellsTemp):-1:1

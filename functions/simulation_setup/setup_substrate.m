@@ -132,8 +132,10 @@ if d.simset.substrateIncluded
             end
         end
         
-        % close GUI progress dialog 
-        close(progressdlg);
+        % close GUI progress dialog
+        if isobject(app)
+            close(progressdlg);
+        end
         
     % if substrate is imported from imported simulation
     elseif strcmp(app.modelCase,'import') && app.UseimportedsubstratedataCheckBox.Value

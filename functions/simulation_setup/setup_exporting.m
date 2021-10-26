@@ -631,7 +631,7 @@ if d.simset.substrateIncluded && or(d.ex.substratePlot,d.ex.substrateFull)
         % describes the stiffness profile
         switch app.StiffnessstyleButtonGroup.SelectedObject.Text
             case 'Heterogeneous'
-                writematrix(app.heterogenousStiffness, [folderPath '/substrate_auxiliary/heterogeneous_information.csv']);
+                writematrix(app.heterogeneousStiffness, [folderPath '/substrate_auxiliary/heterogeneous_information.csv']);
             case 'Gradient'
                 writematrix(app.stiffnessGradientInformation, [folderPath '/substrate_auxiliary/gradient_information.csv']);
         end

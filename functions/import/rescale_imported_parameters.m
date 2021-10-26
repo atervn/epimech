@@ -20,7 +20,7 @@ d.spar.membraneLength = app.import.scaledParameters.membraneLength*app.import.sc
 for k = 1:length(d.cells)
 
     % rescale the fCortex
-    d.cells(k).cortex.fCortex = d.cells(k).cortex.fCortex*app.import.scaledParameters.scalingTime/app.import.scaledParameters.eta*app.systemParameters.eta/app.systemParameters.scalingTime;
+    d.cells(k).cortex.fCortex = d.cells(k).cortex.fCortex*app.import.scaledParameters.eta/app.import.scaledParameters.scalingTime*app.systemParameters.scalingTime/app.systemParameters.eta;
     
     % if fCortex has been modified from the original value, scale the old
     % value to obtain the new one
@@ -28,7 +28,6 @@ for k = 1:length(d.cells)
 
     % rescale the normal cell area
     d.cells(k).area = d.cells(k).area*app.import.scaledParameters.scalingLength^2/app.systemParameters.scalingLength^2;
-    
     
     % rescale the normal cell perimeter
     d.cells(k).perimeter = d.cells(k).perimeter*app.import.scaledParameters.scalingLength/app.systemParameters.scalingLength;

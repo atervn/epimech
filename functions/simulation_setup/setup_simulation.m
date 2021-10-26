@@ -1,4 +1,4 @@
-function d = setup_simulation(app)
+function d = setup_simulation(app,varargin)
 % SETUP_SIMULATION Setup the data related to the simulation
 %   The function setups to the simulation by scaling parameters, setting up
 %   the simulation settings, creating or importing the cells, creating or
@@ -7,6 +7,7 @@ function d = setup_simulation(app)
 %   exporting options.
 %   INPUT:
 %       app: main application structure
+%       varargin: can be used to input simulation starting time
 %   OUTPUT:
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021
@@ -46,7 +47,13 @@ d = setup_frame(d);
 % plotting settings
 d = setup_plotting_options(app,d,'simulate');
 
-% export settings
-d = setup_exporting(app,d);
+% export settings, if starting time is given (CMD)
+if numel(varargin) > 0
+    d = setup_exporting(app,d,varargin{1});
+    
+% otherwise (GUI)
+else
+    d = setup_exporting(app,d);
+end
 
 end

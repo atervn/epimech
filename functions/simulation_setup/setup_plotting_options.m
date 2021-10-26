@@ -67,496 +67,500 @@ function d = setup_specific_plotting_options(app, plotCase,d,varargin)
 %   by Aapo Tervonen, 2021
 
 % which plot case
-switch plotCase
+% switch plotCase
     
-    % simulation
-    case 'simulate'
-        
-        % get plotting options
-        d.pl = app.plottingOptions;
-        
-        % set plot type (used to set specific thing needed for this plot)
-        d.pl.plotType = 1;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 1;
-        d.pl.nTitleLines = 1;
-        
-        % get the maximum simulation time
-        d.pl.maxTime = app.systemParameters.simulationTime;
-        
-        % get the plot time step
-        d.pl.plotDt = app.plottingOptions.plotDtMultiplier*d.spar.maximumTimeStep;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox.Value;
-        
-    % browsing the time points before simulation
-    case 'browse'
-
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 2;
+% simulation
+if strcmp(plotCase,'simulate')
+    
+    % get plotting options
+    d.pl = app.plottingOptions;
+    
+    % set plot type (used to set specific thing needed for this plot)
+    d.pl.plotType = 1;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 1;
+    d.pl.nTitleLines = 1;
+    
+    % get the maximum simulation time
+    d.pl.maxTime = app.systemParameters.simulationTime;
+    
+    % get the plot time step
+    d.pl.plotDt = app.plottingOptions.plotDtMultiplier*d.spar.maximumTimeStep;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox.Value;
+    
+% browsing the time points before simulation
+elseif strcmp(plotCase,'browse')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 2;
+    d.pl.nTitleLines = 2;
+    
+    % get the maximum simulation time
+    d.pl.maxTime = app.import.scaledParameters.simulationTime*app.import.scaledParameters.scalingTime;
+    
+    % get the plot time step (set to be able to browse through all time
+    % points)
+    d.pl.plotDt = app.import.scaledParameters.maximumTimeStep;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% adding cells as the initial state of new simulation
+elseif strcmp(plotCase,'add_cells')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 3;
+    d.pl.nTitleLines = 1;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % set the plotting window size from the GUI (automatic size turned
+    % off always)
+    d.pl.windowSize = app.plottingOptions.windowSize;
+    d.pl.automaticSize = 0;
+    
+% remove cells be selection
+elseif strcmp(plotCase,'remove_cells')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 4;
+    d.pl.nTitleLines = 1;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type
+    d.pl.highlightType = 3;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% remove cells with shape
+elseif strcmp(plotCase,'remove_with_shape')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type (to indicate plot_shape to indicate that this is
+    % removal shape)
+    d.pl.plotType = 2;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 5;
+    d.pl.nTitleLines = 1;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type and highlighted cells
+    d.pl.highlightType = 5;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% show substrate size when it is defined manually
+elseif strcmp(plotCase,'show_substrate_size')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type (to indicate plot_shape to indicate that this is
+    % substrate showing)
+    d.pl.plotType = 3;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 6;
+    d.pl.nTitleLines = 1;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% select pointlike cell
+elseif strcmp(plotCase,'select_pointlike_cell')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 7;
+    d.pl.nTitleLines = 1;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type and the highlighted cell
+    d.pl.highlightType = 3;
+    d.pl.highlightedCells = app.pointlikeProperties.cell;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% normal post plotting (one time point)
+elseif strcmp(plotCase,'post')
+    
+    % get the plotting options
+    d.pl = app.importPlottingOptions;
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 8;
+    d.pl.nTitleLines = 1;
+    
+    % get the maximum time from the import
+    d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+    
+    % get the plotting time step from the import
+    d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+    
+    % set highlight settings depending on the selected special plot
+    % type
+    d = get_highlighted_cells(app,d);
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    
+% browse post plotting
+elseif strcmp(plotCase,'post_browse')
+    
+    % get the plotting options
+    d.pl = app.importPlottingOptions;
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 2;
+    d.pl.nTitleLines = 2;
+    
+    % get the maximum time from the import
+    d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+    
+    % get the plotting time step from the import
+    d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+    
+    % set highlight settings depending on the selected special plot
+    % type
+    d = get_highlighted_cells(app,d);
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    
+% post animation
+elseif strcmp(plotCase,'post_animation')
+    
+    % get the plotting options
+    d.pl = app.importPlottingOptions;
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 8;
+    d.pl.nTitleLines = 1;
+    
+    % get the maximum time from the import
+    d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+    
+    % get the plotting time step from the import
+    d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+    
+    % set highlight settings depending on the selected special plot
+    % type
+    d = get_highlighted_cells(app,d);
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    
+% opto region selection plotting
+elseif strcmp(plotCase,'opto_area')
+    
+    % set substrate solved and included to 0
+    d.simset.substrateSolved = 0;
+    d.simset.substrateIncluded = 0;
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 9;
+    d.pl.nTitleLines = 2;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type and the optogenetic vertices as the
+    % highlighted cells
+    d.pl.highlightType = 4;
+    d.pl.highlightedCells = app.optoVertices;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% cell selection for optogenetic junction analysis
+elseif strcmp(plotCase,'opto_post_cell')
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 10;
+    d.pl.nTitleLines = 2;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type and highlighted cells
+    d.pl.highlightType = 3;
+    d.pl.highlightedCells = app.plotImport(app.selectedFile).optoSelectedCells;
+    
+    % set the automatic sizing to true
+    d.pl.automaticSize = 1;
+    
+% force magnitude plot
+elseif strcmp(plotCase,'force_magnitude') || strcmp(plotCase,'force_magnitude_video')
+    
+    % get the plotting options
+    d.pl = app.importPlottingOptions;
+    
+    % set plot type (to indicate for force plotting that this is
+    % magnitude and not quiver)
+    d.pl.plotType = 4;
+    
+    % get the maximum time from the import
+    d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+    
+    % get the plotting time step from the import
+    d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    
+    % check if the title has two or one line (the browse type requires
+    % two lines)
+    if numel(varargin) > 0 && strcmp(varargin{1},'browse')
         d.pl.nTitleLines = 2;
-        
-        % get the maximum simulation time
-        d.pl.maxTime = app.import.scaledParameters.simulationTime*app.import.scaledParameters.scalingTime;
-        
-        % get the plot time step (set to be able to browse through all time
-        % points)
-        d.pl.plotDt = app.import.scaledParameters.maximumTimeStep;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % adding cells as the initial state of new simulation
-    case 'add_cells'
-
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 3;
+    else
         d.pl.nTitleLines = 1;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-        
-        % set the plotting window size from the GUI (automatic size turned
-        % off always)
-        d.pl.windowSize = app.plottingOptions.windowSize;
-        d.pl.automaticSize = 0;
-        
-    % remove cells be selection
-    case 'remove_cells'
-
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 4;
-        d.pl.nTitleLines = 1;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type
-        d.pl.highlightType = 3;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % remove cells with shape   
-    case 'remove_with_shape'
-
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type (to indicate plot_shape to indicate that this is
-        % removal shape)
-        d.pl.plotType = 2;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 5;
-        d.pl.nTitleLines = 1;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type and highlighted cells
-        d.pl.highlightType = 5;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % show substrate size when it is defined manually
-    case 'show_substrate_size'
-
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type (to indicate plot_shape to indicate that this is
-        % substrate showing)
-        d.pl.plotType = 3;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 6;
-        d.pl.nTitleLines = 1;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % select pointlike cell
-    case 'select_pointlike_cell'
-        
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 7;
-        d.pl.nTitleLines = 1;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type and the highlighted cell
-        d.pl.highlightType = 3;
-        d.pl.highlightedCells = app.pointlikeProperties.cell;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % normal post plotting (one time point)
-    case 'post'
-        
-        % get the plotting options
-        d.pl = app.importPlottingOptions;
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 8;
-        d.pl.nTitleLines = 1;
-        
-        % get the maximum time from the import
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        
-        % get the plotting time step from the import
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        
-        % set highlight settings depending on the selected special plot
-        % type
-        d = get_highlighted_cells(app,d);
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-        
-    % browse post plotting
-    case 'post_browse'
-        
-        % get the plotting options
-        d.pl = app.importPlottingOptions;
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 2;
+    end
+    
+    % get the force magnitude lot settings (marker size and color range
+    % limits)
+    d.pl.markerSize = app.MarkersizeEditField.Value;
+    d.pl.minMagnitude = app.MinimummagnitudeEditField.Value;
+    d.pl.maxMagnitude = app.MaximummagnitudeEditField.Value;
+    
+    % read the colormap from file
+    d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);
+    
+    % set all force plotting settings to false to make sure only the
+    % selected force is shown
+    d.pl.cellForcesCortical = 0;
+    d.pl.cellForcesJunctions = 0;
+    d.pl.cellForcesDivision = 0;
+    d.pl.cellForcesMembrane = 0;
+    d.pl.cellForcesContact = 0;
+    d.pl.cellForcesArea = 0;
+    d.pl.cellForcesPointlike = 0;
+    d.pl.cellForcesFocalAdhesions = 0;
+    d.pl.cellForcesTotal = 0;
+    d.pl.substrateForcesCentral = 0;
+    d.pl.substrateForcesRepulsion = 0;
+    d.pl.substrateForcesRestoration = 0;
+    d.pl.substrateForcesFocalAdhesions = 0;
+    d.pl.substrateForcesTotal = 0;
+    
+    % check which force is selected for the magnitude plot, set the
+    % plotting for that force true, and set the titleType that is
+    % individual for each force
+    switch app.ForceDropDown_2.Value
+        case 'Total forces'
+            d.pl.cellForcesTotal = 1;
+            d.pl.titleType = 20;
+        case 'Cortical forces'
+            d.pl.cellForcesCortical = 1;
+            d.pl.titleType = 21;
+        case 'Junction forces'
+            d.pl.cellForcesJunctions = 1;
+            d.pl.titleType = 22;
+        case 'Division forces'
+            d.pl.cellForcesDivision = 1;
+            d.pl.titleType = 23;
+        case 'Membrane forces'
+            d.pl.cellForcesMembrane = 1;
+            d.pl.titleType = 24;
+        case 'Contact forces'
+            d.pl.cellForcesContact = 1;
+            d.pl.titleType = 25;
+        case 'Area forces'
+            d.pl.cellForcesArea = 1;
+            d.pl.titleType = 26;
+        case 'Pointlike forces'
+            d.pl.cellForcesPointlike = 1;
+            d.pl.titleType = 27;
+        case 'Focal adhesion forces'
+            d.pl.cellForcesFocalAdhesions = 1;
+            d.pl.titleType = 28;
+        case 'Total substrate forces'
+            d.pl.substrateForcesTotal = 1;
+            d.pl.titleType = 29;
+        case 'Central substrate forces'
+            d.pl.substrateForcesCentral = 1;
+            d.pl.titleType = 30;
+        case 'Restorative substrate forces'
+            d.pl.substrateForcesRestoration = 1;
+            d.pl.titleType = 31;
+        case 'Repulsion substrate forces'
+            d.pl.substrateForcesRepulsion = 1;
+            d.pl.titleType = 32;
+        case 'Focal adhesion substrate forces'
+            d.pl.substrateForcesFocalAdhesions = 1;
+            d.pl.titleType = 33;
+    end
+    
+% plotting cell shape etc. descriptors using color fill
+elseif strcmp(plotCase,'cell_descriptors') || strcmp(plotCase,'cell_descriptors_video')
+    
+    % get the plotting options
+    d.pl = app.importPlottingOptions;
+    
+    % set plot type
+    d.pl.plotType = 0;
+    
+    % get the maximum time from the import
+    d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
+    
+    % get the plotting time step from the import
+    d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
+    
+    % set highlight type
+    d.pl.highlightType = 0;
+    
+    % get the automatic sizing
+    d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
+    
+    % get the color range minimum and maximun limits
+    d.pl.minMagnitude = app.MinimummagnitudeEditField_2.Value;
+    d.pl.maxMagnitude = app.MaximummagnitudeEditField_2.Value;
+    
+    % read the colormap
+    d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);
+    
+    % create a vector of color values for the range
+    d.pl.colorLocations = linspace(d.pl.minMagnitude,d.pl.maxMagnitude,64);
+    
+    % check if the title has two or one line (the browse type requires
+    % two lines)
+    if numel(varargin) > 0 && strcmp(varargin{1},'browse')
         d.pl.nTitleLines = 2;
-        
-        % get the maximum time from the import
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        
-        % get the plotting time step from the import
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        
-        % set highlight settings depending on the selected special plot
-        % type
-        d = get_highlighted_cells(app,d);
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-        
-    % post animation
-    case 'post_animation'
-        
-        % get the plotting options
-        d.pl = app.importPlottingOptions;
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 8;
+    else
         d.pl.nTitleLines = 1;
-        
-        % get the maximum time from the import
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        
-        % get the plotting time step from the import
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        
-        % set highlight settings depending on the selected special plot
-        % type
-        d = get_highlighted_cells(app,d);
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-        
-    % opto region selection plotting
-    case 'opto_area'
-                
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 9;
-        d.pl.nTitleLines = 2;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type and the optogenetic vertices as the
-        % highlighted cells
-        d.pl.highlightType = 4;
-        d.pl.highlightedCells = app.optoVertices;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % cell selection for optogenetic junction analysis
-    case 'opto_post_cell'
-        
-        % get the basic plotting options
-        d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % set title type and number of title lines
-        d.pl.titleType = 10;
-        d.pl.nTitleLines = 2;
-        
-        % set the maximum simulation time and plotting step (values not
-        % important, but step has to have value that is plotted in plot
-        % function, e.g. 1)
-        d.pl.maxTime = 0;
-        d.pl.plotDt = 1;
-        
-        % set highlight type and highlighted cells
-        d.pl.highlightType = 3;
-        d.pl.highlightedCells = app.plotImport(app.selectedFile).optoSelectedCells;
-        
-        % set the automatic sizing to true
-        d.pl.automaticSize = 1;
-        
-    % force magnitude plot
-    case 'force_magnitude'
-        
-        % get the plotting options
-        d.pl = app.importPlottingOptions;
-        
-        % set plot type (to indicate for force plotting that this is
-        % magnitude and not quiver)
-        d.pl.plotType = 4;
-        
-        % get the maximum time from the import
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        
-        % get the plotting time step from the import
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-        
-        % check if the title has two or one line (the browse type requires
-        % two lines)
-        if numel(varargin) > 0 && strcmp(varargin{1},'browse')
-            d.pl.nTitleLines = 2;
-        else
-            d.pl.nTitleLines = 1;
-        end
-        
-        % get the force magnitude lot settings (marker size and color range
-        % limits)
-        d.pl.markerSize = app.MarkersizeEditField.Value;
-        d.pl.minMagnitude = app.MinimummagnitudeEditField.Value;
-        d.pl.maxMagnitude = app.MaximummagnitudeEditField.Value;
-        
-        % read the colormap from file
-        d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);   
-        
-        % set all force plotting settings to false to make sure only the
-        % selected force is shown
-        d.pl.cellForcesCortical = 0;
-        d.pl.cellForcesJunctions = 0;
-        d.pl.cellForcesDivision = 0;
-        d.pl.cellForcesMembrane = 0;
-        d.pl.cellForcesContact = 0;
-        d.pl.cellForcesArea = 0;
-        d.pl.cellForcesPointlike = 0;
-        d.pl.cellForcesFocalAdhesions = 0;
-        d.pl.cellForcesTotal = 0;
-        d.pl.substrateForcesCentral = 0;
-        d.pl.substrateForcesRepulsion = 0;
-        d.pl.substrateForcesRestoration = 0;
-        d.pl.substrateForcesFocalAdhesions = 0;
-        d.pl.substrateForcesTotal = 0;
-        
-        % check which force is selected for the magnitude plot, set the
-        % plotting for that force true, and set the titleType that is
-        % individual for each force
-        switch app.ForceDropDown_2.Value
-            case 'Total forces'
-                d.pl.cellForcesTotal = 1;
-                d.pl.titleType = 20;
-            case 'Cortical forces'
-                d.pl.cellForcesCortical = 1;
-                d.pl.titleType = 21;
-            case 'Junction forces'
-                d.pl.cellForcesJunctions = 1;
-                d.pl.titleType = 22;
-            case 'Division forces'
-                d.pl.cellForcesDivision = 1;
-                d.pl.titleType = 23;
-            case 'Membrane forces'
-                d.pl.cellForcesMembrane = 1;
-                d.pl.titleType = 24;
-            case 'Contact forces'
-                d.pl.cellForcesContact = 1;
-                d.pl.titleType = 25;
-            case 'Area forces'
-                d.pl.cellForcesArea = 1;
-                d.pl.titleType = 26;
-            case 'Pointlike forces'
-                d.pl.cellForcesPointlike = 1;
-                d.pl.titleType = 27;
-            case 'Focal adhesion forces'
-                d.pl.cellForcesFocalAdhesions = 1;
-                d.pl.titleType = 28;
-            case 'Total substrate forces'
-                d.pl.substrateForcesTotal = 1;
-                d.pl.titleType = 29;
-            case 'Central substrate forces'
-                d.pl.substrateForcesCentral = 1;
-                d.pl.titleType = 30;
-            case 'Restorative substrate forces'
-                d.pl.substrateForcesRestoration = 1;
-                d.pl.titleType = 31;
-            case 'Repulsion substrate forces'
-                d.pl.substrateForcesRepulsion = 1;
-                d.pl.titleType = 32;
-            case 'Focal adhesion substrate forces'
-                d.pl.substrateForcesFocalAdhesions = 1;
-                d.pl.titleType = 33;
-        end
-        
-    % plotting cell shape etc. descriptors using color fill
-    case 'cell_descriptors'
-        
-        % get the plotting options
-        d.pl = app.importPlottingOptions;
-        
-        % set plot type
-        d.pl.plotType = 0;
-        
-        % get the maximum time from the import
-        d.pl.maxTime = app.plotImport(app.selectedFile).scaledParameters.simulationTime*app.plotImport(app.selectedFile).scaledParameters.scalingTime;
-        
-        % get the plotting time step from the import
-        d.pl.plotDt = app.plotImport(app.selectedFile).scaledParameters.maximumTimeStep;
-        
-        % set highlight type
-        d.pl.highlightType = 0;
-        
-        % get the automatic sizing
-        d.pl.automaticSize = app.AutomaticsizeCheckBox_2.Value;
-        
-        % get the color range minimum and maximun limits
-        d.pl.minMagnitude = app.MinimummagnitudeEditField_2.Value;
-        d.pl.maxMagnitude = app.MaximummagnitudeEditField_2.Value;
-        
-        % read the colormap
-        d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap.csv']);
-        
-        % create a vector of color values for the range
-        d.pl.colorLocations = linspace(d.pl.minMagnitude,d.pl.maxMagnitude,64);
-        
-        % check if the title has two or one line (the browse type requires
-        % two lines)
-        if numel(varargin) > 0 && strcmp(varargin{1},'browse')
-            d.pl.nTitleLines = 2;
-        else
-            d.pl.nTitleLines = 1;
-        end
-        
-        % check which descriptor is selected for the plotting, set the cell
-        % style based on the descriptor, and set the title type (individual
-        % for each descriptor)
-        switch app.DescriptorDropDown.Value
-            case 'Area'
-                d.pl.cellStyle = 7;
-                d.pl.titleType = 40;
-            case 'Area strain'
-                d.pl.cellStyle = 8;
-                d.pl.titleType = 41;
-            case 'Perimeter'
-                d.pl.cellStyle = 9;
-                d.pl.titleType = 42;
-            case 'Perimeter strain'
-                d.pl.cellStyle = 10;
-                d.pl.titleType = 43;
-            case 'Circularity'
-                d.pl.cellStyle = 11;
-                d.pl.titleType = 44;
-            case 'Aspect ratio'
-                d.pl.cellStyle = 12;
-                d.pl.titleType = 45;
-            case 'Angle'
-                d.pl.cellStyle = 13;
-                d.pl.titleType = 46;
-                
-                % for angle, use a diffent colormap and range that goes
-                % from -90 to 90 degrees where the color values are
-                % mirrored over the angle of 0 degrees
-                d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap2.csv']);
-                d.pl.colormap = [d.pl.colormap;flipud(d.pl.colormap)];
-                d.pl.colorLocations = linspace(-90,90,128);
-        end
+    end
+    
+    % check which descriptor is selected for the plotting, set the cell
+    % style based on the descriptor, and set the title type (individual
+    % for each descriptor)
+    switch app.DescriptorDropDown.Value
+        case 'Area'
+            d.pl.cellStyle = 7;
+            d.pl.titleType = 40;
+        case 'Area strain'
+            d.pl.cellStyle = 8;
+            d.pl.titleType = 41;
+        case 'Perimeter'
+            d.pl.cellStyle = 9;
+            d.pl.titleType = 42;
+        case 'Perimeter strain'
+            d.pl.cellStyle = 10;
+            d.pl.titleType = 43;
+        case 'Circularity'
+            d.pl.cellStyle = 11;
+            d.pl.titleType = 44;
+        case 'Aspect ratio'
+            d.pl.cellStyle = 12;
+            d.pl.titleType = 45;
+        case 'Angle'
+            d.pl.cellStyle = 13;
+            d.pl.titleType = 46;
+            
+            % for angle, use a diffent colormap and range that goes
+            % from -90 to 90 degrees where the color values are
+            % mirrored over the angle of 0 degrees
+            d.pl.colormap = csvread([app.defaultPath 'settings/misc/mymap2.csv']);
+            d.pl.colormap = [d.pl.colormap;flipud(d.pl.colormap)];
+            d.pl.colorLocations = linspace(-90,90,128);
+    end
 end
 
 % if there is no simulation type set yet, set it to 0, since it is needed
@@ -807,7 +811,7 @@ switch app.appTask
     case 'plotAndAnalyze'
         
         % check if post animation, force magnitude or cell descriptor plot
-        if strcmp(plotCase,'post_animation') || strcmp(plotCase,'force_magnitude') || strcmp(plotCase,'cell_descriptors')
+        if strcmp(plotCase,'post_animation') || strcmp(plotCase,'force_magnitude_video') || strcmp(plotCase,'cell_descriptors_video')
             
             % get the video selection
             d.pl.video = logical(app.SavevideoCheckBox_2.Value);
