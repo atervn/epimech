@@ -3,7 +3,7 @@ function d = scale_parameters(app,d)
 %   The function scales the model parameters with the eta, scaling length
 %   and time to dimensionless values.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

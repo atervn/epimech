@@ -1,11 +1,11 @@
-function d = remove_substrate_points(d,app,expansionMultiplier)
+function d = remove_substrate_points(app,d,expansionMultiplier)
 % REMOVA_SUBSTRATE_POINTS Remove extra substrate points
 %   The function removes extra points from the substrate when using the
 %   fitted substrate type. It forms a polyshape from the cells and uses it
 %   to defined which points are not near the cells. Then it proceeds to
 %   remove the point interaction data and the point coordinates.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %       expansionMultiplier: multiplier used to determine how much the
 %           cells are expended when creating the polyshape, in practice

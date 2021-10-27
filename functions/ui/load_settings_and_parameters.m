@@ -287,11 +287,6 @@ if strcmp(app.appTask,'simulate')
                 app.UseimportedsubstratedataCheckBox_2.Visible = 'Off';
             end
             
-            
-            
-            if ~(isfield(app.pointlikeProperties,'movementTime') && numel(app.pointlikeProperties.movementTime) > 0)
-                app.pointlikeProperties = initialize_pointlike_properties;
-            end
             app.pointlikeProperties.cell = 1;
             
             if strcmp(app.modelCase,'import') && strcmp(app.import.simulationType,'pointlike') && strcmp(app.import.stiffnessType,'Gradient')

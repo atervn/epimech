@@ -113,7 +113,7 @@ parfor (iLoop = 1:data.nSimulations, nWorkers)
             d = main_simulation(app,d);
             
             % zip the results
-            zip_results(d,app);
+            zip_results(app,d);
         end
         
         % show the finishing message for the simulation
@@ -142,7 +142,7 @@ if ~isempty(data.initialStateFiles)
         [~,fileName,~] = fileparts(data.initialStateFiles{i});
         folderName = [defaultPath  'results/' fileName];
         if exist(folderName,'dir') == 7
-            remove_folder_function(folderName);
+            remove_folder(folderName);
         end
     end
 end

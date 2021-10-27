@@ -4,7 +4,7 @@ function timeScalingFactor = get_import_time_scaling_constant(app)
 %   The function calculate the time scaling constant for conversion between
 %   import index and time
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %   OUTPUT:
 %       timeScalingFactor: calculated time scaling factor
 %   by Aapo Tervonen, 2021

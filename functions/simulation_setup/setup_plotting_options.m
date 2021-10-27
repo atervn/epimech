@@ -5,7 +5,7 @@ function d = setup_plotting_options(app, d, plotCase, varargin)
 %   analysis. Also, the function creates the figure, sets the figure
 %   callbacks and initializes the video, if needed.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %       plotCase: plot case
 %       varargin: with the value 'browse' can be used to indicate the need
@@ -42,7 +42,7 @@ d = setup_figure(app,d,plotCase);
 d = setup_scalebar(app,d);
 
 % setup figure callbacks
-set_figure_callbacks(d,app)
+set_figure_callbacks(app,d)
 
 % setups video settings
 d = setup_video_settings(app,d,plotCase);

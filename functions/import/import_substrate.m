@@ -5,7 +5,7 @@ function d = import_substrate(app,d)
 %   plotting. For plotting, the substrate forces are also imported if
 %   needed.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

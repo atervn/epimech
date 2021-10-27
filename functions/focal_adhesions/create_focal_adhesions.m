@@ -1,4 +1,4 @@
-function [d, ok] = create_focal_adhesions(d,app)
+function [d, ok] = create_focal_adhesions(app,d)
 % CREATE_FOCAL_ADHESIONS Create focal adhesions for the cell vertices
 %   The function defined the focal adhesions for each cell. The focal
 %   adhesion attachment point in defined with baryocentric coordinates
@@ -7,7 +7,7 @@ function [d, ok] = create_focal_adhesions(d,app)
 %   positions. For gradient and heterogeneous susbtrates, the Youngs
 %   modulus is calculated as the weighted average of the closest points.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

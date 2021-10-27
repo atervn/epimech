@@ -57,4 +57,4 @@ d.pl.axesHandle.YTickLabel = [];
 d.pl.axesHandle.XColor = 'none';
 d.pl.axesHandle.YColor = 'none';
 
-set_figure_callbacks(d,app.CallingApp)
+set_figure_callbacks(app.CallingApp,d)

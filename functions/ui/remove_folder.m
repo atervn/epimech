@@ -1,5 +1,5 @@
-function remove_folder_function(folderName)
-% REMOVE_FOLDER_FUNCTION Remove export folder
+function remove_folder(folderName)
+% REMOVE_FOLDER Remove export folder
 %   The function removes the folder that the results were exported in.
 %   Since there might be some problems removing the folder if the OS doing
 %   something with it (e.g. synching somewhere), the function tries the
@@ -9,7 +9,7 @@ function remove_folder_function(folderName)
 %   by Aapo Tervonen, 2021
 
 % go through some iterations
-for i=1:10
+for i = 1:10
     
     % try to remove the folder
     status=rmdir(folderName,'s');

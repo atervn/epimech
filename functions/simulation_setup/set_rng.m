@@ -5,7 +5,7 @@ function set_rng(app)
 %   case can be used to run the growth simulation with the same behavior
 %   for example to debug the code.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %   by Aapo Tervonen, 2021
 
 % check if this is growth simulation and if the uniform division times

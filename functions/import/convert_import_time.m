@@ -4,7 +4,7 @@ function outputTime = convert_import_time(app,timePoint,option)
 %   The function converts the imported time point between the import index
 %   and the time in seconds.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       timePoint: current time point to convert (either time in seconds or
 %           import index)
 %       option: variable to indicate the direction of the conversion

@@ -1,11 +1,11 @@
-function d = get_substrate_spring_constants(d,app)
+function d = get_substrate_spring_constants(app,d)
 % SETUP_SUBSTRATE_SPRING_CONSTANTS Define the substrate spring constants
 %   The function finds the magnitudes for the substrate spring constants
 %   for the three different cases of stiffness: uniform, heterogeneous, and
 %   gradient. In the latter two cases, the value are defined based on the
 %   predefined heterogeneous profile parameters and gradient profile.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

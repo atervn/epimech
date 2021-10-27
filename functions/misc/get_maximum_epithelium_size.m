@@ -3,7 +3,7 @@ function maxSize = get_maximum_epithelium_size(d)
 %   The function find the half side length of the square that fits the
 %   whole epithelium (with the middle of the square in at 0,0)
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %   OUTPUT:
 %       maxSize: maximum size
 %   by Aapo Tervonen, 2021

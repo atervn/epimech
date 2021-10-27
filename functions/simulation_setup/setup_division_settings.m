@@ -3,7 +3,7 @@ function d = setup_division_settings(app,d)
 %   The function defines the simulation settings related to cell division
 %   and cell sizing.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

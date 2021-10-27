@@ -1,10 +1,10 @@
-function d = setup_pointlike_settings(d,app)
+function d = setup_pointlike_settings(app,d)
 % SETUP_POINTLIKE_SETTINGS Setup the settings for the pointlike
 %   The function either defines the pointlike propreties for the new
 %   simulation or imports the data if imported pointlike properties are
 %   used.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

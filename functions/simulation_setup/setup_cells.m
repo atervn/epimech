@@ -3,7 +3,7 @@ function d = setup_cells(app,d)
 %   The function either creates new cells or imports cells from previous
 %   simulation for the simulation. 
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

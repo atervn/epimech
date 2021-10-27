@@ -1,9 +1,9 @@
-function set_figure_callbacks(d,app)
+function set_figure_callbacks(app,d)
 % SET_FIGURE_CALLBACKS Set callbacks for the resizing, zooming, and panning
 %   The function defines the callback functions for the resizing the
 %   figure, and zooming and panning in the axis.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 

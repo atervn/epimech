@@ -1,6 +1,6 @@
 function d = get_substrate_interactions(app, d, nX, nY)
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %       nX: number of points in a substrate row
 %       nY: number of substrate row

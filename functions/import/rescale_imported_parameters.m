@@ -4,7 +4,7 @@ function d = rescale_imported_parameters(app,d)
 %   eta, scaling length or scaling time has changed compared to the
 %   imported simulation.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

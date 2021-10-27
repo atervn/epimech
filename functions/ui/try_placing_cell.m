@@ -1,4 +1,4 @@
-function [d, endLoop] = try_placing_cell(d,app)
+function [d, endLoop] = try_placing_cell(app,d)
 
 endLoop = 0;
 

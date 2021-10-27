@@ -56,7 +56,7 @@ function d = create_substrate(app, d, substrateSize)
 %       adhesionNumbers: number of focal adhesions that are interacting
 %           with each point, defined when creating focal adhesions
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %       substrateSize: size of the substrate square
 %       progressdlg: progress dialog handle used with the GUI

@@ -6,7 +6,7 @@ function d = setup_simulation(app,varargin)
 %   optogenetic, or frame simulations, as well as the plotting and
 %   exporting options.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       varargin: can be used to input simulation starting time
 %   OUTPUT:
 %       d: main simulation data structure
@@ -36,7 +36,7 @@ d = setup_substrate(app,d);
 if ~isstruct(d); return; end
 
 % pointlike settings
-d = setup_pointlike_settings(d,app);
+d = setup_pointlike_settings(app,d);
 
 % setup optogenetics
 d = setup_optogenetic_settings(app,d);

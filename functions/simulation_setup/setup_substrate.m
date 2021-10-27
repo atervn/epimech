@@ -3,7 +3,7 @@ function d = setup_substrate(app,d)
 %   The function created the substrate and defines the focal adhesions for
 %   the simulation or imports the substrate data if needed.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure
@@ -98,14 +98,14 @@ if d.simset.substrateIncluded
             
             % remove extra points if fitted shape
             if strcmp(app.SubstrateTypeButtonGroup.SelectedObject.Text,'Fitted')
-                d = remove_substrate_points(d,app,expansionMultiplier);
+                d = remove_substrate_points(app,d,expansionMultiplier);
                 if ~isstruct(d); return; end
             end
             
             % if the simulation is pointlike or optogenetic, ge the
             % substrate spring constants and edge points
             if d.simset.substrateSolved
-                d = get_substrate_spring_constants(d,app);
+                d = get_substrate_spring_constants(app,d);
                 d = get_substrate_edge_points(d);
             end
             
@@ -116,7 +116,7 @@ if d.simset.substrateIncluded
             end
             
             % create focal adhesions
-            [d, ok] = create_focal_adhesions(d,app);
+            [d, ok] = create_focal_adhesions(app,d);
             
             % if everything is ok
             if ok

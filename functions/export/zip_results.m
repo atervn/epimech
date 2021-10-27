@@ -1,11 +1,11 @@
-function zip_results(d,app)
+function zip_results(app,d)
 % ZIP_RESULTS Zip simulation results
 %   The function zips the simulation results and removes the export folder.
 %   Also, if the user stops the simulation when running from the GUI, it
 %   asks if the users wishes to save the data thusfar.
 %   INPUT: 
-%       d: main simulation data structure
 %       app: application object
+%       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
 % if simulation is stopped by the user and exporting is on
@@ -29,7 +29,7 @@ if app.simulationStopped && d.ex.export
     end
     
     % remove the export folder
-    remove_folder_function([d.ex.defaultPath '/results/' d.ex.exportName]);
+    remove_folder([d.ex.defaultPath '/results/' d.ex.exportName]);
     
 % if data is exported
 elseif d.ex.export
@@ -43,7 +43,7 @@ elseif d.ex.export
     zip([d.ex.defaultPath '/results/' d.ex.exportName '.zip'],[d.ex.defaultPath '/results/' d.ex.exportName]);
     
     % remove the export folder
-    remove_folder_function([d.ex.defaultPath '/results/' d.ex.exportName]);
+    remove_folder([d.ex.defaultPath '/results/' d.ex.exportName]);
     
     % close the progress dialog
     if isfield(app,'EpiMechUIFigure')

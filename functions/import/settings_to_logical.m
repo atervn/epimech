@@ -1,6 +1,18 @@
 function settings = settings_to_logical(settings,settingsType)
+% SETTINGS_TO_LOGICAL Convert plotting or exporting settings to logicals
+%   The function converts the plotting and exporting settings from numbers
+%   to logicals.
+%   INPUT:
+%       settings: structure whose field values are to be converted
+%       settingsType: indicate if plot or export
+%   OUTPUT:
+%       settings: converted structure
+%   by Aapo Tervonen, 2021
 
+% which type
 switch settingsType
+    
+    % plot
     case 'plot'
         settings.junctions = logical(settings.junctions);
         settings.cellForcesTotal = logical(settings.cellForcesTotal);
@@ -22,6 +34,8 @@ switch settingsType
         settings.substrateForcesRestoration = logical(settings.substrateForcesRestoration);
         settings.substrateForcesFocalAdhesions = logical(settings.substrateForcesFocalAdhesions);
         settings.substrateForcesTotal = logical(settings.substrateForcesTotal);
+        
+    % export
     case 'export'
         settings.parameters = logical(settings.parameters);
         settings.vertices = logical(settings.vertices);
@@ -54,4 +68,6 @@ switch settingsType
         settings.stretch = logical(settings.stretch);
         settings.lineage = logical(settings.lineage);
         settings.corticalStrengths = logical(settings.corticalStrengths);
+end
+
 end

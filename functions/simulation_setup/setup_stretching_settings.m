@@ -4,7 +4,7 @@ function d = setup_stretching_settings(app,d)
 %   The function defines the settings for the lateral compression or
 %   stretching simulation based on the user input.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

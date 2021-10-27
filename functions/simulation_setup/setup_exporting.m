@@ -4,10 +4,10 @@ function d = setup_exporting(app,d,varargin)
 %   folders, exports all parameter data, and static data related to
 %   substrate, pointlike, and opto.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %       varargin: can be used to give startingTime that was defined before
-%       calling the function
+%           calling the function
 %   OUTPUT:
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021

@@ -1,4 +1,4 @@
-function d = initialize_cells(d,app)
+function d = initialize_cells(app,d)
 
 d.cells = initialize_cells_struct;
 

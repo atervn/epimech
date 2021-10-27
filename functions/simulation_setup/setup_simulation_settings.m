@@ -3,7 +3,7 @@ function d = setup_simulation_settings(app,d)
 %   The function sets the simulation type, the solver and various
 %   miscellanious variables.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

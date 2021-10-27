@@ -1,4 +1,4 @@
-function plotting_loop(d,app,option)
+function plotting_loop(app,d,option)
 
 
 if strcmp(option,'add_cells')
@@ -7,7 +7,7 @@ if strcmp(option,'add_cells')
     hold on
     while 1
         
-        [d, endLoop] = try_placing_cell(d,app);
+        [d, endLoop] = try_placing_cell(app,d);
         if endLoop
             break
         else

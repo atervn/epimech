@@ -3,7 +3,7 @@ function d = setup_optogenetic_settings(app,d)
 %   The function collects the settings for the optogenetic activation
 %   during the simulation.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %       d: main simulation data structure
 %   OUTPUT:
 %       d: main simulation data structure

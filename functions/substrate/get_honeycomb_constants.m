@@ -3,7 +3,7 @@ function constants = get_honeycomb_constants(app)
 %   The function calculates the honeycomb constant values (alpha, beta, and
 %   gamma) from the give three digit number given in the parameters.
 %   INPUT:
-%       app: main application structure
+%       app: main application object
 %   OUTPUT:
 %       constants: honeycomb constants
 %   by Aapo Tervonen, 2021
