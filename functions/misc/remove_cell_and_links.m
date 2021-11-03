@@ -12,8 +12,9 @@ function d = remove_cell_and_links(d,cellToRemove,varargin)
 %   structure d.
 %   by Aapo Tervonen, 2021
 
-% is the function is called during simulation
-if numel(varargin) > 0 && varargin{1} == 1
+% is the function is called during simulation and that substrate is
+% included
+if numel(varargin) > 0 && varargin{1} == 1 && d.simset.substrateIncluded
     
     % find the vertices with focal adhesions
     numberOfConnected = nnz(d.cells(cellToRemove).substrate.connected);

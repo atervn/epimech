@@ -44,10 +44,11 @@ for k = 1:length(d.cells)
                 % calculate the distance between the neighboring vertices
                 distance = sqrt((d.cells(k).verticesX(divisionVertexRight) - d.cells(k).verticesX(divisionVertexLeft)).^2 + (d.cells(k).verticesY(divisionVertexRight) - d.cells(k).verticesY(divisionVertexLeft)).^2);
                 
-                % if the distance is above the normal junction length, add
-                % new vertices on each side separated by the normal
-                % junction length
-                if distance > d.spar.junctionLength
+                % if the distance is above the normal junction length times
+                % 1.5, add % new vertices on each side separated by the
+                % normal junction length (multiplier to make sure that
+                % there will be no extremely small new boundary sections)
+                if distance > d.spar.junctionLength*1.5
                                         
                     % add the new vertices on each side of the first division
                     % vertex
