@@ -16,6 +16,10 @@ function d = vertex_removal(d,k,vertex2Remove)
 d.cells(k).verticesX(vertex2Remove) = [];
 d.cells(k).verticesY(vertex2Remove) = [];
 
+% remove the velocities for the vertex
+d.cells(k).velocitiesX(vertex2Remove) = [];
+d.cells(k).velocitiesY(vertex2Remove) = [];
+
 % if the vertex has a junction or two
 if any(d.cells(k).vertexStates(vertex2Remove) == [1 2])
     for i2 = 1:d.cells(k).vertexStates(vertex2Remove)

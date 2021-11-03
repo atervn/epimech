@@ -46,6 +46,7 @@ for k = 1:length(d.cells)
             d.cells(k).division.newAreas = newAreas;
             d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
             d.cells(k).division.time = time + d.spar.maximumGrowthTime;
+            d.simset.calculateForces.area(k) = true;
         end
     
     % if the cell is an internal cell, not growing or dividing, and that
@@ -84,6 +85,7 @@ for k = 1:length(d.cells)
             d.cells(k).division.newAreas = newAreas;
             d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
             d.cells(k).division.time = time + d.spar.maximumGrowthTime;
+            d.simset.calculateForces.area(k) = true;
             
         end
         
@@ -102,6 +104,7 @@ for k = 1:length(d.cells)
             d.cells(k).normArea = d.cells(k).division.targetArea;
             d.cells(k).division.state = 2;
             d.cells(k).division.time = time + d.spar.maximumDivisionTime;
+            d.simset.calculateForces.area(k) = true;
         end
     end
 end

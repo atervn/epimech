@@ -6,9 +6,11 @@ function cells = initialize_cells_struct
 %       cells: cell data structure
 %   by Aapo Tervonen, 2021
 
-% cell coordinates
+% cell coordinates and velocities
 cells.verticesX = [];
 cells.verticesY = [];
+cells.velocitiesX = [];
+cells.velocitiesY = [];
 
 % number of vertices
 cells.nVertices = [];

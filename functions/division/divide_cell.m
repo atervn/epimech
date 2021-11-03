@@ -29,6 +29,7 @@ for k = 1:length(d.cells)
             
             % go through the two division vertices
             for i = 1:2
+                
                 % Find the indices of the neighboring the division vertex
                 if d.cells(k).division.vertices(i) == 1
                     divisionVertexRight = d.cells(k).nVertices;
@@ -47,7 +48,7 @@ for k = 1:length(d.cells)
                 % if the distance is above the normal junction length, add
                 % new vertices on each side separated by the normal
                 % junction length
-                if distance > d.spar.junctionLength
+                if distance > d.spar.junctionLength*1.5
                                         
                     % add the new vertices on each side of the first division
                     % vertex
@@ -75,6 +76,10 @@ for k = 1:length(d.cells)
             d.cells(end+1).verticesX = d.cells(k).verticesX(divisionVertex1Left:divisionVertex2Right);
             d.cells(end).verticesY = d.cells(k).verticesY(divisionVertex1Left:divisionVertex2Right);
             
+            % get vertex velocities for the new cell
+            d.cells(end).velocitiesX = d.cells(k).velocitiesX(divisionVertex1Left:divisionVertex2Right);
+            d.cells(end).velocitiesY = d.cells(k).velocitiesY(divisionVertex1Left:divisionVertex2Right);
+            
             % get vertexStates vector for the new cell
             d.cells(end).vertexStates = d.cells(k).vertexStates(divisionVertex1Left:divisionVertex2Right);
             
@@ -89,7 +94,7 @@ for k = 1:length(d.cells)
             % get the cortical multipliers for the new cell
             d.cells(end).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(divisionVertex1Left:divisionVertex2Right);
             
-           % modify the vertex coordinate vectors, the vertexState 
+            % modify the vertex coordinate vectors, the vertexState 
             % vectors, junction matrices, and the cortical multipliers of
             % the old cell
             
@@ -98,6 +103,8 @@ for k = 1:length(d.cells)
                 idx = divisionVertex2Left:divisionVertex1Right;
                 d.cells(k).verticesX = d.cells(k).verticesX(idx);
                 d.cells(k).verticesY = d.cells(k).verticesY(idx);
+                d.cells(k).velocitiesX = d.cells(k).velocitiesX(idx);
+                d.cells(k).velocitiesY = d.cells(k).velocitiesY(idx);
                 d.cells(k).vertexStates = d.cells(k).vertexStates(idx);
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
@@ -108,6 +115,8 @@ for k = 1:length(d.cells)
                 idx = 1:divisionVertex1Right;
                 d.cells(k).verticesX = d.cells(k).verticesX(idx);
                 d.cells(k).verticesY = d.cells(k).verticesY(idx);
+                d.cells(k).velocitiesX = d.cells(k).velocitiesX(idx);
+                d.cells(k).velocitiesY = d.cells(k).velocitiesY(idx);
                 d.cells(k).vertexStates = d.cells(k).vertexStates(idx);
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
@@ -119,6 +128,8 @@ for k = 1:length(d.cells)
                 idx2 = divisionVertex2Left:length(d.cells(k).verticesX);
                 d.cells(k).verticesX = [d.cells(k).verticesX(idx1) ; d.cells(k).verticesX(idx2)];
                 d.cells(k).verticesY = [d.cells(k).verticesY(idx1) ; d.cells(k).verticesY(idx2)];
+                d.cells(k).velocitiesX = [d.cells(k).velocitiesX(idx1) ; d.cells(k).velocitiesX(idx2)];
+                d.cells(k).velocitiesY = [d.cells(k).velocitiesY(idx1) ; d.cells(k).velocitiesY(idx2)];
                 d.cells(k).vertexStates = [d.cells(k).vertexStates(idx1) ; d.cells(k).vertexStates(idx2)];
                 d.cells(k).junctions.cells = [d.cells(k).junctions.cells(idx1,:) ; d.cells(k).junctions.cells(idx2,:)];
                 d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(idx1,:) ; d.cells(k).junctions.vertices(idx2,:)];  
@@ -186,7 +197,7 @@ for k = 1:length(d.cells)
             d.cells(end) = get_boundary_vectors(d.cells(end));
             d.cells(end) = get_vertex_angles(d.cells(end));
             d.cells(end).normPerimeter = d.cells(end).perimeter;
-%             d.cells(end) = set_empty_cell_properties(d.cells(end));
+            d.cells(end) = set_empty_cell_properties(d.cells(end));
             
             % get the division time for the new cell (either based on the
             % predefined values or random values)
@@ -244,6 +255,12 @@ for k = 1:length(d.cells)
 
             % reset the new areas for the old cell
             d.cells(k).division.newAreas = zeros(2,1);
+            
+            d.simset.calculateForces.all = [d.simset.calculateForces.all; true];
+            d.simset.calculateForces.area = [d.simset.calculateForces.area; true];
+            d.simset.calculateForces.junctions = [d.simset.calculateForces.junctions; true];
+            
+            d.simset.calculateForces.all(k) = true;
             
         end
     end

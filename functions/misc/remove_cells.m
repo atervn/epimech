@@ -21,5 +21,8 @@ for k = length(d.cells):-1:1
         
         % set the junction modification to true
         d.simset.junctionModification = true;
+        d.simset.calculateForces.area(k) = [];
+        d.simset.calculateForces.all(k) = [];
+        d.simset.calculateForces.junctions(k) = [];
     end
 end

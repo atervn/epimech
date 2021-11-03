@@ -48,9 +48,16 @@ while longLengths ~= 0
                     newVertexX = (d.cells(k).verticesX(longIdx(i)) + d.cells(k).verticesX(longIdx(i)+1))/2;
                     newVertexY = (d.cells(k).verticesY(longIdx(i)) + d.cells(k).verticesY(longIdx(i)+1))/2;
                     
-                    % add the new vertex into the coordinate vectors
+                    % new velocities
+                    newVelocitiesX = (d.cells(k).velocitiesX(longIdx(i)) + d.cells(k).velocitiesX(longIdx(i)+1))/2;
+                    newVelocitiesY = (d.cells(k).velocitiesY(longIdx(i)) + d.cells(k).velocitiesY(longIdx(i)+1))/2;
+                    
+                    % add the new vertex into the coordinate and velocity
+                    % vectors
                     d.cells(k).verticesX = [d.cells(k).verticesX(1:longIdx(i)) ; newVertexX ; d.cells(k).verticesX(longIdx(i)+1:end)];
                     d.cells(k).verticesY = [d.cells(k).verticesY(1:longIdx(i)) ; newVertexY ; d.cells(k).verticesY(longIdx(i)+1:end)];
+                    d.cells(k).velocitiesX = [d.cells(k).velocitiesX(1:longIdx(i)) ; newVelocitiesX ; d.cells(k).velocitiesX(longIdx(i)+1:end)];
+                    d.cells(k).velocitiesY = [d.cells(k).velocitiesY(1:longIdx(i)) ; newVelocitiesY ; d.cells(k).velocitiesY(longIdx(i)+1:end)];
                     
                     % add the new vertex into the vertexStates vector
                     d.cells(k).vertexStates = [d.cells(k).vertexStates(1:longIdx(i)) ; 0 ; d.cells(k).vertexStates(longIdx(i)+1:end)];
@@ -95,9 +102,15 @@ while longLengths ~= 0
                     newVertexX = (d.cells(k).verticesX(end) + d.cells(k).verticesX(1))/2;
                     newVertexY = (d.cells(k).verticesY(end) + d.cells(k).verticesY(1))/2;
                     
+                    % new velocities
+                    newVelocitiesX = (d.cells(k).velocitiesX(end) + d.cells(k).velocitiesX(1))/2;
+                    newVelocitiesY = (d.cells(k).velocitiesY(end) + d.cells(k).velocitiesY(1))/2;
+                    
                     % add the new vertex into the coordinate vectors
                     d.cells(k).verticesX = [d.cells(k).verticesX ; newVertexX];
                     d.cells(k).verticesY = [d.cells(k).verticesY ; newVertexY];
+                    d.cells(k).velocitiesX = [d.cells(k).velocitiesX ; newVelocitiesX];
+                    d.cells(k).velocitiesY = [d.cells(k).velocitiesY ; newVelocitiesY];
                     
                     % add the new vertex into the vertexStates vector
                     d.cells(k).vertexStates = [d.cells(k).vertexStates ; 0];
@@ -188,6 +201,8 @@ for k = find(verticesAdded)
     
     % get the vertex angles
     d.cells(k) = get_vertex_angles(d.cells(k));
+    
+    d.simset.calculateForces.all(k) = true;
 end
 
 end

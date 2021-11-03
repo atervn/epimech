@@ -271,6 +271,9 @@ if length(d.cells) > 1
         else
             d.cells(k).junctions.linked2CellNumbers2 = [];
         end
+        
+        d.simset.calculateForces.junctions(k) = true;
+        
     end 
 end
 

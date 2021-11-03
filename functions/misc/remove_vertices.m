@@ -60,6 +60,9 @@ for k = length(d.cells):-1:1
         d.cells(k) = get_boundary_lengths(d.cells(k));
         d.cells(k) = get_vertex_angles(d.cells(k));
         d.cells(k).nVertices = size(d.cells(k).verticesX,1);
+        
+        d.simset.calculateForces.all(k) = true;
+        
     end
     
     %% Remove by length
@@ -157,6 +160,8 @@ for k = length(d.cells):-1:1
             d.cells(k) = get_boundary_lengths(d.cells(k));
             d.cells(k) = get_vertex_angles(d.cells(k));
             d.cells(k).nVertices = size(d.cells(k).verticesX,1);
+            
+            d.simset.calculateForces.all(k) = true;
         end
     end
     

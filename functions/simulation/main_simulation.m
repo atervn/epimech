@@ -40,6 +40,10 @@ end
 
 tic
 
+d.simset.calculateForces.all = true;
+d.simset.calculateForces.junctions = true;
+d.simset.calculateForces.area = true;
+
 %% main simulation loop
 while time - d.spar.simulationTime <= 1e-8
 
@@ -126,15 +130,17 @@ while time - d.spar.simulationTime <= 1e-8
     end
     
     %% solve cells
-    switch d.simset.solver
-        case 1
-            % 2nd order Runge Kutta solver
-            [d, dt, maxmaxMovement] = solve_cells_rk2(d, dt);
-        case 2
-            % 4th order Runge Kutta solver
-            [d, dt, maxmaxMovement] = solve_cells_rk4(d, dt);
-    end
-    
+%     switch d.simset.solver
+%         case 1
+%             % 2nd order Runge Kutta solver
+%             [d, dt, maxmaxMovement] = solve_cells_rk2(d, dt);
+%         case 2
+%             % 4th order Runge Kutta solver
+%             [d, dt, maxmaxMovement] = solve_cells_rk4(d, dt);
+%     end
+%     
+    [d, dt, maxmaxMovement] = solve_cells_vv(d, dt);
+
     % save time step for post plotting
     if d.simset.dtPlot
         d.simset.timeStepsCells(end+1) = dt;

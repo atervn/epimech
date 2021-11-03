@@ -23,6 +23,10 @@ d.spar.rCell = nBoundary*d.spar.membraneLength/(2*pi);
 d.cells(end+1).verticesX = d.spar.rCell.*cos(2.*pi.*(0:1/nBoundary:1-1/nBoundary)') + cellCenter(1)/d.spar.scalingLength;
 d.cells(end).verticesY = d.spar.rCell.*sin(2.*pi.*(0:1/nBoundary:1-1/nBoundary)') + cellCenter(2)/d.spar.scalingLength;
 
+% vertex velocities
+d.cells(end).velocitiesX = zeros(size(d.cells(end).verticesX));
+d.cells(end).velocitiesY = zeros(size(d.cells(end).verticesY));
+
 % get the number of vertices
 d.cells(end).nVertices = length(d.cells(end).verticesX);
 

@@ -40,6 +40,9 @@ newCoords.LeftY = d.cells(k).verticesY(divisionVertex) + distanceFromDivVertex*l
 newCoords.RightX = d.cells(k).verticesX(divisionVertex) + distanceFromDivVertex*rightUnitX;
 newCoords.RightY = d.cells(k).verticesY(divisionVertex) + distanceFromDivVertex*rightUnitY;
 
+newVelocitiesX = d.cells(k).velocitiesX(divisionVertex);
+newVelocitiesY = d.cells(k).velocitiesY(divisionVertex);
+
 % check if the original right neighbor is the last vertex
 % in the cell, if yes, put the left neighbor first, since
 % it has a smaller index
@@ -111,6 +114,10 @@ for i = 1:2
         d.cells(k).verticesX = [d.cells(k).verticesX(1:vertexIdx(i)) ; newVertexX ; d.cells(k).verticesX(vertexIdx(i)+1:end)];
         d.cells(k).verticesY = [d.cells(k).verticesY(1:vertexIdx(i)) ; newVertexY ; d.cells(k).verticesY(vertexIdx(i)+1:end)];
         
+        % add the new velocity
+        d.cells(k).velocitiesX = [d.cells(k).velocitiesX(1:vertexIdx(i)) ; newVelocitiesX ; d.cells(k).velocitiesX(vertexIdx(i)+1:end)];
+        d.cells(k).velocitiesY = [d.cells(k).velocitiesY(1:vertexIdx(i)) ; newVelocitiesY ; d.cells(k).velocitiesY(vertexIdx(i)+1:end)];
+        
         % add the new vertex into the vertexStates vector
         d.cells(k).vertexStates = [d.cells(k).vertexStates(1:vertexIdx(i)) ; 0 ; d.cells(k).vertexStates(vertexIdx(i)+1:end)];
         
@@ -145,6 +152,11 @@ for i = 1:2
         % add the new vertex into the boundaryVertices matrix
         d.cells(k).verticesX = [d.cells(k).verticesX ; newVertexX];
         d.cells(k).verticesY = [d.cells(k).verticesY ; newVertexY];
+        
+        % add the new velocity
+        d.cells(k).velocitiesX = [d.cells(k).velocitiesX ; newVelocitiesX];
+        d.cells(k).velocitiesY = [d.cells(k).velocitiesY ; newVelocitiesY];
+        
         
         % add the new vertex into the vertexStates vector
         d.cells(k).vertexStates = [d.cells(k).vertexStates ; 0];

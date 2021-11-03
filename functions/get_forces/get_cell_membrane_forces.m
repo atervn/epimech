@@ -22,14 +22,14 @@ shorts = displacements <= 0;
 longs = displacements > 0;
 
 % initialize force magnitude vector
-forceMagnitudes = zeros(cells.nVertices,1);
+% forceMagnitudes = zeros(cells.nVertices,1);
 
 % get the short magnitudes (basically only the displacement for the
 % nonlinear spring)
-forceMagnitudes(shorts) = cells.leftLengths(shorts) - spar.membraneLength.^2.*reciprocalTempLengths(shorts);
+forceMagnitudes = cells.leftLengths - spar.membraneLength.^2.*reciprocalTempLengths;
 
 % get the long magnitudes
-forceMagnitudes(longs) = cells.leftLengths(longs) - spar.membraneLength.^2./(cells.leftLengths(longs) - 2*spar.membraneLength) - 2*spar.membraneLength;
+% forceMagnitudes(longs) = cells.leftLengths(longs) - spar.membraneLength.^2./(cells.leftLengths(longs) - 2*spar.membraneLength) - 2*spar.membraneLength;
 
 % multiply the magnitude with the spring constant and by the reciprocal
 % lengths (needed for calculating the unit vectors in the next step)

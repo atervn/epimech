@@ -19,7 +19,7 @@ if strcmp(app.simulationType,'growth') && app.UniformdivisiontimesCheckBox.Value
 else
     
     % random seed
-    rng shuffle
+    rng('shuffle')
 end
 
 end
