@@ -25,7 +25,7 @@ elseif d.pl.cellStyle == 3
     
 % plot the cells in style 4 (black filled)
 elseif d.pl.cellStyle == 4
-    fill(d.pl.axesHandle,d.cells(k).verticesX,d.cells(k).verticesY,[0 0 0], 'linewidth', 0.5, 'edgecolor', [0 0 0])
+    fill(d.pl.axesHandle,d.cells(k).verticesX,d.cells(k).verticesY,[0 0 0], 'LineStyle', 'none')
 
 % plot the cells in style 5 (cell center shown by a point and lines
 % connecting neighboring cells)

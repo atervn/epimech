@@ -94,6 +94,15 @@ for k = 1:length(d.cells)
             % get the cortical multipliers for the new cell
             d.cells(end).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(divisionVertex1Left:divisionVertex2Right);
             
+            % edit forces
+            d.cells(end).forces.dampingX = d.cells(k).forces.dampingX(divisionVertex1Left:divisionVertex2Right);
+            d.cells(end).forces.dampingY = d.cells(k).forces.dampingY(divisionVertex1Left:divisionVertex2Right);
+            d.cells(end).forces.divisionX = zeros(size(d.cells(end).verticesX));
+            d.cells(end).forces.divisionY = zeros(size(d.cells(end).verticesX));
+            d.cells(end).forces.junctionX = d.cells(k).forces.junctionX(divisionVertex1Left:divisionVertex2Right);
+            d.cells(end).forces.junctionY = d.cells(k).forces.junctionY(divisionVertex1Left:divisionVertex2Right);
+                    
+            
             % modify the vertex coordinate vectors, the vertexState 
             % vectors, junction matrices, and the cortical multipliers of
             % the old cell
@@ -109,7 +118,11 @@ for k = 1:length(d.cells)
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
                 d.cells(k).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(idx);
-            
+                d.cells(k).forces.dampingX = d.cells(k).forces.dampingX(idx);
+                d.cells(k).forces.dampingY = d.cells(k).forces.dampingY(idx);
+                d.cells(k).forces.junctionX = d.cells(k).forces.junctionX(idx);
+                d.cells(k).forces.junctionY = d.cells(k).forces.junctionY(idx);
+                
             % if the second division vertex has the index of nVertices
             elseif divisionVertex2Left == 1
                 idx = 1:divisionVertex1Right;
@@ -121,6 +134,10 @@ for k = 1:length(d.cells)
                 d.cells(k).junctions.cells = d.cells(k).junctions.cells(idx,:);
                 d.cells(k).junctions.vertices = d.cells(k).junctions.vertices(idx,:);
                 d.cells(k).cortex.vertexMultipliers = d.cells(k).cortex.vertexMultipliers(idx);
+                d.cells(k).forces.dampingX = d.cells(k).forces.dampingX(idx);
+                d.cells(k).forces.dampingY = d.cells(k).forces.dampingY(idx);
+                d.cells(k).forces.junctionX = d.cells(k).forces.junctionX(idx);
+                d.cells(k).forces.junctionY = d.cells(k).forces.junctionY(idx);
                 
             % otherwise
             else
@@ -134,8 +151,16 @@ for k = 1:length(d.cells)
                 d.cells(k).junctions.cells = [d.cells(k).junctions.cells(idx1,:) ; d.cells(k).junctions.cells(idx2,:)];
                 d.cells(k).junctions.vertices = [d.cells(k).junctions.vertices(idx1,:) ; d.cells(k).junctions.vertices(idx2,:)];  
                 d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers(idx1);d.cells(k).cortex.vertexMultipliers(idx2)];
+                d.cells(k).forces.dampingX = [d.cells(k).forces.dampingX(idx1);d.cells(k).forces.dampingX(idx2)]; 
+                d.cells(k).forces.dampingY = [d.cells(k).forces.dampingY(idx1);d.cells(k).forces.dampingY(idx2)];
+                d.cells(k).forces.junctionX = [d.cells(k).forces.junctionX(idx1);d.cells(k).forces.junctionX(idx2)]; 
+                d.cells(k).forces.junctionY = [d.cells(k).forces.junctionY(idx1);d.cells(k).forces.junctionY(idx2)]; 
             end
 
+            
+            d.cells(k).forces.divisionX = zeros(size(d.cells(k).verticesX));
+            d.cells(k).forces.divisionY = zeros(size(d.cells(k).verticesX));
+            
             % get the indices of the vertex that have one or two junctions
             d.cells(k).junctions.linkedIdx1 = find(d.cells(k).vertexStates > 0);
             d.cells(k).junctions.linkedIdx2 = find(d.cells(k).vertexStates == 2);
@@ -197,7 +222,7 @@ for k = 1:length(d.cells)
             d.cells(end) = get_boundary_vectors(d.cells(end));
             d.cells(end) = get_vertex_angles(d.cells(end));
             d.cells(end).normPerimeter = d.cells(end).perimeter;
-            d.cells(end) = set_empty_cell_properties(d.cells(end));
+%             d.cells(end) = set_empty_cell_properties(d.cells(end));
             
             % get the division time for the new cell (either based on the
             % predefined values or random values)
@@ -256,12 +281,20 @@ for k = 1:length(d.cells)
             % reset the new areas for the old cell
             d.cells(k).division.newAreas = zeros(2,1);
             
-            d.simset.calculateForces.all = [d.simset.calculateForces.all; true];
             d.simset.calculateForces.area = [d.simset.calculateForces.area; true];
-            d.simset.calculateForces.junctions = [d.simset.calculateForces.junctions; true];
+            d.simset.calculateForces.cortical = [d.simset.calculateForces.cortical; true];
+            d.simset.calculateForces.all = [d.simset.calculateForces.area; false];
+            d.simset.calculateForces.junction = [d.simset.calculateForces.area; false];
+            d.simset.calculateForces.membrane = [d.simset.calculateForces.membrane; true];
+            d.simset.calculateForces.division = [d.simset.calculateForces.division; true];
             
             d.simset.calculateForces.all(k) = true;
-            
+            d.simset.calculateForces.area(k) = true;
+            d.simset.calculateForces.cortical(k) = true;
+            d.simset.calculateForces.all(k) = false;
+            d.simset.calculateForces.junction(k) = false;
+            d.simset.calculateForces.membrane(k) = true;
+            d.simset.calculateForces.division(k) = true;
         end
     end
 end

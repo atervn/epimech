@@ -87,7 +87,7 @@ else
     [~,fileName,~] = fileparts(data.initialStateFiles{iLoop});
     
     % define string for the imported folder
-    app.import.folderName = [app.defaultPath 'Results/' fileName];
+    app.import.folderName = [app.defaultPath 'results/' fileName];
     
     % load the number of time points
     app.import.nTimePoints = size(dir([app.import.folderName '/vertices/*.csv']),1);

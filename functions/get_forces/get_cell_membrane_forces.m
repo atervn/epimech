@@ -17,9 +17,9 @@ leftVerticesY = circshift(cells.verticesY,-1,1);
 reciprocalTempLengths = 1./cells.leftLengths;
 
 % get the vertices with short or long lengths
-displacements = cells.leftLengths - spar.membraneLength;
-shorts = displacements <= 0;
-longs = displacements > 0;
+% displacements = cells.leftLengths - spar.membraneLength;
+% shorts = displacements <= 0;
+% longs = displacements > 0;
 
 % initialize force magnitude vector
 % forceMagnitudes = zeros(cells.nVertices,1);
@@ -27,6 +27,7 @@ longs = displacements > 0;
 % get the short magnitudes (basically only the displacement for the
 % nonlinear spring)
 forceMagnitudes = cells.leftLengths - spar.membraneLength.^2.*reciprocalTempLengths;
+% forceMagnitudes(shorts) = cells.leftLengths(shorts) - spar.membraneLength.^2.*reciprocalTempLengths(shorts);
 
 % get the long magnitudes
 % forceMagnitudes(longs) = cells.leftLengths(longs) - spar.membraneLength.^2./(cells.leftLengths(longs) - 2*spar.membraneLength) - 2*spar.membraneLength;

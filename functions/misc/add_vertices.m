@@ -91,10 +91,18 @@ while longLengths ~= 0
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i), 1);
-                        d = add_new_frame_vertices(d, k, longIdx(i), 1);
+                        d = add_new_edge_vertices(d, k, longIdx(i), 1);
                     end
                     
-                    % last vertex of the cell
+                    % edit forces
+                    d.cells(k).forces.junctionX = [d.cells(k).forces.junctionX(1:longIdx(i)) ; 0 ; d.cells(k).forces.junctionX(longIdx(i)+1:end)];
+                    d.cells(k).forces.junctionY = [d.cells(k).forces.junctionY(1:longIdx(i)) ; 0 ; d.cells(k).forces.junctionY(longIdx(i)+1:end)];
+                    d.cells(k).forces.divisionX = [d.cells(k).forces.divisionX(1:longIdx(i)) ; 0 ; d.cells(k).forces.divisionX(longIdx(i)+1:end)];
+                    d.cells(k).forces.divisionY = [d.cells(k).forces.divisionY(1:longIdx(i)) ; 0 ; d.cells(k).forces.divisionY(longIdx(i)+1:end)];
+                    d.cells(k).forces.dampingX = [d.cells(k).forces.dampingX(1:longIdx(i)) ; (d.cells(k).forces.dampingX(longIdx(i)) + d.cells(k).forces.dampingX(longIdx(i)+1))/2 ; d.cells(k).forces.dampingX(longIdx(i)+1:end)];
+                    d.cells(k).forces.dampingY = [d.cells(k).forces.dampingY(1:longIdx(i)) ; (d.cells(k).forces.dampingY(longIdx(i)) + d.cells(k).forces.dampingY(longIdx(i)+1))/2 ; d.cells(k).forces.dampingY(longIdx(i)+1:end)];
+                    
+                % last vertex of the cell
                 else
                     
                     % creates a new vertex to the midway between the two
@@ -128,10 +136,17 @@ while longLengths ~= 0
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i),2);
-                        d = add_new_frame_vertices(d, k, longIdx(i),2);
+                        d = add_new_edge_vertices(d, k, longIdx(i),2);
                     end
+                    
+                    % edit forces
+                    d.cells(k).forces.junctionX = [d.cells(k).forces.junctionX ; 0];
+                    d.cells(k).forces.junctionY = [d.cells(k).forces.junctionY ; 0];
+                    d.cells(k).forces.divisionX = [d.cells(k).forces.divisionX ; 0];
+                    d.cells(k).forces.divisionY = [d.cells(k).forces.divisionY ; 0];
+                    d.cells(k).forces.dampingX = [d.cells(k).forces.dampingX ; (d.cells(k).forces.dampingX(end) + d.cells(k).forces.dampingX(1))/2];
+                    d.cells(k).forces.dampingY = [d.cells(k).forces.dampingY ; (d.cells(k).forces.dampingY(end) + d.cells(k).forces.dampingY(1))/2];
                 end
-                
                 
                 % update the number of vertices
                 d.cells(k).nVertices = d.cells(k).nVertices + 1;
@@ -202,7 +217,9 @@ for k = find(verticesAdded)
     % get the vertex angles
     d.cells(k) = get_vertex_angles(d.cells(k));
     
-    d.simset.calculateForces.all(k) = true;
+    d.simset.calculateForces.membrane(k) = true;
+    d.simset.calculateForces.cortical(k) = true;
+    d.simset.calculateForces.area(k) = true;
 end
 
 end

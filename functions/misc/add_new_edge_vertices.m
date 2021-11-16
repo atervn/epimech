@@ -1,4 +1,4 @@
-function d = add_new_frame_vertices(d,k,longIdx,pos)
+function d = add_new_edge_vertices(d,k,longIdx,pos)
 % ADD_NEW_EDGE_VERTICES Adds new edge vertices for the cells
 %   The function adds new edge vertices when new vertices are added.
 %   New edge vertices is added only if both neighboring vertices are edge

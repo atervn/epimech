@@ -14,10 +14,6 @@ function d = form_junctions(d)
 %  check that there are more than one cell
 if length(d.cells) > 1
     
-    % vectors used to find unique neighbors
-    zeroVec = zeros(1,length(d.cells));
-    cellNumbers = (1:size(d.cells,2));
-    
     % go through the cells
     for k = 1:size(d.cells,2)
         
@@ -260,19 +256,19 @@ if length(d.cells) > 1
         
         % get the unique neighbor cells for the first junction
         if numel(d.cells(k).junctions.linkedIdx1) > 0
-            d.cells(k).junctions.linked2CellNumbers1 = get_uniques(d.cells(k).junctions.pairCells1,cellNumbers,zeroVec);
+            d.cells(k).junctions.linked2CellNumbers1 = find(accumarray(d.cells(k).junctions.pairCells1,1))';%get_uniques(d.cells(k).junctions.pairCells1,cellNumbers,zeroVec);
         else
             d.cells(k).junctions.linked2CellNumbers1 = [];
         end
         
         % get the unique neighbor cells for the first junction
         if numel(d.cells(k).junctions.linkedIdx2) > 0
-            d.cells(k).junctions.linked2CellNumbers2 = get_uniques(d.cells(k).junctions.pairCells2,cellNumbers,zeroVec);
+            d.cells(k).junctions.linked2CellNumbers2 = find(accumarray(d.cells(k).junctions.pairCells2,1))';%get_uniques(d.cells(k).junctions.pairCells2,cellNumbers,zeroVec);
         else
             d.cells(k).junctions.linked2CellNumbers2 = [];
         end
         
-        d.simset.calculateForces.junctions(k) = true;
+        d.simset.calculateForces.junction(k) = true;
         
     end 
 end

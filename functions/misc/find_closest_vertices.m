@@ -38,7 +38,7 @@ end
 % if pointlike simulation, find the unique neighbors of the pointlike cell
 if d.simset.simulationType == 2
     pointlikeNeigbors = [d.cells(d.simset.pointlike.cell).junctions.linked2CellNumbers1 ; d.cells(d.simset.pointlike.cell).junctions.linked2CellNumbers2];
-    pointlikeAndNeighbors = [d.simset.pointlike.cell get_uniques(pointlikeNeigbors,cellNumbers,zeroVec)];
+    pointlikeAndNeighbors = [d.simset.pointlike.cell find(accumarray(pointlikeNeigbors,1))'];%(pointlikeNeigbors,cellNumbers,zeroVec)];
 end
 
 % set the maximum squared vertex search radius
@@ -95,12 +95,12 @@ for k = 1:nCells
         % go through the neighboring cells and get their vertices and
         % coordinates
         for k2 = neighboringCells'
-            pairCells = [pairCells ; k2.*ones(d.cells(k2).nVertices,1)]; %#ok<*AGROW>
+            pairCells = [pairCells ; k2.*ones(d.cells(k2).nVertices,1)];  %#ok<*AGROW>
             pairVertices = [pairVertices ; (1:d.cells(k2).nVertices)'];
             pairVerticesX = [pairVerticesX ; d.cells(k2).verticesX];
             pairVerticesY = [pairVerticesY ; d.cells(k2).verticesY];
         end
-        
+             
         % get the indices of the possible pair vertices that are too far
         % away from the center of cell k (1.1 times the cell max radius
         % plus 3 times the junction length
@@ -122,6 +122,9 @@ for k = 1:nCells
         % get the vertices that have at least one possible
         % interaction
         atLeastOne = (sum(possibleInteractions,1) > 0)';
+        
+        % save the indices with at least one contact
+        d.cells(k).contacts.atLeastOne = atLeastOne;
         
         % get the indices of the vertices with at least one interaction
         atLeastOneIdx = find(atLeastOne);
@@ -236,7 +239,7 @@ for k = 1:nCells
         if numel(closestCells1)
             
             % get the unique neighbors
-            neighboringCells = get_uniques(closestCells1,cellNumbers,zeroVec);
+            neighboringCells = find(accumarray(closestCells1',1))';%get_uniques(closestCells1,cellNumbers,zeroVec);
             
             % go through the neighbors
             for k2 = neighboringCells
@@ -287,9 +290,14 @@ for k = 1:nCells
         if prev.present
             prev.pairCellIDs = closestCells1(betweenVerticesRight);
             prev.pairVertexIDs = previousVertices1(betweenVerticesRight);
+            prev.pairVerticesX = rightSegmentX(betweenVerticesRight);
+            prev.pairVerticesY = rightSegmentY(betweenVerticesRight);
+            prev.pairVectorsX = rightSegmentVectorX(betweenVerticesRight);
+            prev.pairVectorsY = rightSegmentVectorY(betweenVerticesRight);
+            prev.lengths = rightSegmentLength(betweenVerticesRight);
 
             % get the unique cells
-            prev.pairCells = get_uniques(prev.pairCellIDs,cellNumbers,zeroVec);
+            prev.pairCells = find(accumarray(prev.pairCellIDs',1))';%get_uniques(prev.pairCellIDs,cellNumbers,zeroVec);
         end
         d.cells(k).contacts.cell1.prev = prev;
         
@@ -300,9 +308,14 @@ for k = 1:nCells
         if next.present
             next.pairCellIDs = closestCells1(betweenVerticesLeft);
             next.pairVertexIDs = closestVertices1(betweenVerticesLeft);
+            next.pairVerticesX = leftSegmentX(betweenVerticesLeft);
+            next.pairVerticesY = leftSegmentY(betweenVerticesLeft);
+            next.pairVectorsX = leftSegmentVectorX(betweenVerticesLeft);
+            next.pairVectorsY = leftSegmentVectorY(betweenVerticesLeft);
+            next.lengths = leftSegmentLength(betweenVerticesLeft);
             
             % get the unique cells
-            next.pairCells = get_uniques(next.pairCellIDs,cellNumbers,zeroVec);
+            next.pairCells = find(accumarray(next.pairCellIDs',1))';%get_uniques(next.pairCellIDs,cellNumbers,zeroVec);
         end
         d.cells(k).contacts.cell1.next = next;
         
@@ -317,9 +330,11 @@ for k = 1:nCells
         if vertex.present
             vertex.pairCellIDs = closestCells1(neither);
             vertex.pairVertexIDs = closestVertices1(neither);
+            vertex.pairVerticesX = leftSegmentX(neither);
+            vertex.pairVerticesY = leftSegmentY(neither);
             
             % get the unique cells
-            vertex.pairCells = get_uniques(vertex.pairCellIDs,cellNumbers,zeroVec);
+            vertex.pairCells = find(accumarray(vertex.pairCellIDs',1))';%get_uniques(vertex.pairCellIDs,cellNumbers,zeroVec);
         end
         d.cells(k).contacts.cell1.vertex = vertex;
 
@@ -350,7 +365,7 @@ for k = 1:nCells
             if numel(closestCells2)
                 
                 % get the unique neighbors
-                neighboringCells = get_uniques(closestCells2,cellNumbers,zeroVec);
+                neighboringCells = find(accumarray(closestCells2,1))';%get_uniques(closestCells2,cellNumbers,zeroVec);
 
                 % go through the neighbors
                 for k2 = neighboringCells
@@ -400,9 +415,14 @@ for k = 1:nCells
             if prev.present
                 prev.pairCellIDs = closestCells2(betweenVerticesRight);
                 prev.pairVertexIDs = previousVertices2(betweenVerticesRight);
+                prev.pairVerticesX = rightSegmentX(betweenVerticesRight);
+                prev.pairVerticesY = rightSegmentY(betweenVerticesRight);
+                prev.pairVectorsX = rightSegmentVectorX(betweenVerticesRight);
+                prev.pairVectorsY = rightSegmentVectorY(betweenVerticesRight);
+                prev.lengths = rightSegmentLength(betweenVerticesRight);
                 
                 % get the unique cells
-                prev.pairCells = get_uniques(prev.pairCellIDs,cellNumbers,zeroVec);
+                prev.pairCells = find(accumarray(prev.pairCellIDs,1))';%get_uniques(prev.pairCellIDs,cellNumbers,zeroVec);
             else
                 prev.pairCellIDs = [];
                 prev.pairVertexIDs = [];
@@ -417,9 +437,14 @@ for k = 1:nCells
             if next.present
                 next.pairCellIDs = closestCells2(betweenVerticesLeft);
                 next.pairVertexIDs = closestVertices2(betweenVerticesLeft);
+                next.pairVerticesX = leftSegmentX(betweenVerticesLeft);
+                next.pairVerticesY = leftSegmentY(betweenVerticesLeft);
+                next.pairVectorsX = leftSegmentVectorX(betweenVerticesLeft);
+                next.pairVectorsY = leftSegmentVectorY(betweenVerticesLeft);
+                next.lengths = leftSegmentLength(betweenVerticesLeft);
                 
                 % get the unique cells
-                next.pairCells = get_uniques(next.pairCellIDs,cellNumbers,zeroVec);
+                next.pairCells = find(accumarray(next.pairCellIDs,1))';%get_uniques(next.pairCellIDs,cellNumbers,zeroVec);
             else
                 next.pairCellIDs = [];
                 next.pairVertexIDs = [];
@@ -438,9 +463,11 @@ for k = 1:nCells
             if vertex.present
                 vertex.pairCellIDs = closestCells2(neither);
                 vertex.pairVertexIDs = closestVertices2(neither);
+                vertex.pairVerticesX = leftSegmentX(neither);
+                vertex.pairVerticesY = leftSegmentY(neither);
                 
                 % get the unique cells
-                vertex.pairCells = get_uniques(vertex.pairCellIDs,cellNumbers,zeroVec);
+                vertex.pairCells = find(accumarray(vertex.pairCellIDs,1))';%get_uniques(vertex.pairCellIDs,cellNumbers,zeroVec);
             else
                 vertex.pairCellIDs = [];
                 vertex.pairVertexIDs = [];

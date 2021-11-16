@@ -184,6 +184,14 @@ end
 % remove the vertex from the cortical multipliers
 d.cells(k).cortex.vertexMultipliers(vertex2Remove) = [];
 
+% edit forces
+d.cells(k).forces.junctionX(vertex2Remove) = [];
+d.cells(k).forces.junctionY(vertex2Remove) = [];
+d.cells(k).forces.divisionX(vertex2Remove) = [];
+d.cells(k).forces.divisionY(vertex2Remove) = [];
+d.cells(k).forces.dampingX(vertex2Remove) = [];
+d.cells(k).forces.dampingY(vertex2Remove) = [];
+
 % set junction modification to true
 d.simset.junctionModification = true;
 

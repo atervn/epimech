@@ -38,11 +38,18 @@ if d.simset.dtPlot
     d.simset.timeStepsSub = [];
 end
 
+Movement = [];
+
 tic
 
 d.simset.calculateForces.all = true;
-d.simset.calculateForces.junctions = true;
+d.simset.calculateForces.junction = true;
 d.simset.calculateForces.area = true;
+d.simset.calculateForces.membrane = true;
+d.simset.calculateForces.cortical = true;
+d.simset.calculateForces.division = true;
+
+
 
 %% main simulation loop
 while time - d.spar.simulationTime <= 1e-8
@@ -58,6 +65,15 @@ while time - d.spar.simulationTime <= 1e-8
         end
     end
     
+%     if time >= 511200
+%         d.pl.plotDt = 1;
+%     end
+%     if time >= 514400
+%         d.pl.plotDt = 1;
+%     end
+    
+    time
+
     %% cell properties and component removal
     
     % get cell properties
@@ -139,8 +155,14 @@ while time - d.spar.simulationTime <= 1e-8
 %             [d, dt, maxmaxMovement] = solve_cells_rk4(d, dt);
 %     end
 %     
-    [d, dt, maxmaxMovement] = solve_cells_vv(d, dt);
 
+    
+    [d, dt, maxmaxMovement] = solve_cells_vv(d, dt);
+    
+    
+    
+    Movement(end+1) = maxmaxMovement;
+    
     % save time step for post plotting
     if d.simset.dtPlot
         d.simset.timeStepsCells(end+1) = dt;
@@ -185,6 +207,8 @@ while time - d.spar.simulationTime <= 1e-8
     % update progress bar if shown
     d = update_progress_bar(app, d, time);
 end
+
+figure(32); plot(Movement);
 
 % plot the simulation time steps if selected
 post_plot_dt(d);

@@ -10,8 +10,7 @@ function junctions2Remove = check_junction_angle_remove(spar,cells,linkedIdx,pai
 %       pairVerticesY: y-coordinates of junction pairs
 %   OUTPUT:
 %       junctions2Remove: junctions to be removed
-
-
+%   by Aapo Tervonen, 2021
 
 % get the junction vector components
 junctionVectorsX = pairVerticesX - cells.verticesX(linkedIdx);
@@ -19,9 +18,6 @@ junctionVectorsY = pairVerticesY - cells.verticesY(linkedIdx);
 
 % get the junction angles
 junctionAngles = get_angles(cells.rightVectorsX(linkedIdx), cells.rightVectorsY(linkedIdx), junctionVectorsX, junctionVectorsY);
-% junctionAngles = atan2(junctionVectorsY, junctionVectorsX) - atan2(-cells.rightVectorsY(linkedIdx), -cells.rightVectorsX(linkedIdx));
-% negatives = junctionAngles < 0;
-% junctionAngles(negatives) = junctionAngles(negatives) + 2*pi;
 
 % get half of the membrane outside angles
 halfAngles = cells.outsideAngles(linkedIdx)./2;

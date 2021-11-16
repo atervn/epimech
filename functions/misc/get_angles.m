@@ -16,6 +16,7 @@ function angles = get_angles(vector1X, vector1Y, vector2X, vector2Y)
 angles = atan2(-vector2Y, -vector2X) - atan2(vector1Y, vector1X);
 
 % if the angle is clocwise, get the supplementary angle
-angles(angles < 0) = angles(angles < 0) + 2*pi;
+negAngles = angles < 0;
+angles(negAngles) = angles(negAngles) + 2*pi;
 
 end

@@ -39,10 +39,9 @@ if numel(cells(k).junctions.pairCells1) > 0
         % get the coordinates of the vertices of the pair vertices in
         % cell k       
         pair1VerticesX(verticesIdx) = cells(otherCell).verticesX(otherVerticesIdx);
-        pair1VerticesY(verticesIdx) = cells(otherCell).verticesY(otherVerticesIdx);
-        
+        pair1VerticesY(verticesIdx) = cells(otherCell).verticesY(otherVerticesIdx); 
     end
-    
+
     % calculate the distances between the vertices and their pairs
     distances = sqrt((cells(k).verticesX(junctions.linkedIdx1) - pair1VerticesX).^2 + (cells(k).verticesY(junctions.linkedIdx1) - pair1VerticesY).^2);
     

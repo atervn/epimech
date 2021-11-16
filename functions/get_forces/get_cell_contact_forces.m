@@ -1,4 +1,4 @@
-function cells = get_cell_contact_forces(cells,spar,k)
+function cells = get_cell_contact_forces(cells,spar,k,option)
 % GET_CELL_CONTACT_FORCES Calculate the contact forces between cells
 %   The function calculates the contact forces that keep the cells from
 %   overlapping. This was also keeps the two sides of the cleavage apart
@@ -15,11 +15,11 @@ function cells = get_cell_contact_forces(cells,spar,k)
 if cells(k).contacts.present
     
     % calculate the contact forces with the closest vertices
-    [forcesCell1X, forcesCell1Y] = calculate_contact_forces(cells,spar,k,cells(k).contacts.cell1);
+    [forcesCell1X, forcesCell1Y] = calculate_contact_forces(cells,spar,k,cells(k).contacts.cell1,option);
     
     % calculate the contact forces with the second to closest vertex in
     % another neighbor
-    [forcesCell2X, forcesCell2Y] = calculate_contact_forces(cells,spar,k,cells(k).contacts.cell2);
+    [forcesCell2X, forcesCell2Y] = calculate_contact_forces(cells,spar,k,cells(k).contacts.cell2,option);
     
     % sum the forces
     cells(k).forces.contactX = forcesCell1X + forcesCell2X;
@@ -46,7 +46,7 @@ end
 
 end
 
-function [forcesX, forcesY] = calculate_contact_forces(cells,spar,k,contactData)
+function [forcesX, forcesY] = calculate_contact_forces(cells,spar,k,contactData,option)
 % CALCULATE_CONTACT_FORCES Calculate the contact forces with the
 % neighboring cells
 %   The function calculate the contact forces either for the closest
@@ -77,32 +77,43 @@ tooClosePrevIdx = [];
 % segment to the closest vertex
 if contactData.prev.present
     
-    % initialize vectors for the coordinates of the vertex previous to
-    % the closest vertex, the vector and the distance between the two
-    prevPairVerticesX = zeros(length(contactData.prev.vertices),1);
-    prevPairVerticesY = prevPairVerticesX;
-    prevPairVectorsX = prevPairVerticesX;
-    prevPairVectorsY = prevPairVerticesX;
-    prevLengths = prevPairVerticesX;
     
-    % go through the cells where there are closest vertices
-    for k2 = contactData.prev.pairCells
+    
+    if option == 1
+        prevPairVerticesX = contactData.prev.pairVerticesX;
+        prevPairVerticesY = contactData.prev.pairVerticesY;
+        prevPairVectorsX = contactData.prev.pairVectorsX;
+        prevPairVectorsY = contactData.prev.pairVectorsY;
+        prevLengths = contactData.prev.lengths;
+    else
         
-        % vertices in cell k that have this contact interaction with
-        % cell k2
-        verticesIdx = contactData.prev.pairCellIDs == k2;
+        % initialize vectors for the coordinates of the vertex previous to
+        % the closest vertex, the vector and the distance between the two
+        prevPairVerticesX = zeros(length(contactData.prev.vertices),1);
+        prevPairVerticesY = prevPairVerticesX;
+        prevPairVectorsX = prevPairVerticesX;
+        prevPairVectorsY = prevPairVerticesX;
+        prevLengths = prevPairVerticesX;
         
-        % the indices of the vertices previous to the closest vertices
-        % to the cell k vertices
-        pairIdx = contactData.prev.pairVertexIDs(verticesIdx);
-        
-        % get the coordinates, vectors, and distance for these vertices
-        % in cell k2
-        prevPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
-        prevPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
-        prevPairVectorsX(verticesIdx) = cells(k2).leftVectorsX(pairIdx);
-        prevPairVectorsY(verticesIdx) = cells(k2).leftVectorsY(pairIdx);
-        prevLengths(verticesIdx) = cells(k2).leftLengths(pairIdx);
+        % go through the cells where there are closest vertices
+        for k2 = contactData.prev.pairCells
+            
+            % vertices in cell k that have this contact interaction with
+            % cell k2
+            verticesIdx = contactData.prev.pairCellIDs == k2;
+            
+            % the indices of the vertices previous to the closest vertices
+            % to the cell k vertices
+            pairIdx = contactData.prev.pairVertexIDs(verticesIdx);
+            
+            % get the coordinates, vectors, and distance for these vertices
+            % in cell k2
+            prevPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
+            prevPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
+            prevPairVectorsX(verticesIdx) = cells(k2).leftVectorsX(pairIdx);
+            prevPairVectorsY(verticesIdx) = cells(k2).leftVectorsY(pairIdx);
+            prevLengths(verticesIdx) = cells(k2).leftLengths(pairIdx);
+        end
     end
     
     % get reciprocal lengths
@@ -154,31 +165,41 @@ tooCloseNextIdx = [];
 % segment to the closest vertex
 if contactData.next.present
     
-    % initialize vectors for the coordinates of the closest vertex, its
-    % next vector and distance to the next vertex
-    nextPairVerticesX = zeros(length(contactData.next.vertices),1);
-    nextPairVerticesY = nextPairVerticesX;
-    nextPairVectorsX = nextPairVerticesX;
-    nextPairVectorsY = nextPairVerticesX;
-    nextLengths = nextPairVerticesX;
-    
-    % go through the cells where there are closest vertices
-    for k2 = contactData.next.pairCells
+    if option == 1
+        nextPairVerticesX = contactData.next.pairVerticesX;
+        nextPairVerticesY = contactData.next.pairVerticesY;
+        nextPairVectorsX = contactData.next.pairVectorsX;
+        nextPairVectorsY = contactData.next.pairVectorsY;
+        nextLengths = contactData.next.lengths;
         
-        % vertices in cell k that have this contact interaction with
-        % cell k2
-        verticesIdx = contactData.next.pairCellIDs == k2;
+    else
         
-        % the indices of the closest vertices to the cell k vertices
-        pairIdx = contactData.next.pairVertexIDs(verticesIdx);
+        % initialize vectors for the coordinates of the closest vertex, its
+        % next vector and distance to the next vertex
+        nextPairVerticesX = zeros(length(contactData.next.vertices),1);
+        nextPairVerticesY = nextPairVerticesX;
+        nextPairVectorsX = nextPairVerticesX;
+        nextPairVectorsY = nextPairVerticesX;
+        nextLengths = nextPairVerticesX;
         
-        % get the coordinates, vectors, and distance for these vertices
-        % in cell k2
-        nextPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
-        nextPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
-        nextPairVectorsX(verticesIdx) = cells(k2).leftVectorsX(pairIdx);
-        nextPairVectorsY(verticesIdx) = cells(k2).leftVectorsY(pairIdx);
-        nextLengths(verticesIdx) = cells(k2).leftLengths(pairIdx);
+        % go through the cells where there are closest vertices
+        for k2 = contactData.next.pairCells
+            
+            % vertices in cell k that have this contact interaction with
+            % cell k2
+            verticesIdx = contactData.next.pairCellIDs == k2;
+            
+            % the indices of the closest vertices to the cell k vertices
+            pairIdx = contactData.next.pairVertexIDs(verticesIdx);
+            
+            % get the coordinates, vectors, and distance for these vertices
+            % in cell k2
+            nextPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
+            nextPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
+            nextPairVectorsX(verticesIdx) = cells(k2).leftVectorsX(pairIdx);
+            nextPairVectorsY(verticesIdx) = cells(k2).leftVectorsY(pairIdx);
+            nextLengths(verticesIdx) = cells(k2).leftLengths(pairIdx);
+        end
     end
     
     % get reciprocal lengths
@@ -224,24 +245,31 @@ end
 % segment around the closest vertex
 if contactData.vertex.present
     
-    % initialize coordinate vectors for the closest vertices
-    vertexPairVerticesX = zeros(length(contactData.vertex.vertices),1);
-    vertexPairVerticesY = vertexPairVerticesX;
-    
-    % go through the close cells
-    for k2 = contactData.vertex.pairCells
+    if option == 1
+        vertexPairVerticesX = contactData.vertex.pairVerticesX;
+        vertexPairVerticesY = contactData.vertex.pairVerticesY;
         
-        % vertices in cell k that have this contact interaction with
-        % cell k2
-        verticesIdx = contactData.vertex.pairCellIDs == k2;
+    else
         
-        % the indices of the closest vertices to the cell k vertices
-        pairIdx = contactData.vertex.pairVertexIDs(verticesIdx);
+        % initialize coordinate vectors for the closest vertices
+        vertexPairVerticesX = zeros(length(contactData.vertex.vertices),1);
+        vertexPairVerticesY = vertexPairVerticesX;
         
-        % get the coordinates, vectors, and distance for these vertices
-        % in cell k2
-        vertexPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
-        vertexPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
+        % go through the close cells
+        for k2 = contactData.vertex.pairCells
+            
+            % vertices in cell k that have this contact interaction with
+            % cell k2
+            verticesIdx = contactData.vertex.pairCellIDs == k2;
+            
+            % the indices of the closest vertices to the cell k vertices
+            pairIdx = contactData.vertex.pairVertexIDs(verticesIdx);
+            
+            % get the coordinates, vectors, and distance for these vertices
+            % in cell k2
+            vertexPairVerticesX(verticesIdx) = cells(k2).verticesX(pairIdx);
+            vertexPairVerticesY(verticesIdx) = cells(k2).verticesY(pairIdx);
+        end
     end
     
     % get the vectors between the vertices

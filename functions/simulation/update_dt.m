@@ -16,7 +16,7 @@ function dt = update_dt(d,dt,time,maxmaxMovement)
 
 % if the current time step is lower than the maximum and the max vertex
 % movement is below a limit
-if dt < d.spar.maximumTimeStep && maxmaxMovement <= d.spar.cellMinimumMovementSq
+if dt < d.spar.maximumTimeStep && maxmaxMovement <= 0.02
     % set a multiplier to double the time step
     multiplier = 2;
 else

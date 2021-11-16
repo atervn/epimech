@@ -145,6 +145,15 @@ for i = 1:2
             % of the new vertex
             d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers(1:vertexIdx(i)-1) ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; (originals(vertexIdx(i)-1) + originals(vertexIdx(i)))./2 ; d.cells(k).cortex.vertexMultipliers(vertexIdx(i)+1:end)];
         end
+        
+        % edit forces
+        d.cells(k).forces.junctionX = [d.cells(k).forces.junctionX(1:vertexIdx(i)) ; 0 ; d.cells(k).forces.junctionX(vertexIdx(i)+1:end)];
+        d.cells(k).forces.junctionY = [d.cells(k).forces.junctionY(1:vertexIdx(i)) ; 0 ; d.cells(k).forces.junctionY(vertexIdx(i)+1:end)];
+        d.cells(k).forces.divisionX = [d.cells(k).forces.divisionX(1:vertexIdx(i)) ; 0 ; d.cells(k).forces.divisionX(vertexIdx(i)+1:end)];
+        d.cells(k).forces.divisionY = [d.cells(k).forces.divisionY(1:vertexIdx(i)) ; 0 ; d.cells(k).forces.divisionY(vertexIdx(i)+1:end)];
+        d.cells(k).forces.dampingX = [d.cells(k).forces.dampingX(1:vertexIdx(i)) ; (d.cells(k).forces.dampingX(vertexIdx(i)) + d.cells(k).forces.dampingX(vertexIdx(i)+1))/2 ; d.cells(k).forces.dampingX(vertexIdx(i)+1:end)];
+        d.cells(k).forces.dampingY = [d.cells(k).forces.dampingY(1:vertexIdx(i)) ; (d.cells(k).forces.dampingY(vertexIdx(i)) + d.cells(k).forces.dampingY(vertexIdx(i)+1))/2 ; d.cells(k).forces.dampingY(vertexIdx(i)+1:end)];
+        
     
     % last vertex in the cell
     else
@@ -172,6 +181,13 @@ for i = 1:2
         d.cells(k).cortex.vertexMultipliers(end) = (originals(end-1) + originals(end))./2;
         d.cells(k).cortex.vertexMultipliers = [d.cells(k).cortex.vertexMultipliers ; (originals(end-1) + originals(end))./2;];
         
+        % edit forces
+        d.cells(k).forces.junctionX = [d.cells(k).forces.junctionX ; 0];
+        d.cells(k).forces.junctionY = [d.cells(k).forces.junctionY ; 0];
+        d.cells(k).forces.divisionX = [d.cells(k).forces.divisionX ; 0];
+        d.cells(k).forces.divisionY = [d.cells(k).forces.divisionY ; 0];
+        d.cells(k).forces.dampingX = [d.cells(k).forces.dampingX ; (d.cells(k).forces.dampingX(end) + d.cells(k).forces.dampingX(1))/2];
+        d.cells(k).forces.dampingY = [d.cells(k).forces.dampingY ; (d.cells(k).forces.dampingY(end) + d.cells(k).forces.dampingY(1))/2];
     end
     
     % update the number of vertices
