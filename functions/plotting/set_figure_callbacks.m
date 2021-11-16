@@ -32,7 +32,7 @@ function resize_callback(~, eventData,spar,pl)
 %   The function resizes the axis margins, scale bar, and title, cell
 %   number, and vertex number fonts.
 %   INPUT:
-%       eventData: modify figure object
+%       eventData: modified figure object
 %       spar: scaled parameters structure
 %       pl: plotting options data structure
 %   by Aapo Tervonen, 2021
@@ -271,19 +271,19 @@ end
 
 end
 
-function zoom_pan_callback(~, evd,spar,pl,app)
+function zoom_pan_callback(~, eventData,spar,pl,app)
 % ZOOM_PAN_CALLBACK Modify the figure upon zooming or panning
 %   The function modifies the scale bar, and title, cell
 %   number, and vertex number fonts when zooming or panning.
 %   INPUT:
-%       eventData: modify figure object
+%       eventData: modified figure object
 %       spar: scaled parameters structure
 %       pl: plotting options data structure
 %       app: main application data structure
 %   by Aapo Tervonen, 2021
 
 % get the axes handle
-axesHandle = evd.Axes;
+axesHandle = eventData.Axes;
 
 % get the axis size in x and y-directions
 sizeX = axesHandle.XLim(2) - axesHandle.XLim(1);
@@ -318,7 +318,7 @@ axisSizeUm = axisSizeinScaled*spar.scalingLength*1e6;
 
 % get the axis size in pixels and find how many pixels is a unit scaled
 % length
-axisSizeInPixels = eventData.Source.Position(4)*axesHandle.Position(4);
+axisSizeInPixels = pl.figureHandle.Position(4)*axesHandle.Position(4);
 scaledLengthPerPixels = axisSizeinScaled/axisSizeInPixels;
 
 % check if scale bar is shown

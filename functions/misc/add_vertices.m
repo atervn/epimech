@@ -84,7 +84,7 @@ while longLengths ~= 0
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i), 1);
-                        d = add_new_frame_vertices(d, k, longIdx(i), 1);
+                        d = add_new_edge_vertices(d, k, longIdx(i), 1);
                     end
                     
                     % last vertex of the cell
@@ -115,7 +115,7 @@ while longLengths ~= 0
                     % focal adhesions and edge vertices
                     if any(d.simset.simulationType == [3,5])
                         d = add_focal_adhesions(d, k, longIdx(i),2);
-                        d = add_new_frame_vertices(d, k, longIdx(i),2);
+                        d = add_new_edge_vertices(d, k, longIdx(i),2);
                     end
                 end
                 

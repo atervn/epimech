@@ -23,7 +23,7 @@ if any(d.simset.simulationType == [1 3 5])
     
     % if junctions are to be modified, remove junctions if required
     if d.simset.junctionModification
-        d.cells = remove_junctions(d.cells, d.spar);
+        d = remove_junctions(d);
     end
 end
 

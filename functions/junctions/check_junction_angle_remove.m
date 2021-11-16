@@ -19,9 +19,6 @@ junctionVectorsY = pairVerticesY - cells.verticesY(linkedIdx);
 
 % get the junction angles
 junctionAngles = get_angles(cells.rightVectorsX(linkedIdx), cells.rightVectorsY(linkedIdx), junctionVectorsX, junctionVectorsY);
-% junctionAngles = atan2(junctionVectorsY, junctionVectorsX) - atan2(-cells.rightVectorsY(linkedIdx), -cells.rightVectorsX(linkedIdx));
-% negatives = junctionAngles < 0;
-% junctionAngles(negatives) = junctionAngles(negatives) + 2*pi;
 
 % get half of the membrane outside angles
 halfAngles = cells.outsideAngles(linkedIdx)./2;
