@@ -1,4 +1,4 @@
-function app = create_app_struct(data,iLoop)
+function app = create_app_struct(data,iLoop,defaultPath)
 % CREATE_APP_STRUCT Create an app structure for the CMD simulation
 %   The function defines the necessary fields for the app structure
 %   required by the simulation setup functions based on the inputted config
@@ -6,6 +6,7 @@ function app = create_app_struct(data,iLoop)
 %   INPUT:
 %       data: structure to collect config file data
 %       iLoop: simulation loop index
+%       defaultPath: path to the epimech root
 %   OUTPUT:
 %       app: temporary application structure
 %   by Aapo Tervonen, 2021
@@ -14,7 +15,7 @@ function app = create_app_struct(data,iLoop)
 app = struct();
 
 % set the default path
-app.defaultPath = [fileparts(mfilename('fullpath')) '/'];
+app.defaultPath = defaultPath;
 
 % set the app task
 app.appTask = 'simulate';

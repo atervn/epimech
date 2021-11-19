@@ -101,7 +101,7 @@ parfor (iLoop = 1:data.nSimulations, nWorkers)
         tic;
         
         % creat the app structure and setup the parameter study
-        app = create_app_struct(data,iLoop);
+        app = create_app_struct(data,iLoop,defaultPath);
         
         % if there were no problems setting up the parameter study
         if isstruct(app)
