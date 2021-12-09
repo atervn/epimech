@@ -125,10 +125,10 @@ parfor (iLoop = 1:data.nSimulations, nWorkers)
         % print that there was an error
         fprintf('Simulation %.0f failed\n', iLoop);
         
-        % open an error log file to the root, write the error information
+        % create an error report file to the root, write the error report
         % and close the file
         fID = fopen(['simulation_' num2str(iLoop) '_error_log.txt'],'w');
-        fprintf(fID,[ME.identifier '\n' ME.message '\n' ME.stack.file '\n' ME.stack.name '\n' ME.stack.line '\n']);
+        fprintf(fID, '%s\n', getReport(ME, 'extended'));
         fclose(fID);
     end
 end

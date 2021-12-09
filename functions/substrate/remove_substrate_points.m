@@ -135,17 +135,16 @@ for i = 1:length(cellsX)
         if numel(closeVertices) > 0
             
             % check if the close by vertex with the highest distance is on
-            % the other side of i == 1 (this is relevant for th vertices
+            % the other side of i == 1 (this is relevant for the vertices
             % close the end of the indices)
-            if any(closeVertices < i)
+            if max(closeVertices) - i > i + size(closeBy,1) - max(closeVertices)
                 
-                % if yes, take the index with the highest index that is
-                % smaller than i as the other vertex
-                otherPoint = max(closeVertices(closeVertices < i));
+                % add these vertices to the sections to be removed
+                removeBetween = [removeBetween ; max(closeVertices) i]; %#ok<AGROW>
                 
                 % skip until the end of the shape indices, since the rest
                 % of the shape is to be removed
-                skipUntil = length(cellsX) + 1; 
+                skipUntil = i;
                 
             % otherwise
             else
@@ -156,10 +155,10 @@ for i = 1:length(cellsX)
                 
                 % skip until the end of the section to be removed
                 skipUntil = otherPoint;
-            end
             
-            % add these vertices to the sections to be removed
-            removeBetween = [removeBetween ; i otherPoint]; %#ok<AGROW>
+                % add these vertices to the sections to be removed
+                removeBetween = [removeBetween ; i otherPoint]; %#ok<AGROW>
+            end
         end
     end
 end
