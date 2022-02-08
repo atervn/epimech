@@ -10,11 +10,11 @@ pointLikeCell = temp.cell;
 if app.CellsButton.Value
     app.CallingApp.plotImport(fileIdx).currentTimePoint = initialTime;
     
-    initialCells = import_cells(app.CallingApp,d,'post_plotting');
+    [~,initialCells] = import_cells(app.CallingApp,d,'post_plotting');
     
     app.CallingApp.plotImport(fileIdx).currentTimePoint = endTime;
     
-    endCells = import_cells(app.CallingApp,d,'post_plotting');
+    [~,endCells] = import_cells(app.CallingApp,d,'post_plotting');
     
     initialCellCenterX = zeros(1,length(initialCells));
     initialCellCenterY = zeros(1,length(initialCells));
@@ -51,7 +51,7 @@ else
         endPointsX = importedPoints(:,1);
         endPointsY = importedPoints(:,2);
         
-        initialCells = import_cells(app.CallingApp,d,'post_plotting',1);
+        [~,initialCells] = import_cells(app.CallingApp,d,'post_plotting',1);
         
         moveX = -mean(initialCells(pointLikeCell).verticesX).*d.spar.scalingLength.*1e6;
         moveY = -mean(initialCells(pointLikeCell).verticesY).*d.spar.scalingLength.*1e6;

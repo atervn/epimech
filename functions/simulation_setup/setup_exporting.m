@@ -45,6 +45,16 @@ if app.ExportdataCheckBox.Value
         d.ex.exportName = [exportDate '_' exportTime '_' app.SimulationnameEditField.Value];
     end
     
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
     % if the results folder in the epimech root does not exist, create it
     if exist([app.defaultPath 'results']) ~= 7 %#ok<EXIST>
         mkdir(app.defaultPath, 'results');
@@ -53,6 +63,15 @@ if app.ExportdataCheckBox.Value
     % create the folder for the simulation export and get its path
     mkdir([app.defaultPath 'results/'], d.ex.exportName);
     folderPath = [app.defaultPath 'results/' d.ex.exportName];
+    
+    
+     
+    mkdir([d.ex.defaultPath '/results/', d.ex.exportName],'meta');
+    dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/time_between_exports.csv'],[]);
+    
+    
+    
+    
     
     % create folders for exported data
     create_export_folders(d, folderPath);
@@ -166,8 +185,12 @@ function create_export_folders(d, folderPath)
 %       folderPath: simulation export root folder path
 %   by Aapo Tervonen, 2021
 
-% if vertex coordinates are exported, create the folder for them
-if d.ex.vertices
+% create a folder for the cell IDs
+mkdir(folderPath, 'cell_ids');
+
+% if vertex coordinates or velocities are exported, create the folder for
+% them
+if d.ex.vertices || d.ex.vertexVelocities
     mkdir(folderPath, 'vertices');
 end
 

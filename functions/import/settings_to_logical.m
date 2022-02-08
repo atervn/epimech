@@ -39,6 +39,7 @@ switch settingsType
     case 'export'
         settings.parameters = logical(settings.parameters);
         settings.vertices = logical(settings.vertices);
+        settings.vertexVelocities = logical(settings.vertexVelocities);
         settings.vertexStates = logical(settings.vertexStates);
         settings.division = logical(settings.division);
         settings.cellStates = logical(settings.cellStates);

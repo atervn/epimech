@@ -10,6 +10,8 @@ function export_data(d,time)
 % check if current time step is one of the exporting time steps
 if d.ex.export && mod(time+1e-10,d.ex.exportDt) <= 1e-9
     
+    timeExport = toc(d.simset.exportTiming);
+    
     % save the number of cells to a temporary export structure
     export.nCells = length(d.cells);
     
@@ -30,7 +32,12 @@ if d.ex.export && mod(time+1e-10,d.ex.exportDt) <= 1e-9
     exportMatrices = get_export_data(d,exportMatrices,export);
     
     % write the export matrices to files
-    write_export_data(d, exportMatrices, time); 
+    write_export_data(d, exportMatrices, time);
+    
+
+    dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/time_between_exports.csv'],timeExport,'-append');
+    
+    d.simset.exportTiming = tic;
 end
 
 end

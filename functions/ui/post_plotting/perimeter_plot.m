@@ -7,13 +7,15 @@ maxs = [];
 mins = [];
 folderExists = exist([app.plotImport(app.selectedFile).folderName '/perimeters'],'dir') == 7;
 
+currentTimePoint = app.plotImport(app.selectedFile).currentTimePoint;
+
 if isempty(app.selectedCells)
 
 for i = 1:app.plotImport(app.selectedFile).nTimePoints
     if ~folderExists
         app.plotImport(app.selectedFile).currentTimePoint = i;
         d = [];
-        cells = import_cells(app,d,'post_plotting');
+        [~,cells] = import_cells(app,d,'post_plotting');
         
         tempPerimeters = zeros(1,length(cells));
         cells = get_boundary_vectors(cells);
@@ -69,7 +71,7 @@ else
         
         app.plotImport(app.selectedFile).currentTimePoint = i;
         d = [];
-        cells = import_cells(app,d,'post_plotting');
+        [~,cells] = import_cells(app,d,'post_plotting');
         cells = get_boundary_vectors(cells);
         cells = get_boundary_lengths(cells);
         
@@ -110,3 +112,5 @@ else
        l.String{k} = ['cell ' num2str(app.selectedCells(k))]; 
     end
 end
+
+app.plotImport(app.selectedFile).currentTimePoint = currentTimePoint;

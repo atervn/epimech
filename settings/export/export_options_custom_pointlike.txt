@@ -1,6 +1,7 @@
 exportDtMultiplier,1
 parameters,1
 vertices,1
+vertexVelocities,1
 vertexStates,1
 division,1
 cellStates,1

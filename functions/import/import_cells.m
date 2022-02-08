@@ -1,14 +1,16 @@
-function cells = import_cells(app,d,option,varargin)
+function [d,cells] = import_cells(app,d,option,varargin)
 % IMPORT_CELLS Import cell data for simulation or plotting
 %   The function loads the required cell data from the unzipped files and
 %   creates the cell data structure.
 %   INPUT:
 %       app: main application data structure
+%       d: main simulation data structure
 %       option: variable to indicate the type of import
 %       varargin: can be used to indicate a time point to load that differs
 %           from the selected one
 %   OUTPUT:
-%       cells: cell data structure
+%       d: main simulation data structure
+%       cells: main cell data structure
 %   by Aapo Tervonen, 2021
 
 
@@ -66,21 +68,29 @@ for k = 1:nCells
     % if simulation
     if strcmp(option, 'simulation')
         
+        % get the vertex velocities for cell k
+        velocities = importedData.velocities(:,1+2*(k-1):2+2*(k-1));
+        velocities = velocities(1:cells(k).nVertices,:);
+        cells(k).velocitiesX = velocities(:,1);
+        cells(k).velocitiesY = velocities(:,2);
+        
         % get the cell division state
         cells(k).division.state = importedData.divisionStates(k);
         
-        % get the division vertices, distances, new areas and target area
-        % if growth simulation
+        % get the division vertices, distances, new areas, target area, and
+        % division times if growth simulation
         if strcmp(app.simulationType, 'growth')
             cells(k).division.vertices = importedData.divisionVertices(:,k);
             cells(k).division.distanceSq = importedData.divisionDistances(k);
             cells(k).division.newAreas = importedData.newAreas(:,k);
             cells(k).division.targetArea = importedData.targetAreas(1,k);
+            cells(k).division.time = importedData.divisionTimes(k) - (timePoint-1)*app.import.systemParameters.scalingTime*app.import.exportOptions.exportDt;
         else
             cells(k).division.vertices = [0;0];
             cells(k).division.distanceSq = 0;
             cells(k).division.newAreas = [0;0];
             cells(k).division.targetArea = 0;
+            cells(k).division.time = 0;
         end
         
         % get the cortical data if it is available
@@ -193,6 +203,15 @@ end
 % if additional junction data is needed, derived it from the main data
 if strcmp(option, 'post_plotting') && (app.importPlottingOptions.junctions || app.importPlottingOptions.cellStyle == 3 || app.importPlottingOptions.cellStyle == 5)
     cells = get_junction_data(cells);
+end
+
+d.cells = cells;
+
+% import cell ID data (if available) LEGACY
+if exist([folderName '/cell_ids'],'dir') == 7
+    d.simset.cellIDs = csvread([folderName '/cell_ids/cell_ids_' num2str(timePoint) '.csv']);
+else
+    d.simset.cellIDs = 1:length(d.cells);
 end
 
 end

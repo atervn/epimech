@@ -7,6 +7,7 @@ maxs = [];
 mins = [];
 folderExists = exist([app.plotImport(app.selectedFile).folderName '/areas'],'dir') == 7;
 
+currentTimePoint = app.plotImport(app.selectedFile).currentTimePoint;
 
 for i = 1:app.plotImport(app.selectedFile).nTimePoints
     if ~folderExists
@@ -14,7 +15,7 @@ for i = 1:app.plotImport(app.selectedFile).nTimePoints
         
         d = [];
         
-        cells = import_cells(app,d,'post_plotting');
+        [~,cells] = import_cells(app,d,'post_plotting');
         
         tempAreas = zeros(1,length(cells));
         for k = 1:length(cells)
@@ -59,3 +60,5 @@ hold off
 ylabel('Cell areas (\mum^2)')
 xlabel(['Time (' timeUnit ')'])
 xlim([times(1) times(end)])
+
+app.plotImport(app.selectedFile).currentTimePoint = currentTimePoint;

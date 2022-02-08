@@ -53,24 +53,26 @@ cells.contacts.cell2.vertex.pairVertexIDs = [];
 cells.contacts.cell2.vertex.pairCells = [];
 
 % force structure
-cells.forces.divisionX = [];
-cells.forces.divisionY = [];
-cells.forces.corticalX = [];
-cells.forces.corticalY = [];
-cells.forces.junctionX = [];
-cells.forces.junctionY = [];
-cells.forces.areaX = [];
-cells.forces.areaY = [];
-cells.forces.membraneX = [];
-cells.forces.membraneY = [];
-cells.forces.substrateX = [];
-cells.forces.substrateY = [];
-cells.forces.pointlikeX = [];
-cells.forces.pointlikeY = [];
-cells.forces.contactX = [];
-cells.forces.contactY = [];
-cells.forces.totalX = [];
-cells.forces.totalY = [];
+cells.forces.divisionX = zeros(cells.nVertices,1);
+cells.forces.divisionY = zeros(cells.nVertices,1);
+cells.forces.corticalX = zeros(cells.nVertices,1);
+cells.forces.corticalY = zeros(cells.nVertices,1);
+cells.forces.junctionX = zeros(cells.nVertices,1);
+cells.forces.junctionY = zeros(cells.nVertices,1);
+cells.forces.areaX = zeros(cells.nVertices,1);
+cells.forces.areaY = zeros(cells.nVertices,1);
+cells.forces.membraneX = zeros(cells.nVertices,1);
+cells.forces.membraneY = zeros(cells.nVertices,1);
+cells.forces.substrateX = zeros(cells.nVertices,1);
+cells.forces.substrateY = zeros(cells.nVertices,1);
+cells.forces.pointlikeX = zeros(cells.nVertices,1);
+cells.forces.pointlikeY = zeros(cells.nVertices,1);
+cells.forces.contactX = zeros(cells.nVertices,1);
+cells.forces.contactY = zeros(cells.nVertices,1);
+cells.forces.dampingX = zeros(cells.nVertices,1);
+cells.forces.dampingY = zeros(cells.nVertices,1);
+cells.forces.totalX = zeros(cells.nVertices,1);
+cells.forces.totalY = zeros(cells.nVertices,1);
 
 % movement increment structure
 cells.increments.k1X = [];

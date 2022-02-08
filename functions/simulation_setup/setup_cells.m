@@ -9,7 +9,6 @@ function d = setup_cells(app,d)
 %       d: main simulation data structure
 %   by Aapo Tervonen, 2021
 
-
 switch app.modelCase
     
     % new simulation
@@ -35,11 +34,14 @@ switch app.modelCase
                 end
         end
         
+        % define cell IDs
+        d.simset.cellIDs = 1:length(d.cells);
+        
     % imported simulation
     case 'import'
         
         % import cell data
-        d.cells = import_cells(app,d,'simulation');
+        d = import_cells(app,d,'simulation');
         
         % remove cells
         d = remove_cells_gui(app, d,'simulation');

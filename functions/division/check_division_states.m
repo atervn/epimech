@@ -44,7 +44,7 @@ for k = 1:length(d.cells)
             % cell growth
             d.cells(k).division.targetArea = sum(newAreas);
             d.cells(k).division.newAreas = newAreas;
-            d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
+%             d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
             d.cells(k).division.time = time + d.spar.maximumGrowthTime;
             d.simset.calculateForces.area(k) = true;
         end
@@ -83,7 +83,7 @@ for k = 1:length(d.cells)
             sumAreas = sum(newAreas);
             d.cells(k).division.targetArea = sumAreas;
             d.cells(k).division.newAreas = newAreas;
-            d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
+%             d.cells(k).normArea = d.spar.cellGrowthConstant*d.cells(k).division.targetArea;
             d.cells(k).division.time = time + d.spar.maximumGrowthTime;
             d.simset.calculateForces.area(k) = true;       
         end
@@ -100,7 +100,7 @@ for k = 1:length(d.cells)
             
             % set the normal areas, division state, and the maximum
             % cytokinesis time
-            d.cells(k).normArea = d.cells(k).division.targetArea;
+%             d.cells(k).normArea = d.cells(k).division.targetArea;
             d.cells(k).division.state = 2;
             d.cells(k).division.time = time + d.spar.maximumDivisionTime;
             d.simset.calculateForces.area(k) = true;

@@ -14,13 +14,21 @@ for k = length(d.cells):-1:1
     % check if there are less than 5 vertices in the cell or the cell area
     % is less than half the minimum cell area allowed for new daughter
     % cells after division
-    if d.cells(k).nVertices < 5 || d.cells(k).area < d.spar.minimumCellSize || (d.cells(k).cellState == 0 && (d.cells(k).area - d.cells(k).normArea)/d.cells(k).normArea < -0.9 && d.cells(k).area < 1.5*d.spar.minimumCellSize)
+    if d.cells(k).nVertices < 5 ...
+            || d.cells(k).area < d.spar.minimumCellSize ...
+            || 4*pi*d.cells(k).area/d.cells(k).perimeter^2 < 0.5 ...
+            || (d.cells(k).cellState == 0 && (d.cells(k).area - d.cells(k).normArea)/d.cells(k).normArea < -0.9 && d.cells(k).area < 1.5*d.spar.minimumCellSize)
         
         % remove the cell and its junctions and focal adhesions
         d = remove_cell_and_links(d,k,1);
         
+        % remove the cell ID
+        d.simset.cellIDs(k) = [];
+        
         % set the junction modification to true
         d.simset.junctionModification = true;
+        
+        % remove the cell data from the forces to calculate
         d.simset.calculateForces.area(k) = [];
         d.simset.calculateForces.all(k) = [];
         d.simset.calculateForces.junction(k) = [];

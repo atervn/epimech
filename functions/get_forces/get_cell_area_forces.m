@@ -18,17 +18,18 @@ meanVectorsY = 0.5.*(cells.leftVectorsY + cells.rightVectorsY);
 
 % dividing cell (multiplier to take into account the higher target
 % area)
-if cells.division.state == 1
+% if cells.division.state == 1
 
     % calculate the area force magnitude
-    forceMagnitude = spar.cellGrowthForceConstant*spar.fArea*(cells.area - cells.normArea)/cells.normArea;
-    
+%     forceMagnitude = spar.cellGrowthForceConstant*spar.fArea*(cells.area - cells.normArea)/cells.normArea;
+%     forceMagnitude = spar.fArea*(-0.1);
+
 % quiescent cell
-else
+% else
     
     % calculate the area force magnitude
     forceMagnitude = spar.fArea*(cells.area - cells.normArea)/cells.normArea;
-end
+% end
 
 % calculate the area forces
 cells.forces.areaX = forceMagnitude.*-meanVectorsY;

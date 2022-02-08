@@ -19,7 +19,7 @@ switch app.modelCase
         d.spar.membraneLength = app.import.scaledParameters.membraneLength;
         d.spar.fArea = app.import.scaledParameters.fArea*app.systemParameters.scalingTime/app.systemParameters.eta/app.import.scaledParameters.scalingTime*app.import.systemParameters.eta;
   
-        d.cells = import_cells(app,d,'simulation');
+        d = import_cells(app,d,'simulation');
         d = remove_cells_gui(app, d,'simulation');
         d = edit_division_properties(d);
 end

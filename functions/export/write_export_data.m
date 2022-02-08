@@ -15,6 +15,11 @@ if d.ex.vertices
     write_file(d.ex, exportMatrices.vertices, 'vertices', exportNumber);
 end
 
+% write the cell vertex coordinate data to file
+if d.ex.vertexVelocities
+    write_file(d.ex, exportMatrices.vertexVelocities, 'velocities', exportNumber, 'vertices');
+end
+
 % write the cell vertex state data to file
 if d.ex.vertexStates
     write_file(d.ex, exportMatrices.vertexStates, 'vertex_states', exportNumber);
@@ -27,6 +32,7 @@ if d.ex.division
     write_file(d.ex, exportMatrices.divisionDistances, 'distances', exportNumber, 'division');
     write_file(d.ex, exportMatrices.newNormAreas, 'new_areas', exportNumber, 'division');
     write_file(d.ex, exportMatrices.targetAreas, 'target_areas', exportNumber, 'division');
+    write_file(d.ex, exportMatrices.divisionTimes, 'times', exportNumber, 'division');
 end
 
 % write the cell state data to file
@@ -162,4 +168,7 @@ if d.ex.substrateForcesTotal && d.simset.substrateSolved
     write_file(d.ex,exportMatrices.substrateForcesTotal, 'total', exportNumber, 'substrate_forces/total');
 end
     
+% write cell IDs to file
+write_file(d.ex,exportMatrices.cellIDs, 'cell_ids', exportNumber);
+
 end

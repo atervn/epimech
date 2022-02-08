@@ -581,7 +581,7 @@ for k = 1:nCells
         end
         
     end
-    
+       
     % if the cell is in cytokinesis (state = 2)
     if d.cells(k).division.state == 2
         

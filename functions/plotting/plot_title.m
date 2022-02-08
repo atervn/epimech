@@ -18,7 +18,7 @@ switch d.pl.titleType
     case 1
         
         % get the time used in the plotting in this time step
-        plottingTime = toc;
+        plottingTime = toc(d.simset.plotTiming);
         
         % growth simulation
         if d.simset.simulationType == 1
@@ -26,7 +26,7 @@ switch d.pl.titleType
             % plot the figure title (format: "Current time ; number of
             % cells; (plot time step simulation duration/duration for the
             % plotting/time it takes to simulate one cell for one hour)"
-            title(d.pl.axesHandle,['Time: ' timeString '; nCells: ' num2str(length(d.cells)) '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str((loopTime - plottingTime)/length(d.cells)*(3600/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
+            title(d.pl.axesHandle,['Time: ' timeString '; nCells: ' num2str(length(d.cells)) '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str(loopTime/length(d.cells)*(3600/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
             
         % pointlike simulation
         elseif d.simset.simulationType == 2

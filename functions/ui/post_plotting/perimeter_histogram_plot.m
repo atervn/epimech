@@ -8,7 +8,7 @@ folderExists2 = exist([app.plotImport(app.selectedFile).folderName '/perimeters'
 
 if ~folderExists2
     d = [];
-    cells = import_cells(app,d,'post_plotting');
+    [~,cells] = import_cells(app,d,'post_plotting');
     tempPerimeters = zeros(1,length(cells));
     cells = get_boundary_vectors(cells);
     cells = get_boundary_lengths(cells);

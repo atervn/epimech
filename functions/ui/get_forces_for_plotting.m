@@ -8,9 +8,9 @@ substrateForces = {'Total substrate forces','Central substrate forces','Restorat
 
 if ~any(strcmp(app.ForceDropDown.Value,substrateForces))
     
-    cells = import_cells(app.CallingApp,d,'post_plotting');
+    [~,cells] = import_cells(app.CallingApp,d,'post_plotting');
     
-    initialCells = import_cells(app.CallingApp,d,'post_plotting',1);
+    [~,initialCells] = import_cells(app.CallingApp,d,'post_plotting',1);
     
     cellPositionsX = zeros(1,length(cells));
     cellPositionsY = zeros(1,length(cells));
@@ -69,7 +69,7 @@ else
         pointsX = importedPoints(:,1);
         pointsY = importedPoints(:,2);
         
-        initialCells = import_cells(app.CallingApp,d,'post_plotting',1);
+        [~,initialCells] = import_cells(app.CallingApp,d,'post_plotting',1);
         
         moveX = -mean(initialCells(pointLikeCell).verticesX).*d.spar.scalingLength.*1e6;
         moveY = -mean(initialCells(pointLikeCell).verticesY).*d.spar.scalingLength.*1e6;

@@ -80,6 +80,9 @@ if ~isempty(app.import.removedCells)
             case 'basic_plotting'
                 d.cells(removedCellsTemp(k)) = [];
         end
+        
+        d.simset.cellIDs(k) = [];
+        
     end
 end
 

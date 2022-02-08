@@ -14,6 +14,12 @@ if d.ex.vertices
     exportMatrices.vertices = zeros([export.nVerticesMax export.nCells*2]);
 end
 
+% if the cell vertex coordinates are exported
+if d.ex.vertexVelocities
+    exportMatrices.vertexVelocities = zeros([export.nVerticesMax export.nCells*2]);
+end
+
+
 % if the cell vertex states are exported
 if d.ex.vertexStates
     exportMatrices.vertexStates = zeros([export.nVerticesMax export.nCells]);
@@ -26,6 +32,7 @@ if d.ex.division
     exportMatrices.divisionDistances = zeros([1 export.nCells]);
     exportMatrices.newNormAreas = zeros([2 export.nCells]);
     exportMatrices.targetAreas = zeros([1 export.nCells]);
+    exportMatrices.divisionTimes = zeros([1 export.nCells]);
 end
 
 % if the cell states are exported

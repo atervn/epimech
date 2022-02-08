@@ -22,12 +22,18 @@ if exist([folderName '/scaled_parameters.csv'],'file') ~= 2
     return
 end
 
-if exist([folderName '/vertices/'],'dir') ~= 7
-    incomplete = 'vertices folder';
+if exist([folderName '/vertices/vertices_1.csv'],'file') ~= 2
+    incomplete = 'vertex coordinates data';
     return
 end
 
+
 if strcmp(app.appTask,'simulate')
+    
+    if exist([folderName '/vertices/velocities_1.csv'],'file') ~= 2
+        incomplete = 'vertex velocities data';
+        return
+    end
     if exist([folderName '/cell_parameters.csv'],'file') ~= 2
         incomplete = 'cell_parameters.csv file';
         return

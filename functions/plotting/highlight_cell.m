@@ -13,7 +13,7 @@ function highlight_cell(d,k,varargin)
 if d.pl.highlightType == 1
     
     % if the cell is to be highlight, plot it with the highlight color)
-    if any(d.pl.highlightedCells == k)
+    if any(d.pl.highlightedCells == d.simset.cellIDs(k))
         fill(d.pl.axesHandle,d.cells(k).verticesX,d.cells(k).verticesY,[0.4 0.4 0.8], 'linewidth', 2, 'edgecolor', [0.1 0.1 0.4]);
     end
     
@@ -67,7 +67,7 @@ elseif d.pl.highlightType == 2
 elseif d.pl.highlightType == 3
     
     % if the current cell is the selected cell
-    if any(d.pl.highlightedCells == k)
+    if any(d.pl.highlightedCells == d.simset.cellIDs(k))
         
         % highlight the cell
         fill(d.pl.axesHandle,d.cells(k).verticesX,d.cells(k).verticesY,[0.4 0.4 0.8], 'linewidth', 2, 'edgecolor', [0.1 0.1 0.4]);
@@ -91,7 +91,7 @@ elseif d.pl.highlightType == 3
 elseif d.pl.highlightType == 4
     
     % if the current cell is within the activated region
-    if any(d.pl.highlightedCells.cells == k)
+    if any(d.pl.highlightedCells.cells == d.simset.cellIDs(k))
         
         % get the vertices that are activated
         vertices = d.pl.highlightedCells.vertices{d.pl.highlightedCells.cells == k};
@@ -104,7 +104,7 @@ elseif d.pl.highlightType == 4
 elseif d.pl.highlightType == 5
     
     % if the current cell is outside the shape
-    if any(d.pl.outsideShape == k)
+    if any(d.pl.outsideShape == d.simset.cellIDs(k))
         
         % highlight the cell
         fill(d.pl.axesHandle,d.cells(k).verticesX,d.cells(k).verticesY,[0.5 0.9 0.9], 'linewidth', 2, 'edgecolor', [0.2 0.5 0.5]);

@@ -36,6 +36,17 @@ for k = 1:length(cells)
         cells(k) = get_cell_pointlike_forces(cells(k),d.simset,d.spar,k);
     end
     
+    % if the simulation includes substrate
+    if d.simset.substrateIncluded
+        
+        % calculate the focal adhesion force for the cells
+        cells(k) = get_cell_focal_adhesion_forces(cells(k),d.sub);
+        
+        % calcualte the edge force for the cells
+        cells(k) = get_edge_forces(cells(k),d.spar);
+    end
+    
+    
     cells(k).forces.dampingX = -cells(k).velocitiesX;
     cells(k).forces.dampingY = -cells(k).velocitiesY;
     
@@ -70,6 +81,9 @@ while allNotGood
             tempCells(k).verticesY = tempCells(k).verticesY + movementY;
             
             tempCells(k).normPerimeter = tempCells(k).normPerimeter + dt*d.spar.perimeterModelingRate*(tempCells(k).perimeter - tempCells(k).normPerimeter);
+            if tempCells(k).division.state == 1
+                tempCells(k).normArea = tempCells(k).normArea + dt*0.00001;
+            end
             
             tempVelocitiesX{k} = tempCells(k).velocitiesX + 0.5.*tempForcesX{k}/m.*dt;
             tempVelocitiesY{k} = tempCells(k).velocitiesY + 0.5.*tempForcesY{k}/m.*dt;
@@ -93,6 +107,16 @@ for k = 1:length(cells)
         cells(k) = get_cell_division_forces(cells(k),d.spar);
     elseif d.simset.simulationType == 2
         cells(k) = get_cell_pointlike_forces(cells(k),d.simset,d.spar,k);
+    end
+    
+    % if the simulation includes substrate
+    if d.simset.substrateIncluded
+        
+        % calculate the focal adhesion force for the cells
+        cells(k) = get_cell_focal_adhesion_forces(tempCells(k),d.sub);
+        
+        % calcualte the edge force for the cells
+        cells(k) = get_edge_forces(tempCells(k),d.spar);
     end
     
     cells(k).forces.dampingX = -tempVelocitiesX{k};

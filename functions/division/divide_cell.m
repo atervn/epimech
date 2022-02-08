@@ -24,6 +24,9 @@ for k = 1:length(d.cells)
         % between the division vertices is below divisionDistance
         if d.cells(k).division.time < time || (d.cells(k).verticesX(d.cells(k).division.vertices(1)) - d.cells(k).verticesX(d.cells(k).division.vertices(2)))^2 + (d.cells(k).verticesY(d.cells(k).division.vertices(1)) - d.cells(k).verticesY(d.cells(k).division.vertices(2)))^2 < d.cells(k).division.distanceSq
             
+            % set the new cell ID
+            d.simset.cellIDs(end+1) = d.simset.cellIDs(end) + 1;
+            
             % modify junctions following the division
             d.simset.junctionModification = true;
             
@@ -212,7 +215,7 @@ for k = 1:length(d.cells)
             d.cells(end).division.newAreas = zeros(2,1);
             d.cells(end).division.distanceSq = 0;
             d.cells(end).nVertices = size(d.cells(end).verticesX,1);
-            d.cells(end).lineage = [d.cells(k).lineage length(d.cells)];
+            d.cells(end).lineage = [d.cells(k).lineage d.simset.cellIDs(end)];
             d.cells(end).cortex.fCortex = d.cells(k).cortex.fCortex;
             d.cells(end).cortex.perimeterConstant = d.cells(k).cortex.perimeterConstant;
             d.cells(end).area = calculate_area(d.cells(end).verticesX,d.cells(end).verticesY);
@@ -295,6 +298,7 @@ for k = 1:length(d.cells)
             d.simset.calculateForces.junction(k) = false;
             d.simset.calculateForces.membrane(k) = true;
             d.simset.calculateForces.division(k) = true;
+            
         end
     end
 end

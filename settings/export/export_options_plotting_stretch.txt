@@ -1,5 +1,6 @@
 parameters,1
 vertices,1
+vertexVelocities,0
 vertexStates,1
 division,0
 cellStates,1

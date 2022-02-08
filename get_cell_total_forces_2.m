@@ -24,8 +24,8 @@ if simulationType == 1
 elseif simulationType == 2
     
     % add the pointlike specific forces
-    totalX = totalX + cells.forces.pointlikeX;% + cells.forces.substrateX + cells.forces.edgeX;
-    totalY = totalY + cells.forces.pointlikeY;% + cells.forces.substrateY + cells.forces.edgeY;
+    totalX = totalX + cells.forces.pointlikeX + cells.forces.substrateX + cells.forces.edgeX;
+    totalY = totalY + cells.forces.pointlikeY + cells.forces.substrateY + cells.forces.edgeY;
     
 % lateral stretching simulation
 elseif simulationType == 3

@@ -18,7 +18,7 @@ if d.pl.plot
         % if this is simulation (plotType == 1), get the time it has taken
         % to simulate after the previous plotting
         if d.pl.plotType == 1
-            loopTime = toc;
+            loopTime = toc(d.simset.solverTiming);
             
         % otherwise
         else
@@ -26,7 +26,7 @@ if d.pl.plot
         end
         
         % for timing the plotting itself
-        tic;
+        d.simset.plotTiming = tic;
         
         % clear the axis
         d.pl.axesHandle = cla(d.pl.axesHandle);
@@ -169,9 +169,9 @@ if d.pl.plot
         
         % if this is a simulation plotting, start the clock to get the
         % duration until the next plotting
-        if d.pl.plotType == 1
-            tic
-        end
+%         if d.pl.plotType == 1
+%             tic
+%         end
         
     end
     

@@ -24,6 +24,11 @@ for k = 1:length(d.cells)
         exportMatrices.vertices(1:export.nVertices(k),idx2) = [d.cells(k).previousVerticesX d.cells(k).previousVerticesY];
     end
     
+    % input the vertex coordinate data
+    if d.ex.vertexVelocities
+        exportMatrices.vertexVelocities(1:export.nVertices(k),idx2) = [d.cells(k).previousVelocitiesX d.cells(k).previousVelocitiesY];
+    end
+    
     % input the vertex states data
     if d.ex.vertexStates
         exportMatrices.vertexStates(1:export.nVertices(k),k) = d.cells(k).vertexStates;
@@ -34,8 +39,9 @@ for k = 1:length(d.cells)
         exportMatrices.divisionStates(1,k) = d.cells(k).division.state;
         exportMatrices.divisionVertices(:,k) = d.cells(k).division.vertices;
         exportMatrices.divisionDistances(k) = d.cells(k).division.distanceSq;
-        exportMatrices.newAreas(1:2,k) = d.cells(k).division.newAreas;
+        exportMatrices.newNormAreas(1:2,k) = d.cells(k).division.newAreas;
         exportMatrices.targetAreas(k) = d.cells(k).division.targetArea;
+        exportMatrices.divisionTimes(k) = d.cells(k).division.time;
     end
     
     % input the cell state data
@@ -142,6 +148,9 @@ for k = 1:length(d.cells)
         exportMatrices.cellForcesTotal(1:export.nVertices(k),idx2) = [d.cells(k).forces.totalX d.cells(k).forces.totalY];
     end
 end
+
+% input the cellIDs
+exportMatrices.cellIDs = d.simset.cellIDs;
 
 % input substrate point coordinates data if substrate is exported (and part
 % of the simulation)

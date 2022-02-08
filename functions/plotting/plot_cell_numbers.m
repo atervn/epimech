@@ -20,14 +20,14 @@ if d.pl.cellNumbers && d.pl.cellStyle ~= 0
         
         % plot the index in white (with clipping on so cell indices outside
         % the plot area are not plotted)
-        txt = text(d.pl.axesHandle,cellCenterX, cellCenterY, num2str(k),'Color', [1 1 1], 'HorizontalAlignment','center','VerticalAlignment', 'middle','clipping','on');
+        txt = text(d.pl.axesHandle,cellCenterX, cellCenterY, num2str(d.simset.cellIDs(k)),'Color', [1 1 1], 'HorizontalAlignment','center','VerticalAlignment', 'middle','clipping','on');
     
     % otherwise
     else
         
         % plot the index in black (with clipping on so cell indices outside
         % the plot area are not plotted)
-        txt = text(d.pl.axesHandle,cellCenterX, cellCenterY, num2str(k),'HorizontalAlignment','center','VerticalAlignment', 'middle','clipping','on');
+        txt = text(d.pl.axesHandle,cellCenterX, cellCenterY, num2str(d.simset.cellIDs(k)),'HorizontalAlignment','center','VerticalAlignment', 'middle','clipping','on');
     end
     
     % get the axis hangle

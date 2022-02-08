@@ -40,16 +40,26 @@ end
 
 Movement = [];
 
-tic
+% d.sub.velocitiesX = zeros(size(d.sub.pointsX));
+% d.sub.velocitiesY = zeros(size(d.sub.pointsX));
 
-d.simset.calculateForces.all = true;
-d.simset.calculateForces.junction = true;
-d.simset.calculateForces.area = true;
-d.simset.calculateForces.membrane = true;
-d.simset.calculateForces.cortical = true;
-d.simset.calculateForces.division = true;
+d.simset.solverTiming = tic;
+d.simset.exportTiming = tic;
+d.simset.loopTime = tic;
 
+meta.maxMovement = [];
+meta.dt = [];
+meta.nCells = [];
+meta.loopTime = [];
+meta.cellTime = [];
 
+% SIIRRÄ SETUPPIIN!
+d.simset.calculateForces.all = true(length(d.cells),1);
+d.simset.calculateForces.junction = true(length(d.cells),1);
+d.simset.calculateForces.area = true(length(d.cells),1);
+d.simset.calculateForces.membrane = true(length(d.cells),1);
+d.simset.calculateForces.cortical = true(length(d.cells),1);
+d.simset.calculateForces.division = true(length(d.cells),1);
 
 %% main simulation loop
 while time - d.spar.simulationTime <= 1e-8
@@ -65,15 +75,6 @@ while time - d.spar.simulationTime <= 1e-8
         end
     end
     
-%     if time >= 511200
-%         d.pl.plotDt = 1;
-%     end
-%     if time >= 514400
-%         d.pl.plotDt = 1;
-%     end
-    
-    time
-
     %% cell properties and component removal
     
     % get cell properties
@@ -94,6 +95,10 @@ while time - d.spar.simulationTime <= 1e-8
         d = remove_vertices(d);
     end
     
+    % get cell areas and perimeters
+    d.cells = get_cell_areas(d.cells);
+    d.cells = get_cell_perimeters(d.cells);
+    
     % remove cells if needed
     d = remove_cells(d);
     if isempty(d.cells)
@@ -101,10 +106,6 @@ while time - d.spar.simulationTime <= 1e-8
     end
     
     %% division
-    
-    % get cell areas and perimeters
-    d.cells = get_cell_areas(d.cells);
-    d.cells = get_cell_perimeters(d.cells);
     
     % if simulationType is growth (1)
     if d.simset.simulationType == 1
@@ -134,6 +135,8 @@ while time - d.spar.simulationTime <= 1e-8
     for k = 1:length(d.cells)
         d.cells(k).previousVerticesX = d.cells(k).verticesX;
         d.cells(k).previousVerticesY = d.cells(k).verticesY;
+        d.cells(k).previousVelocitiesX = d.cells(k).velocitiesX;
+        d.cells(k).previousVelocitiesY = d.cells(k).velocitiesY;
     end
     if d.simset.substrateIncluded
         d.sub.previousPointsX = d.sub.pointsX;
@@ -159,9 +162,9 @@ while time - d.spar.simulationTime <= 1e-8
     
     [d, dt, maxmaxMovement] = solve_cells_vv(d, dt);
     
-    
-    
-    Movement(end+1) = maxmaxMovement;
+    meta.dt(end+1) = dt;
+    meta.nCells(end+1) = length(d.cells);
+    meta.maxMovement(end+1) = maxmaxMovement;
     
     % save time step for post plotting
     if d.simset.dtPlot
@@ -172,7 +175,9 @@ while time - d.spar.simulationTime <= 1e-8
     if d.simset.substrateSolved
         
         % solve using 4th order Runge Kutta solver
-        [d,subDt] = solve_substrate(d,dt,subDt);
+%         [d,subDt] = solve_substrate(d,dt,subDt);
+        
+        [d,dt] = solve_substrate_vv(d,dt);
         
         % save time step for post plotting
         if d.simset.dtPlot
@@ -182,11 +187,20 @@ while time - d.spar.simulationTime <= 1e-8
     
     %% misc
     
+    meta.loopTime(end+1) = toc(d.simset.loopTime);
+    meta.cellTime(end+1) = meta.loopTime(end)/length(d.cells)*(3600/d.spar.scalingTime/meta.dt(end));
+    
     % plot data
     d.pl.videoObject = plot_function(d, time);
     
+    if d.pl.plot && mod(time+1e-10,d.pl.plotDt) <= 1e-9
+        d.simset.solverTiming = tic;
+    end
+    
+    d.simset.loopTime = tic;
+    
     % export data
-    export_data(d, time)
+    export_data(d, time);
     
     % move pointlike micromanipulator
     d = move_pointlike(d, time, dt);
@@ -208,7 +222,16 @@ while time - d.spar.simulationTime <= 1e-8
     d = update_progress_bar(app, d, time);
 end
 
-figure(32); plot(Movement);
+if d.ex.export
+dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/n_cells.csv'],meta.nCells);
+dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/maxMovement.csv'],meta.maxMovement);
+dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/dt.csv'],meta.dt);
+dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/loopTime.csv'],meta.loopTime);
+dlmwrite([d.ex.defaultPath '/results/', d.ex.exportName '/meta/cellTime.csv'],meta.cellTime);
+end
+
+
+figure(32); plot(meta.maxMovement);
 
 % plot the simulation time steps if selected
 post_plot_dt(d);

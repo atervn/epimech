@@ -87,7 +87,7 @@ if option == 1
                     app.import.specificCellParameters = import_settings([app.import.folderName '/specific_cell_parameters.csv']);
                     app.import.systemParameters = import_settings([app.import.folderName '/system_parameters.csv']);
                     app.import.scaledParameters = import_settings([app.import.folderName '/scaled_parameters.csv']);
-                    app.import.nTimePoints = size(dir([app.import.folderName '/vertices/*.csv']),1);
+                    app.import.nTimePoints = size(dir([app.import.folderName '/vertices/vertices_*.csv']),1);
                     app.import.currentTimePoint = app.import.nTimePoints;
                     app.import.originalCellNumbers = get_original_cell_numbers_function(app);
                     app.import.nCells = length(app.import.originalCellNumbers);
@@ -105,7 +105,7 @@ if option == 1
                     app.plotImport(i).exportOptions = import_settings([app.plotImport(i).folderName '/export_options.csv']);
                     app.plotImport(i).systemParameters = import_settings([app.plotImport(i).folderName '/system_parameters.csv']);
                     app.plotImport(i).scaledParameters = import_settings([app.plotImport(i).folderName '/scaled_parameters.csv']);
-                    app.plotImport(i).nTimePoints = size(dir([app.plotImport(i).folderName '/vertices/*.csv']),1);
+                    app.plotImport(i).nTimePoints = size(dir([app.plotImport(i).folderName '/vertices/vertices_*.csv']),1);
                     app.plotImport(i).currentTimePoint = app.plotImport(i).nTimePoints;
                     app.plotImport(i).cellNumbers = get_original_cell_numbers_function(app,i);
                     app.plotImport(i).cellParameters = import_settings([app.plotImport(i).folderName '/cell_parameters.csv']);

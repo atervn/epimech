@@ -148,6 +148,8 @@ cells.movementY = [];
 % previous vertex positions (needed for plotting during the simulation)
 cells.previousVerticesX = [];
 cells.previousVerticesY = [];
+cells.previousVelocitiesX = [];
+cells.previousVelocitiesY = [];
 
 % cell lineage
 cells.lineage = [];

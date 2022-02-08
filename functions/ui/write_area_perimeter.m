@@ -4,7 +4,7 @@ folderExists = exist([app.plotImport(app.selectedFile).folderName '/areas'],'dir
 
 if ~folderExists
     d = [];
-    cells = import_cells(app,d,'post_plotting');
+    [~,cells] = import_cells(app,d,'post_plotting');
     
     tempAreas = zeros(1,length(cells));
     for k = 1:length(cells)
@@ -20,7 +20,7 @@ if ~folderExists2
     
     if ~folderExists
         d = [];
-        cells = import_cells(app,d,'post_plotting');
+        [~,cells] = import_cells(app,d,'post_plotting');
     end
     tempPerimeters = zeros(1,length(cells));
     cells = get_boundary_vectors(cells);
@@ -42,7 +42,7 @@ app.PerimeterValueLabel.Text = [num2str(round(mean(tempPerimeters),2),'%6.2f') '
 folderExists3 = exist([app.plotImport(app.selectedFile).folderName '/junctions'],'dir') == 7;
 if folderExists3
     d = [];
-    cells = import_cells(app,d,'get_neighbors');
+    [~,cells] = import_cells(app,d,'get_neighbors');
     nNeighbors = zeros(length(cells),1);
     for k = 1:length(cells)
         % only take the internal cells with max 20 % non junction points

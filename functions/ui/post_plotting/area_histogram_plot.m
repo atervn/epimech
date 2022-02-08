@@ -10,7 +10,7 @@ if ~folderExists
     
     d = [];
     
-    cells = import_cells(app,d,'post_plotting');
+    [~,cells] = import_cells(app,d,'post_plotting');
     
     tempAreas = zeros(1,length(cells));
     for k = 1:length(cells)
