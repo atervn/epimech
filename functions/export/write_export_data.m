@@ -27,6 +27,7 @@ if d.ex.division
     write_file(d.ex, exportMatrices.divisionDistances, 'distances', exportNumber, 'division');
     write_file(d.ex, exportMatrices.newNormAreas, 'new_areas', exportNumber, 'division');
     write_file(d.ex, exportMatrices.targetAreas, 'target_areas', exportNumber, 'division');
+    write_file(d.ex, exportMatrices.divisionTimes, 'times', exportNumber, 'division');
 end
 
 % write the cell state data to file

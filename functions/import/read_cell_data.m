@@ -38,6 +38,7 @@ if strcmp(option, 'simulation')
         importedData.divisionDistances = csvread([folderName '/division/distances_' num2str(timePoint), '.csv']);
         importedData.targetAreas = csvread([folderName '/division/target_areas_' num2str(timePoint), '.csv']);
         importedData.newAreas = csvread([folderName '/division/new_areas_' num2str(timePoint), '.csv']);
+        importedData.divisionTimes = csvread([folderName '/division/times_' num2str(timePoint), '.csv']);
     end
     
     % if cortical data is available in the import

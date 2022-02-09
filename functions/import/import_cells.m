@@ -76,11 +76,13 @@ for k = 1:nCells
             cells(k).division.distanceSq = importedData.divisionDistances(k);
             cells(k).division.newAreas = importedData.newAreas(:,k);
             cells(k).division.targetArea = importedData.targetAreas(1,k);
+            cells(k).division.time = importedData.divisionTimes(k) - (timePoint-1)*app.import.systemParameters.scalingTime*app.import.exportOptions.exportDt;
         else
             cells(k).division.vertices = [0;0];
             cells(k).division.distanceSq = 0;
             cells(k).division.newAreas = [0;0];
             cells(k).division.targetArea = 0;
+            cells(k).division.time = 0;
         end
         
         % get the cortical data if it is available

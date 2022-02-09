@@ -26,6 +26,7 @@ if d.ex.division
     exportMatrices.divisionDistances = zeros([1 export.nCells]);
     exportMatrices.newNormAreas = zeros([2 export.nCells]);
     exportMatrices.targetAreas = zeros([1 export.nCells]);
+    exportMatrices.divisionTimes = zeros([1 export.nCells]);
 end
 
 % if the cell states are exported

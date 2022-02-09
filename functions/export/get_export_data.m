@@ -34,8 +34,9 @@ for k = 1:length(d.cells)
         exportMatrices.divisionStates(1,k) = d.cells(k).division.state;
         exportMatrices.divisionVertices(:,k) = d.cells(k).division.vertices;
         exportMatrices.divisionDistances(k) = d.cells(k).division.distanceSq;
-        exportMatrices.newAreas(1:2,k) = d.cells(k).division.newAreas;
+        exportMatrices.newNormAreas(1:2,k) = d.cells(k).division.newAreas;
         exportMatrices.targetAreas(k) = d.cells(k).division.targetArea;
+        exportMatrices.divisionTimes(k) = d.cells(k).division.time;    
     end
     
     % input the cell state data
