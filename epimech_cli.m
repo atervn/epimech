@@ -1,4 +1,4 @@
-function epimech_cmd(varargin)
+function epimech_cli(varargin)
 % EPIMECH_CMD Run the epimech using command line
 %   The function defines the simulations to run based on the user input in
 %   the config file.

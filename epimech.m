@@ -21,7 +21,7 @@ if numel(varargin) == 0
 else
     
     % run the command line version with the given config file
-    epimech_cmd(varargin{1});
+    epimech_cli(varargin{1});
 end
 
 end
