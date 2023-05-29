@@ -162,7 +162,7 @@ to reduce the size of the epithelium. There are two different shapes
 that can be used in the removal, circle and square, whose size is also
 defined. The flag has to be of a type `[shape][size]` (no space), where
 `[shape]` is either `c` (circle) or `s` (square) and the `[size]` is the
-diamater (circle) or side length (square) in $\mu$m. The shapes are
+diameter (circle) or side length (square) in $\mu$m. The shapes are
 centered to coordinates (0,0). For example, if a circular area with the
 diameter of 250 $\mu$m is to be removed, this flag would be `c250`.
 
