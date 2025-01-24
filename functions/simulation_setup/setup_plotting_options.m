@@ -358,6 +358,42 @@ elseif strcmp(plotCase,'opto_area')
     
     % set the automatic sizing to true
     d.pl.automaticSize = 1;
+
+% opto region selection plotting
+elseif strcmp(plotCase,'glass_area')
+    
+    % set substrate solved and included to 0
+    d.simset.substrateSolved = 0;
+    d.simset.substrateIncluded = 0;
+    
+    % get the basic plotting options
+    d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
+    
+    d.pl.cellStyle = 0;
+    d.pl.substrateStyle = 0;
+
+    d.pl.scaleBar.show = true;
+
+    % set plot type
+    d.pl.plotType = 3;
+    
+    % set title type and number of title lines
+    d.pl.titleType = 9;
+    d.pl.nTitleLines = 2;
+    
+    % set the maximum simulation time and plotting step (values not
+    % important, but step has to have value that is plotted in plot
+    % function, e.g. 1)
+    d.pl.maxTime = 0;
+    d.pl.plotDt = 1;
+    
+    % set highlight type and the optogenetic vertices as the
+    % highlighted cells
+    d.pl.highlightedCells = 0;
+    app.SubstratesizeEditField.Value
+    d.pl.windowSize = app.SubstratesizeEditField.Value*1e-6;
+    % set the automatic sizing to true
+    d.pl.automaticSize = 0;
     
 % cell selection for optogenetic junction analysis
 elseif strcmp(plotCase,'opto_post_cell')
@@ -740,17 +776,18 @@ function d = setup_scalebar(app,d)
 %   by Aapo Tervonen, 2021
 
 % check if scale bar is shown
-switch app.appTask
-    
-    % simulation
-    case 'simulate'
-        d.pl.scaleBar.show = app.ScalebarCheckBox.Value;
-        
-    % post plotting
-    case 'plotAndAnalyze'
-        d.pl.scaleBar.show = app.ScalebarCheckBox_2.Value;
+if ~d.pl.scaleBar.show
+    switch app.appTask
+            
+        % simulation
+        case 'simulate'
+            d.pl.scaleBar.show = app.ScalebarCheckBox.Value;
+            
+        % post plotting
+        case 'plotAndAnalyze'
+            d.pl.scaleBar.show = app.ScalebarCheckBox_2.Value;
+    end
 end
-
 % if scale bar is shown
 if d.pl.scaleBar.show
     

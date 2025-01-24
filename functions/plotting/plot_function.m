@@ -75,7 +75,7 @@ if d.pl.plot
         
         % check that the cells data structure is available and that the
         % cells have vertex coordinates
-        if numel(d.cells) > 0 && ~isempty(d.cells(1).verticesX)
+        if d.pl.cellStyle ~= 0 && numel(d.cells) > 0 && ~isempty(d.cells(1).verticesX)
             
             % plot junctions
             plot_junctions(d);

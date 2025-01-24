@@ -469,5 +469,43 @@ if strcmp(app.appTask,'simulate')
                 app.optoVertices.cells = [];
                 app.optoVertices.vertices = {};
             end
+        case 'Glass activation'
+            if app.firstStartup || ~strcmp(app.simulationType,'glass')
+                app.plottingOptions = import_settings([app.defaultPath 'settings/plotting/plotting_options_glass.txt']);
+                app.plottingOptions = settings_to_logical(app.plottingOptions,'plot');
+                
+                app.customExportOptions = import_settings([app.defaultPath 'settings/export/export_options_custom_glass.txt']);
+                app.customExportOptions = settings_to_logical(app.customExportOptions,'export');
+                
+                app.simulationType = 'glass';
+                
+                app.specificCellParameters = import_settings([app.defaultPath 'parameters/specific_parameters_glass.txt']);
+
+                app.systemParameters = import_settings([app.defaultPath 'parameters/system_parameters_glass.txt']);
+                
+                set_object_properties_function(app,{'FittedButton','SquareButton', 'SubstrateparametersButton'},'Enable',{'On'});
+                app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                app.ConstantButton.Value = 1;
+                set_object_properties_function(app,{'EditstiffnessButton'},'Enable',{'Off'});
+                set_object_properties_function(app,{'ConstantButton','HeterogeneousButton','GradientButton','YoungsmodulusEditField', 'YoungsmodulusEditFieldLabel','kPaLabel'},'Enable',{'On'});
+                app.UseimportedsubstratedataCheckBox.Value = 0;
+                app.UseimportedsubstratedataCheckBox.Visible = 'Off';
+                app.UseimportedsubstratedataCheckBox_2.Value = 0;
+                app.UseimportedsubstratedataCheckBox_2.Visible = 'Off';
+                                
+                set_object_properties_function(app,{'SubstratestyleDropDown','SubstratestyleLabel'},'Enable',{'On'});
+                
+                app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                
+                app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
+                
+                app.SimulationtimeDropDown.Items = {'mins','secs'};
+                app.SimulationtimeDropDown.Value = 'mins';
+                app.SimulationtimestepDropDown.Items = {'mins','secs','msecs'};
+                app.SimulationtimestepDropDown.Value = 'secs';
+                
+                app.SaveactivationareaButton.Enable = 'Off';
+                app.activationShapes = {};
+            end
     end
 end

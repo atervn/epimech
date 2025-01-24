@@ -65,6 +65,7 @@ else
                     app.PointlikesettingsPanel.Visible = 'Off';
                     app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
+                    app.GlassActivationPanel.Visible = 'Off';
 
                     
                 case 'Pointlike micromanipulation'
@@ -93,6 +94,7 @@ else
                     app.PointlikesettingsPanel.Visible = 'On';
                     app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
+                    app.GlassActivationPanel.Visible = 'Off';
                 case 'Lateral compression and stretching'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Pointlike micromanipulation')) = [];
@@ -116,6 +118,7 @@ else
                     app.PointlikesettingsPanel.Visible = 'Off';
                     app.StretchSettingsPanel.Visible = 'On';
                     app.OptogeneticsPanel.Visible = 'Off';
+                    app.GlassActivationPanel.Visible = 'Off';
                 case 'Edge compression'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Substrate size')) = [];
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Substrate stiffness')) = [];
@@ -134,6 +137,7 @@ else
                     app.PointlikesettingsPanel.Visible = 'Off';
                     app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'Off';
+                    app.GlassActivationPanel.Visible = 'Off';
                 case 'Optogenetic activation'
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
                     app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Cell size')) = [];
@@ -157,6 +161,38 @@ else
                     app.PointlikesettingsPanel.Visible = 'Off';
                     app.StretchSettingsPanel.Visible = 'Off';
                     app.OptogeneticsPanel.Visible = 'On';
+                    app.GlassActivationPanel.Visible = 'Off';
+                case 'Glass activation'
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Division')) = [];
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Cell size')) = [];
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Lateral compression and stretching')) = [];
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Edge compression')) = [];
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Pointlike micromanipulation')) = [];
+                    app.ComponentsettingsDropdown.Items(strcmp(app.ComponentsettingsDropdown.Items,'Optogenetics')) = [];
+                    
+                    if ~any(strcmp(app.ComponentsettingsDropdown.Items,'Substrate size'))
+                        app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, 'Substrate size'];
+                    end
+                    if ~any(strcmp(app.ComponentsettingsDropdown.Items,'Substrate stiffness'))
+                        app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, 'Substrate stiffness'];
+                    end
+                    if ~any(strcmp(app.ComponentsettingsDropdown.Items,'Focal adhesions'))
+                        app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, 'Focal adhesions'];
+                    end
+                    if ~any(strcmp(app.ComponentsettingsDropdown.Items,'Glass activation'))
+                        app.ComponentsettingsDropdown.Items = [app.ComponentsettingsDropdown.Items, 'Glass activation'];
+                    end
+                    
+                    app.ComponentsettingsDropdown.Value = 'Substrate stiffness';
+                    app.CellsizesettingsPanel.Visible = 'Off';
+                    app.DivisionsettingsPanel.Visible = 'Off';
+                    app.SubstrateSizePanel.Visible = 'Off';
+                    app.SubstrateStiffnessPanel.Visible = 'On';
+                    app.FocalAdhesionsPanel.Visible = 'Off';
+                    app.PointlikesettingsPanel.Visible = 'Off';
+                    app.StretchSettingsPanel.Visible = 'Off';
+                    app.OptogeneticsPanel.Visible = 'Off';
+                    app.GlassActivationPanel.Visible = 'Off';
             end
             
             change_panel_tooltips(app,'all')
