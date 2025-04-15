@@ -12,9 +12,16 @@ function [restorativeForcesX,restorativeForcesY] = get_substrate_restorative_for
 %       restorativeForcesY: y-components of the restorative forces
 %   by Aapo Tervonen, 2021
 
-% calculate the restorative force components
-restorativeForcesX = d.sub.restorativeSpringConstants.*(d.sub.pointsOriginalX - subTemp.pointsX);
-restorativeForcesY = d.sub.restorativeSpringConstants.*(d.sub.pointsOriginalY - subTemp.pointsY);
+if d.simset.simulationType == 6
+    offsetY = d.sub.pointsOriginalY;
+    offsetY(d.simset.glass.substrateIdx) = offsetY(d.simset.glass.substrateIdx) + d.simset.glass.glassOffset;
+    restorativeForcesX = d.sub.restorativeSpringConstants.*(d.sub.pointsOriginalX - subTemp.pointsX);
+    restorativeForcesY = d.sub.restorativeSpringConstants.*(offsetY - subTemp.pointsY);
+else
+    % calculate the restorative force components
+    restorativeForcesX = d.sub.restorativeSpringConstants.*(d.sub.pointsOriginalX - subTemp.pointsX);
+    restorativeForcesY = d.sub.restorativeSpringConstants.*(d.sub.pointsOriginalY - subTemp.pointsY);
+end
 
 % for the points at the edges of the substrate area, multiply with the
 % additional edge constant

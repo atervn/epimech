@@ -12,6 +12,7 @@ corticalStrengths,0
 lineage,1
 pointlike,0
 opto,0
+glass,0
 stretch,1
 substratePlot,1
 substrateFull,0

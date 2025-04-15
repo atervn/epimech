@@ -33,7 +33,11 @@ if any(cells.substrate.connected)
     
     % if stiffness is constant, cells.substrate.fFocalAdhesions is scalar
     % size (1,1), if not, then it has the same length as the number of FAs
+    try
     cells.forces.substrateX(cells.substrate.connected) = cells.substrate.fFocalAdhesions.*(adhesionPointsX - cells.verticesX(cells.substrate.connected));
+    catch 
+        a = 1;
+    end
     cells.forces.substrateY(cells.substrate.connected) = cells.substrate.fFocalAdhesions.*(adhesionPointsY - cells.verticesY(cells.substrate.connected));
 end
 

@@ -42,6 +42,7 @@ app.UseimportedsubstratedataCheckBox.Value = 0;
 app.UseimportedmovementdataCheckBox.Value = 0;
 app.SubstrateTypeButtonGroup.SelectedObject.Text = 'Fitted';
 
+
 % set the appropriate solver
 switch data.simulationType
     case 'growth'
@@ -110,7 +111,9 @@ else
     app.import.scaledParameters = import_settings([app.import.folderName '/scaled_parameters.csv']);
     app.import.cellParameters = import_settings([app.import.folderName '/cell_parameters.csv']);
     app.import.specificCellParameters = import_settings([app.import.folderName '/specific_cell_parameters.csv']);
-    
+    app.import.exportOptions = import_settings([app.import.folderName '/export_options.csv']);
+
+
     % if the user wishes to use the cell parameters from the import
     if data.loadedParameters(iLoop) == 1
         

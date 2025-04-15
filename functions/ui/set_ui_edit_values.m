@@ -162,7 +162,7 @@ switch app.appTask
         
         change_import_parameter_panel(app);
         
-        if (exist([app.plotImport(app.selectedFile).folderName '/substrate/'],'dir') == 7 && exist([app.plotImport(app.selectedFile).folderName '/substrate_auxiliary/'],'dir') == 7) && (strcmp(app.plotImport(app.selectedFile).simulationType,'pointlike') || strcmp(app.plotImport(app.selectedFile).simulationType,'stretch') || strcmp(app.plotImport(app.selectedFile).simulationType,'opto'))
+        if (exist([app.plotImport(app.selectedFile).folderName '/substrate/'],'dir') == 7 && exist([app.plotImport(app.selectedFile).folderName '/substrate_auxiliary/'],'dir') == 7) && (strcmp(app.plotImport(app.selectedFile).simulationType,'pointlike') || strcmp(app.plotImport(app.selectedFile).simulationType,'stretch') || strcmp(app.plotImport(app.selectedFile).simulationType,'opto') || strcmp(app.plotImport(app.selectedFile).simulationType,'glass'))
             set_object_properties_function(app,{'SubstratestyleDropDown_2','SubstratestyleDropDown_2Label'},'Enable', {'On'});
         end
         

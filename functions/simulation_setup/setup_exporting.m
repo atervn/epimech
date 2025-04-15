@@ -90,6 +90,9 @@ if app.ExportdataCheckBox.Value
     % export opto settings
     export_opto_settings(d,folderPath);
     
+    % export glass settings
+    export_glass_settings(d,folderPath);
+
     % export stretch settings
     export_stretch_settings(app,d,folderPath);
 else
@@ -125,6 +128,8 @@ switch app.ExporteddataDropDown.Value
                 ex = import_settings([app.defaultPath 'settings/export/export_options_import_stretch.txt']);
             case 'opto'
                 ex = import_settings([app.defaultPath 'settings/export/export_options_import_opto.txt']);
+            case 'glass'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_import_glass.txt']);
         end
         
         % export suitable for basic plotting
@@ -141,6 +146,9 @@ switch app.ExporteddataDropDown.Value
                 ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_stretch.txt']);
             case 'opto'
                 ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_opto.txt']);
+            case 'glass'
+                ex = import_settings([app.defaultPath 'settings/export/export_options_plotting_glass.txt']);
+                
         end
         
         % full export
@@ -231,6 +239,11 @@ end
 % if opto data is exported and opto simulation, create the folder
 if d.ex.opto && d.simset.simulationType == 5
     mkdir(folderPath, 'opto');
+end
+
+% if opto data is exported and opto simulation, create the folder
+if d.ex.glass && d.simset.simulationType == 6
+    mkdir(folderPath, 'glass');
 end
 
 % if stretch data is exported and stretch simulation, create the folder
@@ -693,6 +706,8 @@ switch d.simset.simulationType
         fprintf(fileID,'frame');
     case 5
         fprintf(fileID,'opto');
+    case 6
+        fprintf(fileID,'glass');
 end
 
 % close the file
@@ -755,6 +770,26 @@ if d.ex.opto && d.simset.simulationType == 5
     % export activation data and activation regions
     csvwrite([folderPath '/opto/opto_activation.csv'],[d.simset.opto.times d.simset.opto.levels]);
     csvwrite([folderPath '/opto/opto_shapes.csv'],d.simset.opto.shapes);
+end
+
+end
+
+function export_glass_settings(d,folderPath)
+% EXPORT_OPTO_DATA Export opto data
+%   The function export the opto data, including the activation behavior
+%   and the activation region shapes
+%   INPUT:
+%       d: main simulation data structure
+%       ex: export settings
+%       folderPath: simulation export root folder path
+%   by Aapo Tervonen, 2021
+
+% if opto is exported and simualtion type is opto
+if d.ex.glass && d.simset.simulationType == 6
+    
+    % export activation data and activation regions
+    csvwrite([folderPath '/glass/glass_activation.csv'],[d.simset.glass.times d.simset.glass.positions]);
+    csvwrite([folderPath '/glass/glass_shapes.csv'],d.simset.glass.shapes);
 end
 
 end

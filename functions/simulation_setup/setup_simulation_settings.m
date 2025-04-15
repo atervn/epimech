@@ -31,6 +31,10 @@ switch app.simulationType
         d.simset.simulationType = 5;
         d.simset.substrateIncluded = 1;
         d.simset.substrateSolved = 1;
+    case 'glass'
+        d.simset.simulationType = 6;
+        d.simset.substrateIncluded = 1;
+        d.simset.substrateSolved = 1;
 end
 
 % set the cell solver

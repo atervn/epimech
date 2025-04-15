@@ -39,6 +39,8 @@ if d.simset.progressBar.active
             d.simset.progressBar.totalTimeString = get_time_string(d, totalTime, 3);
         case 5
             d.simset.progressBar.totalTimeString = get_time_string(d, totalTime, 2);
+        case 6
+            d.simset.progressBar.totalTimeString = get_time_string(d, totalTime, 2);
     end
 end
 

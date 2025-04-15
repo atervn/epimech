@@ -61,6 +61,8 @@ if d.simset.progressBar.active
             msg = get_time_string(d, time, 3);
         case 5
             msg = get_time_string(d, time, 2);
+        case 6
+            msg = get_time_string(d, time, 2);
     end
     
     % print the update time string 

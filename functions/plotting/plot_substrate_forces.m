@@ -14,6 +14,8 @@ if d.simset.substrateSolved
     
     plotForceMagnitude = 0;
     
+    mult = 10;
+
     % if central forces are plotted
     if d.pl.substrateForcesCentral
         
@@ -24,7 +26,7 @@ if d.simset.substrateSolved
             
         % if arrow plot
         else
-            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, 0.01.*d.sub.forces.centralX, 0.01.*d.sub.forces.centralY,'-m','AutoScale', 'off')
+            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, mult.*d.sub.forces.centralX, mult.*d.sub.forces.centralY,'-m','AutoScale', 'off')
         end
     end
     
@@ -38,7 +40,7 @@ if d.simset.substrateSolved
             
         % if arrow plot
         else
-            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, 0.01.*d.sub.forces.repulsionX, 0.01.*d.sub.forces.repulsionY,'-m','AutoScale', 'off')
+            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, mult.*d.sub.forces.repulsionX, mult.*d.sub.forces.repulsionY,'-m','AutoScale', 'off')
         end
     end
     
@@ -52,7 +54,7 @@ if d.simset.substrateSolved
             
         % if arrow plot
         else
-            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, 0.01.*d.sub.forces.restorativeX, 0.01.*d.sub.forces.restorativeY,'-m','AutoScale', 'off')
+            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, mult.*d.sub.forces.restorativeX, mult.*d.sub.forces.restorativeY,'-m','AutoScale', 'off')
         end
     end
     
@@ -66,7 +68,7 @@ if d.simset.substrateSolved
             
         % if arrow plot
         else
-            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, 0.01.*d.sub.forces.focalAdhesionsX, 0.01.*d.sub.forces.focalAdhesionsY,'-m','AutoScale', 'off')
+            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, mult.*d.sub.forces.focalAdhesionsX, mult.*d.sub.forces.focalAdhesionsY,'-m','AutoScale', 'off')
         end
     end
     
@@ -80,7 +82,7 @@ if d.simset.substrateSolved
             
         % if arrow plot
         else
-            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, 0.01.*d.sub.forces.totalX, 0.01.*d.sub.forces.totalY,'-m','AutoScale', 'off')
+            quiver(d.pl.axesHandle,d.sub.pointsX, d.sub.pointsY, mult.*d.sub.forces.totalX, mult.*d.sub.forces.totalY,'-m','AutoScale', 'off')
         end
     end
     

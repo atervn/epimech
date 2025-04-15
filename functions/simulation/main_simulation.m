@@ -120,9 +120,13 @@ while time - d.spar.simulationTime <= 1e-8
         d.sub.previousPointsY = d.sub.pointsY;
     end
 
-    % change vertex activation states in optogenetic simulation
+    
     if d.simset.simulationType == 5
-        d = change_activation(d,time);    
+        % change vertex activation states in optogenetic simulation
+        d = change_activation(d,time);
+    elseif d.simset.simulationType == 6
+        % move glass substrate vertices
+        d = move_glass(d,time);
     end
     
     %% solve cells

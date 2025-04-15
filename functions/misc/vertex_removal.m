@@ -87,7 +87,7 @@ d.cells(k).junctions.vertices(vertex2Remove,:) = [];
 d.cells(k).division.vertices = d.cells(k).division.vertices - 1.*double((d.cells(k).division.vertices) >= vertex2Remove);
 
 % if substrate is included
-if any(d.simset.simulationType == [3,5])
+if any(d.simset.simulationType == [3,5,6])
     if d.cells(k).substrate.connected(vertex2Remove)
         
         idxTemp = find(find(d.cells(k).substrate.connected) == vertex2Remove);

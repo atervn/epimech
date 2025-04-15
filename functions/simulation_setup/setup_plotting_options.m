@@ -369,7 +369,7 @@ elseif strcmp(plotCase,'glass_area')
     % get the basic plotting options
     d.pl = import_settings([app.defaultPath 'settings/plotting/basic_plotting_options.txt']);
     
-    d.pl.cellStyle = 0;
+    d.pl.cellStyle = 1;
     d.pl.substrateStyle = 0;
 
     d.pl.scaleBar.show = true;
@@ -389,8 +389,9 @@ elseif strcmp(plotCase,'glass_area')
     
     % set highlight type and the optogenetic vertices as the
     % highlighted cells
+    d.pl.highlightType = 0;
     d.pl.highlightedCells = 0;
-    app.SubstratesizeEditField.Value
+
     d.pl.windowSize = app.SubstratesizeEditField.Value*1e-6;
     % set the automatic sizing to true
     d.pl.automaticSize = 0;
@@ -776,18 +777,17 @@ function d = setup_scalebar(app,d)
 %   by Aapo Tervonen, 2021
 
 % check if scale bar is shown
-if ~d.pl.scaleBar.show
-    switch app.appTask
-            
-        % simulation
-        case 'simulate'
-            d.pl.scaleBar.show = app.ScalebarCheckBox.Value;
-            
-        % post plotting
-        case 'plotAndAnalyze'
-            d.pl.scaleBar.show = app.ScalebarCheckBox_2.Value;
-    end
+switch app.appTask
+        
+    % simulation
+    case 'simulate'
+        d.pl.scaleBar.show = app.ScalebarCheckBox.Value;
+        
+    % post plotting
+    case 'plotAndAnalyze'
+        d.pl.scaleBar.show = app.ScalebarCheckBox_2.Value;
 end
+
 % if scale bar is shown
 if d.pl.scaleBar.show
     

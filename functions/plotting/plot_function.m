@@ -123,6 +123,9 @@ if d.pl.plot
         % plot optogenetic regions
         plot_opto_region(d,time);
         
+        % plot glass regions
+        plot_glass_region(d,time);
+
         % plot frame
         plot_frame(d);
         

@@ -29,10 +29,14 @@ switch app.StiffnessstyleButtonGroup.SelectedObject.Text
         
         % calculate the general substrate spring constant from Youngs
         % modulus and scale it
-        d.spar.fSubstrate = app.substrateParameters.youngsModulusConstant*app.substrateParameters.youngsModulus*app.systemParameters.scalingTime/app.systemParameters.eta;
-        
+        if strcmp(app.simulationType,'glass')
+            d.spar.fSubstrate = app.substrateParameters.youngsModulusConstant*app.substrateParameters.youngsModulus*app.systemParameters.scalingTime/app.substrateParameters.subEta;
+        else
+            d.spar.fSubstrate = app.substrateParameters.youngsModulusConstant*app.substrateParameters.youngsModulus*app.systemParameters.scalingTime/app.systemParameters.eta;
+        end
+
         % calculate the restorartive spring constants
-        d.sub.restorativeSpringConstants(:) = d.spar.fSubstrate*scaledRestorativeMultiplier;
+        d.sub.restorativeSpringConstants(:) = scaledRestorativeMultiplier*d.spar.fSubstrate;
         
         % calcualte the central spring constants (get a value for
         % each interaction by multiplying with the spring multipliers)

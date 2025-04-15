@@ -88,6 +88,10 @@ if strcmp(app.appTask,'plotAndAnalyze')
             if eventdata.NewData && ~(exist([folderName '/opto'],'dir') == 7)
                 restore_previous_value('Opto data not available.',eventdata,tempTableData,app)
             end
+        case 'glass'
+            if eventdata.NewData && ~(exist([folderName '/glass'],'dir') == 7)
+                restore_previous_value('Glass data not available.',eventdata,tempTableData,app)
+            end
         case 'cellForcesTotal'
             if eventdata.NewData && exist([folderName '/cell_forces/total/'],'dir') ~= 7
                 restore_previous_value('Total force data not available.',eventdata,tempTableData,app)

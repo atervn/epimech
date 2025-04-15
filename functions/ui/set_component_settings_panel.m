@@ -31,6 +31,7 @@ if numel(varargin) > 0 && strcmp(varargin{1},'reset')
             app.PointlikeAnalysisPanel.Visible = 'Off';
             app.OptogeneticAnalysisPanel.Visible = 'Off';
             app.ParametersPanel_2.Visible = 'Off';
+            app.GlassAnalysisPanel.Visible = 'Off';
             
             set_object_properties_function(app,{'AnalysistipsImage','SpecialplottingtipsImage','PostparameterstipsImage','PostplottingtipsImage','PostplottingoptionstipsImage','AnimationtipsImage'},'Visible',{'Off'})
             

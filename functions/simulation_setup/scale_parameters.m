@@ -90,8 +90,8 @@ elseif strcmp(app.simulationType,'opto')
     d.spar.substratePointDistance = app.substrateParameters.substratePointDistance/app.systemParameters.scalingLength; % L^-1
     d.spar.repulsionLength = app.substrateParameters.repulsionLengthConstant*d.spar.substratePointDistance*sqrt(3)/2; % L^-1, also calculate the repulsion distance from the normal point distance 
     d.spar.junctionModificationTimeStep = app.systemParameters.junctionModificationTimeStep/app.systemParameters.scalingTime; % T^-1
-    d.spar.substrateMaximumMovementSq = (app.systemParameters.substrateMaximumMovement/app.systemParameters.scalingTime)^2; % L^-1, also squared
-    d.spar.substrateMinimumMovementSq = (app.systemParameters.substrateMinimumMovement/app.systemParameters.scalingTime)^2; % L^-1, also squared
+    d.spar.substrateMaximumMovementSq = (app.systemParameters.substrateMaximumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
+    d.spar.substrateMinimumMovementSq = (app.systemParameters.substrateMinimumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
     
     % LEGACY (naming has changed)
     if isfield(app.substrateParameters,'substrateEdgeConstant')
@@ -99,6 +99,18 @@ elseif strcmp(app.simulationType,'opto')
     else
         d.spar.edgeMultiplierSubstrate = app.substrateParameters.matrixEdgeConstant; % dimensionless
     end
+elseif strcmp(app.simulationType,'glass')
+    d.spar.fMembrane = app.specificCellParameters.fMembrane*app.systemParameters.scalingTime/app.systemParameters.eta; % T*eta^-1
+    d.spar.fEdgeCell = app.specificCellParameters.fEdgeCell*app.systemParameters.scalingTime/app.systemParameters.eta; % T*eta^-1
+    d.spar.maxMembraneAngle = app.specificCellParameters.maxMembraneAngle; % radians
+    d.spar.maxJunctionAngleConstant = app.specificCellParameters.maxJunctionAngleConstant; % dimensionless
+    d.spar.focalAdhesionBreakingForceSq = ((app.cellParameters.membraneLength*1e6)*app.specificCellParameters.focalAdhesionBreakingForce*app.systemParameters.scalingTime/app.systemParameters.eta/app.systemParameters.scalingLength)^2; % T*eta^-1*L*membraneLength(in um), also square
+    d.spar.substratePointDistance = app.substrateParameters.substratePointDistance/app.systemParameters.scalingLength; % L^-1
+    d.spar.repulsionLength = app.substrateParameters.repulsionLengthConstant*d.spar.substratePointDistance*sqrt(3)/2; % L^-1, also calculate the repulsion distance from the normal point distance 
+    d.spar.junctionModificationTimeStep = app.systemParameters.junctionModificationTimeStep/app.systemParameters.scalingTime; % T^-1
+    d.spar.substrateMaximumMovementSq = (app.systemParameters.substrateMaximumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
+    d.spar.substrateMinimumMovementSq = (app.systemParameters.substrateMinimumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
+    d.spar.edgeMultiplierSubstrate = app.substrateParameters.substrateEdgeConstant; % dimensionless
 end
 
 % scale the simulation related parameters

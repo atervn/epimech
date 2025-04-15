@@ -101,6 +101,41 @@ switch app.plotImport(app.selectedFile).simulationType
                 app.OptogeneticAnalysisPanel.Visible = 'On';
         end
         
+    case 'glass'
+                
+        app.PointlikeAnalysisPanel.Visible = 'Off';
+
+        app.DropDown2.Items(strcmp(app.DropDown2.Items,'Pointlike analysis')) = [];
+        app.DropDown2.Items(strcmp(app.DropDown2.Items,'Optogenetic analysis')) = [];
+
+        if ~any(strcmp(app.DropDown2.Items,'Geometry'))
+            app.DropDown2.Items = [app.DropDown2.Items, 'Geometry'];
+        end
+        if ~any(strcmp(app.DropDown2.Items,'Cell forces'))
+            app.DropDown2.Items = [app.DropDown2.Items, 'Cell forces'];
+        end
+        if ~any(strcmp(app.DropDown2.Items,'Glass analysis'))
+            app.DropDown2.Items = [app.DropDown2.Items, 'Glass analysis'];
+        end
+
+        if ~(~isempty(app.DropDown2.Value) && (strcmp(app.DropDown2.Value,'Geometry') || strcmp(app.DropDown2.Value,'Cell forces') || strcmp(app.DropDown2.Value,'Glass analysis')))
+            app.DropDown2.Value = 'Geometry';
+        end
+        
+        switch app.DropDown2.Value
+            case 'Geometry'
+                app.GeometryAnalysisPanel.Visible = 'On';
+                app.CellForcesAnalysisPanel.Visible = 'Off';
+                app.OptogeneticAnalysisPanel.Visible = 'Off';
+            case 'Cell forces'
+                app.GeometryAnalysisPanel.Visible = 'Off';
+                app.CellForcesAnalysisPanel.Visible = 'On';
+                app.OptogeneticAnalysisPanel.Visible = 'Off';
+            case 'Glass analysis'
+                app.GeometryAnalysisPanel.Visible = 'Off';
+                app.CellForcesAnalysisPanel.Visible = 'Off';
+                app.GlassAnalysisPanel.Visible = 'On';
+        end
         
         
 end

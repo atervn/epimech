@@ -13,6 +13,7 @@ junctions,0
 focalAdhesions,0
 pointlike,0
 opto,0
+glass,0
 cellForcesCortical,0
 cellForcesJunctions,0
 cellForcesDivision,0

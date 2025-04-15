@@ -41,6 +41,9 @@ d = setup_pointlike_settings(app,d);
 % setup optogenetics
 d = setup_optogenetic_settings(app,d);
 
+% setup glass movement settings
+d = setup_glass_settings(app,d);
+
 % frame settings
 d = setup_frame(d);
 

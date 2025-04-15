@@ -117,7 +117,11 @@ if option == 1
                     app.plotImport(i).simulationType = fscanf(fID,'%s');
                     fclose(fID);
                     if strcmp(app.plotImport(i).simulationType,'opto')
-                       app.plotImport(i).optoSelectedCells = []; 
+                        app.plotImport(i).optoSelectedCells = [];
+                    end
+                    if strcmp(app.plotImport(i).simulationType,'glass')
+                        app.plotImport(i).glassActivation = readmatrix([app.plotImport(i).folderName '/glass/glass_activation.csv']);
+                        app.plotImport(i).glassShapes = readmatrix([app.plotImport(i).folderName '/glass/glass_shapes.csv']);
                     end
                                         
                     if isfield(app.plotImport(i).systemParameters,'SIMULATION_TIME')
@@ -146,6 +150,9 @@ if option == 1
                         end
                     case 'opto'
                         app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_opto.txt']);
+                        app.importPlottingOptions = settings_to_logical(app.importPlottingOptions,'plot');
+                    case 'glass'
+                        app.importPlottingOptions = import_settings([app.defaultPath 'settings/plotting/post_plotting_options_glass.txt']);
                         app.importPlottingOptions = settings_to_logical(app.importPlottingOptions,'plot');
                 end
             end
@@ -180,6 +187,7 @@ if strcmp(app.appTask,'simulate')
     app.stiffnessGradientInformation = csvread([app.defaultPath 'settings/misc/default_stiffness_gradient.csv']);
     app.fFAInfo = csvread([app.defaultPath 'parameters/focal_adhesion_parameters.csv']);
     app.optoActivation = csvread([app.defaultPath 'settings/misc/default_opto_activation.csv']);
+    app.glassActivation = csvread([app.defaultPath 'settings/misc/default_glass_movements.csv']);
     app.stretch.piecewise = csvread([app.defaultPath 'settings/misc/default_piecewise_stretch.csv']);
     app.stretch.sine = csvread([app.defaultPath 'settings/misc/default_sine_stretch.csv']);
     app.stretch.type = 1;
@@ -495,7 +503,7 @@ if strcmp(app.appTask,'simulate')
                                 
                 set_object_properties_function(app,{'SubstratestyleDropDown','SubstratestyleLabel'},'Enable',{'On'});
                 
-                app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters.txt']);
+                app.substrateParameters = import_settings([app.defaultPath 'parameters/substrate_parameters_glass.txt']);
                 
                 app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
                 
@@ -505,7 +513,7 @@ if strcmp(app.appTask,'simulate')
                 app.SimulationtimestepDropDown.Value = 'secs';
                 
                 app.SaveactivationareaButton.Enable = 'Off';
-                app.activationShapes = {};
+                app.glassActivationShapes = {};
             end
     end
 end

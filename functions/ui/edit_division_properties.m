@@ -15,7 +15,7 @@ for k = 1:length(d.cells)
     if d.simset.simulationType == 1
         
         % if division until end or dividion until a time that is nonzero
-        if d.simset.division.type == 1 || (simset.division.type == 2 && d.spar.stopDivisionTime > 0)
+        if d.simset.division.type == 1 || (d.simset.division.type == 2 && d.spar.stopDivisionTime > 0)
             
             % if division state is 0
             if d.cells(k).division.state == 0

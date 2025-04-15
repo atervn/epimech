@@ -82,7 +82,7 @@ while longLengths ~= 0
                     
                     % with optogenetic or stretching simulation, update the
                     % focal adhesions and edge vertices
-                    if any(d.simset.simulationType == [3,5])
+                    if any(d.simset.simulationType == [3,5,6])
                         d = add_focal_adhesions(d, k, longIdx(i), 1);
                         d = add_new_edge_vertices(d, k, longIdx(i), 1);
                     end
@@ -113,7 +113,7 @@ while longLengths ~= 0
                     
                     % with optogenetic or stretching simulation, update the
                     % focal adhesions and edge vertices
-                    if any(d.simset.simulationType == [3,5])
+                    if any(d.simset.simulationType == [3,5,6])
                         d = add_focal_adhesions(d, k, longIdx(i),2);
                         d = add_new_edge_vertices(d, k, longIdx(i),2);
                     end

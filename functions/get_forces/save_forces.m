@@ -44,6 +44,9 @@ elseif simulationType == 3
 elseif simulationType == 5
     cells.forces.substrateX = tempCells.forces.substrateX;
     cells.forces.substrateY = tempCells.forces.substrateY;
+elseif simulationType == 6
+    cells.forces.substrateX = tempCells.forces.substrateX;
+    cells.forces.substrateY = tempCells.forces.substrateY;
 end
 
 end
