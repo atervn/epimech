@@ -1,0 +1,11 @@
+GLASS MOVEMENT
+
+- Table: modify the changes in position and the corresponding times
+- Add a row button: add a row at the end of the table
+- Remove a row button: remove a row from the end of the table
+- Figure: visualization of the movement
+- Load button: load a movement from a file
+- Save button: save the movement into a file
+- Reset button: reset the movement back to the values before calling the dialog
+- Default: restore the default movement from the file
+- Close: save changes and close the dialog
