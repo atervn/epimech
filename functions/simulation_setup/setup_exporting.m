@@ -24,7 +24,7 @@ end
 if app.ExportdataCheckBox.Value
     
     % read export settings
-    d.ex= read_export_settings(app);
+    d.ex = read_export_settings(app);
     
     % set exporting to 1 and calculate the export time step
     d.ex.export = 1;

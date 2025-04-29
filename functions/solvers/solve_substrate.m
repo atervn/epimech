@@ -1,4 +1,4 @@
-function [d,subDt] = solve_substrate(d,cellDt,subDt)
+function [d,subDt] = solve_substrate(d,gTime,cellDt,subDt)
 % SOLVE_SUBSTRATE Solves substrate movement using 4th order Runge-Kutta
 % method
 %   The function solves the substrate point movements using 4th order
@@ -58,6 +58,11 @@ for k = 1:length(d.cells)
     subTemp.matrixIdx{k} = d.cells(k).substrate.matrixIdx;
 end
 
+if d.simset.simulationType == 6
+    pointsOriginalX = d.sub.pointsOriginalX;
+    pointsOriginalY = d.sub.pointsOriginalY;
+end
+
 % loop until the cell time step has been reached
 while 1
     
@@ -96,6 +101,12 @@ while 1
                 % keep looping until there are no too large increments k1
                 while 1
                     
+                    if d.simset.simulationType == 6
+                        d.sub.pointsOriginalX = pointsOriginalX;
+                        d.sub.pointsOriginalY = pointsOriginalY;
+                        d = move_glass(d,gTime+time,subDt);
+                    end
+
                     % calculate the increments k1
                     [d, repeat] = get_substrate_increments(d, subTemp, 1, subDt, firstTime);
                     
@@ -152,6 +163,11 @@ while 1
             break;
         end
     end
+
+    if d.simset.simulationType == 6
+        pointsOriginalX = d.sub.pointsOriginalX;
+        pointsOriginalY = d.sub.pointsOriginalY;
+    end
     
     % if the substrate time step is smaller than the cell time step and
     % ther maximum substrate movement is below the defined limit,
@@ -190,6 +206,10 @@ while 1
                 multiplier = multiplier/2;
             end
         end
+
+
+
+        
     end
 end
 

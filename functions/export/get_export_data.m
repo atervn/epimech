@@ -148,6 +148,9 @@ end
 % of the simulation)
 if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
     exportMatrices.substratePoints = [d.sub.pointsX d.sub.pointsY];
+    if d.simset.simulationType == 6
+        exportMatrices.substrateBottomPoints = [d.sub.pointsOriginalX d.sub.pointsOriginalY];
+    end
 end
 
 % input the substrate adhesion number data (required for substrate import)

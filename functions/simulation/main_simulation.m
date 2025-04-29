@@ -40,7 +40,9 @@ end
 
 tic
 
-%% main simulation loop
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% main simulation loop %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 while time - d.spar.simulationTime <= 1e-8
 
     %% stop or pause
@@ -124,9 +126,6 @@ while time - d.spar.simulationTime <= 1e-8
     if d.simset.simulationType == 5
         % change vertex activation states in optogenetic simulation
         d = change_activation(d,time);
-    elseif d.simset.simulationType == 6
-        % move glass substrate vertices
-        d = move_glass(d,time);
     end
     
     %% solve cells
@@ -148,7 +147,7 @@ while time - d.spar.simulationTime <= 1e-8
     if d.simset.substrateSolved
         
         % solve using 4th order Runge Kutta solver
-        [d,subDt] = solve_substrate(d,dt,subDt);
+        [d,subDt] = solve_substrate(d,time,dt,subDt);
         
         % save time step for post plotting
         if d.simset.dtPlot

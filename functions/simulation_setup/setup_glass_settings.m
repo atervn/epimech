@@ -14,30 +14,35 @@ if d.simset.simulationType == 6
     
     d.simset.glass.glassOffset = 0;
 
+    times = app.glassActivation(:,1);
+    displacements = app.glassActivation(:,2);
+
+    for i = length(displacements):-1:2
+        if i == length(displacements)
+            times = [times(1:i); times(i)+app.systemParameters.glassMovementTime];
+            displacements = [displacements(1:i-1); displacements(i-1); displacements(i)];
+        else
+            times = [times(1:i); times(i)+app.systemParameters.glassMovementTime; times(i+1:end)];
+            displacements = [displacements(1:i-1); displacements(i-1); displacements(i:end)];
+        end
+    end
+
     % get the time points where the changes in the positions occur
     % (add large value to the end to make sure there is always next time
     % point available)
-    d.simset.glass.times = [app.glassActivation(:,1) ; 1e12]./d.spar.scalingTime;
+    if max(times./d.spar.scalingTime) < d.spar.simulationTime
+        d.simset.glass.times = [times./d.spar.scalingTime ; d.spar.simulationTime+10];
+    else
+        d.simset.glass.times = [times./d.spar.scalingTime ; (times(end) + 1)./d.spar.scalingTime];
+    end
     
     % get the glass movements starting from the time points (duplicate
     % the last activation level and multiply with the full movement)
-    if app.glassActivation(1,2) == 0
-        d.simset.glass.times = [app.glassActivation(:,1) ; 1e12]./d.spar.scalingTime;
-        d.simset.glass.positions = [app.glassActivation(:,2); app.glassActivation(end,2)].*1e-6./d.spar.scalingLength;
-    else
-        d.simset.glass.times = [app.glassActivation(1,1); app.glassActivation(:,1) ; 1e12]./d.spar.scalingTime;
-        d.simset.glass.positions = [app.glassActivation(1,2); app.glassActivation(:,2); app.glassActivation(end,2)].*1e-6./d.spar.scalingLength;
-    end
+    d.simset.glass.positions = [displacements; displacements(end)].*1e-6./d.spar.scalingLength;
+
     % get the activation region shapes
     d.simset.glass.shapes = app.glassActivationShapes;
     
-    d.simset.glass.substrateIdx = [];
-    for i = 1:length(d.simset.glass.shapes)
-        d.simset.glass.substrateIdx = [d.simset.glass.substrateIdx; find(check_if_inside(d.simset.glass.shapes{i}(:,1),d.simset.glass.shapes{i}(:,2),d.sub.pointsX,d.sub.pointsY))];
-    end
-    
-    d.simset.glass.substrateIdx = unique(d.simset.glass.substrateIdx);
-
     % initialize a varible to keep track of the current time point and
     % activation level index
     d.simset.glass.currentTime = 1;

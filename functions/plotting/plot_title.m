@@ -55,6 +55,13 @@ switch d.pl.titleType
             % step simulation duration/duration for the plotting/time it
             % takes to simulate one cell for one minute)"
             title(d.pl.axesHandle,['Time: ' timeString '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str(loopTime/length(d.cells)*(60/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
+
+        elseif d.simset.simulationType == 6
+            
+            % plot the figure title (format: "Current time ; (plot time
+            % step simulation duration/duration for the plotting/time it
+            % takes to simulate one cell for one minute)"
+            title(d.pl.axesHandle,['Time: ' timeString '; (' num2str(loopTime,'%05.3f') '/' num2str(plottingTime,'%05.3f') '/' num2str(loopTime/length(d.cells)*(60/d.spar.scalingTime/d.pl.plotDt),'%05.3f') ')']);
         end
         
     % browsing (when selecting the time point to start simulation or

@@ -111,6 +111,7 @@ elseif strcmp(app.simulationType,'glass')
     d.spar.substrateMaximumMovementSq = (app.systemParameters.substrateMaximumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
     d.spar.substrateMinimumMovementSq = (app.systemParameters.substrateMinimumMovement/app.systemParameters.scalingLength)^2; % L^-1, also squared
     d.spar.edgeMultiplierSubstrate = app.substrateParameters.substrateEdgeConstant; % dimensionless
+    d.spar.glassMovementTime = app.systemParameters.glassMovementTime/app.systemParameters.scalingTime;
 end
 
 % scale the simulation related parameters

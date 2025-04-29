@@ -508,9 +508,9 @@ if strcmp(app.appTask,'simulate')
                 app.YoungsmodulusEditField.Value = app.substrateParameters.youngsModulus/1000;
                 
                 app.SimulationtimeDropDown.Items = {'mins','secs'};
-                app.SimulationtimeDropDown.Value = 'mins';
+                app.SimulationtimeDropDown.Value = 'secs';
                 app.SimulationtimestepDropDown.Items = {'mins','secs','msecs'};
-                app.SimulationtimestepDropDown.Value = 'secs';
+                app.SimulationtimestepDropDown.Value = 'msecs';
                 
                 app.SaveactivationareaButton.Enable = 'Off';
                 app.glassActivationShapes = {};

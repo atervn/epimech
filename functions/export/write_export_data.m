@@ -83,6 +83,9 @@ if or(d.ex.substratePlot,d.ex.substrateFull) && d.simset.substrateIncluded
     write_file(d.ex,exportMatrices.focalAdhesionPoints, 'focal_adhesion_points', exportNumber, 'focal_adhesions');
     write_file(d.ex,exportMatrices.focalAdhesionConnected, 'focal_adhesion_connected', exportNumber, 'focal_adhesions');
     write_file(d.ex,exportMatrices.focalAdhesionWeights, 'focal_adhesion_weights', exportNumber, 'focal_adhesions');
+    if d.simset.simulationType == 6
+        write_file(d.ex,exportMatrices.substrateBottomPoints, 'substrate_bottom_points', exportNumber, 'substrate');
+    end 
 end
 
 % write the focal adhesion data to file (for import)
