@@ -52,7 +52,7 @@ switch inputStruct
         app.UITable.ColumnName = {'Parameter','Value','Explanation'}';
         app.UITable.ColumnFormat = {'char','shortG','char'};
     case 'fFAInfo'
-        app.UITable.ColumnName = {'Youngs modulus','fFocalAdhesion'}';
+        app.UITable.ColumnName = {'Youngs modulus','fFA'}';
         app.UITable.ColumnFormat = {'char','shortG','char'};
     case 'cellParametersImport'
         app.UITable.ColumnName = {'Parameter','Value','Explanation'}';
