@@ -21,7 +21,7 @@ growth
 % initial state
 
 % simulation time
-9 d 60 s 8 d
+11 d 60 s 10 d
 
 % simulation specific input
 mdck
@@ -32,6 +32,6 @@ mdck
 480 ./settings/export/export_options_import_growth.txt
 
 % simulation names
-test
+g040625
 
 % -------------------------------------------------------------------------

@@ -53,6 +53,8 @@ switch data.simulationType
         app.SolverDropDown.Value = 'RK4';
     case 'stretch'
         app.SolverDropDown.Value = 'RK4';
+    case 'glass'
+        app.SolverDropDown.Value = 'RK2';
 end
 
 % set the simulation name
@@ -242,8 +244,37 @@ if strcmp(app.simulationType,'opto')
     app.optoVertices.cells = [];
 end
 
+% if opto simulation
+if strcmp(app.simulationType,'glass')
+    
+    % get the optogenetic activationd ata
+    app.glassActivation = csvread(data.glass.movement{iLoop});
+    
+    % get the shape data
+    glassShapesTemp = csvread(data.glass.shapes{iLoop});
+    
+    % go through the shape data and save the different shapes into the
+    % optoShapes cell (the shape coordinates are separated by a row of
+    % zeros)
+    app.glassActivationShapes = {};
+    nShapes = sum(glassShapesTemp(:,1) == 0)+1;
+    for i = 1:nShapes
+        [~,idx] = find(glassShapesTemp(:,1) == 0);
+        if isempty(idx)
+            app.glassActivationShapes{i} = glassShapesTemp;
+            nextZero = 2;
+        else
+            nextZero = min(idx);
+            app.glassActivationShapes{i} = glassShapesTemp(1:nextZero-1,:);
+        end
+        glassShapesTemp(1:nextZero,:) = [];
+
+    end
+    
+end
+
 % if simulation with substrate
-if strcmp(app.simulationType,'pointlike') || strcmp(app.simulationType,'stretch') || strcmp(app.simulationType,'opto')
+if strcmp(app.simulationType,'pointlike') || strcmp(app.simulationType,'stretch') || strcmp(app.simulationType,'opto') || strcmp(app.simulationType,'glass')
     
     % set the substrate, focal adhesion, and youngs modulus parameters
     app.substrateParameters = import_settings(data.substrateParameterFiles{iLoop});

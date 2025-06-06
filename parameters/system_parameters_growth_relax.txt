@@ -1,4 +1,4 @@
-eta,0.5
+eta,1e-4
 scalingLength,2e-05
 scalingTime,1
 simulationTime,432000

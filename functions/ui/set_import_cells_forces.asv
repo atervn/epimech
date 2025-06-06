@@ -6,6 +6,7 @@ forceItemsTime = app.ForceDropDown.Items;
 forceItemsPlot = app.ForceDropDown_2.Items;
 forceItemsPlotGlass = app.ForceDropDown_3.Items;
 
+
 if exist([folderName '/cell_forces/total/'],'dir') == 7
     temp = strcmp(forceItemsTime,'Total forces');
     if ~any(temp)
@@ -27,14 +28,12 @@ if exist([folderName '/cell_forces/cortical/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Cortical forces'];
         forceItemsPlot = [forceItemsPlot 'Cortical forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Cortical forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Cortical forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 
 end
@@ -44,14 +43,12 @@ if exist([folderName '/cell_forces/junction/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Junction forces'];
         forceItemsPlot = [forceItemsPlot 'Junction forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Junction forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Junction forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -60,14 +57,12 @@ if exist([folderName '/cell_forces/division/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Division forces'];
         forceItemsPlot = [forceItemsPlot 'Division forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Division forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Division forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -76,14 +71,12 @@ if exist([folderName '/cell_forces/membrane/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Membrane forces'];
         forceItemsPlot = [forceItemsPlot 'Membrane forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Membrane forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Membrane forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -92,14 +85,12 @@ if exist([folderName '/cell_forces/contact/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Contact forces'];
         forceItemsPlot = [forceItemsPlot 'Contact forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Contact forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Contact forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -108,14 +99,12 @@ if exist([folderName '/cell_forces/area/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Area forces'];
         forceItemsPlot = [forceItemsPlot 'Area forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Area forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Area forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -124,14 +113,12 @@ if exist([folderName '/cell_forces/pointlike/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Pointlike forces'];
         forceItemsPlot = [forceItemsPlot 'Pointlike forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Pointlike forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Pointlike forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -140,14 +127,12 @@ if exist([folderName '/cell_forces/focal_adhesion/'],'dir') == 7
     if ~any(temp)
         forceItemsTime = [forceItemsTime 'Focal adhesion forces'];
         forceItemsPlot = [forceItemsPlot 'Focal adhesion forces'];
-        forceItemsPlotGlass = [forceItemsPlotGlass 'Focal adhesion forces'];
     end
 else
     temp = strcmp(forceItemsTime,'Focal adhesion forces');
     if any(temp)
         forceItemsTime(temp) = [];
         forceItemsPlot(temp) = [];
-        forceItemsPlotGlass(temp) = [];
     end
 end
 
@@ -212,9 +197,9 @@ else
     end
 end
 
+
 app.ForceDropDown.Items = forceItemsTime;
 app.ForceDropDown_2.Items = forceItemsPlot;
-app.ForceDropDown_3.Items = forceItemsPlotGlass;
 
 if ~isempty(app.ForceDropDown.Items)
     app.ForceDropDown.Enable = 'On';
@@ -227,17 +212,6 @@ else
     app.CellsListBox.Enable = 'Off';
     app.PlotButton_2.Enable = 'Off';
 end
-
-if ~isempty(app.ForceDropDown_3.Items)
-    app.ForceDropDown_3.Enable = 'On';
-    app.TypeDropDown_2.Enable = 'On';
-    app.PlotButton_3.Enable = 'On';
-else
-    app.ForceDropDown_3.Enable = 'Off';
-    app.TypeDropDown_2.Enable = 'Off';
-    app.PlotButton_3.Enable = 'Off';
-end
-
 end
 
 

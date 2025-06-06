@@ -468,6 +468,104 @@ if strcmp(fgetl(fID),'% simulation specific input')
                 end
             end
         end
+
+    elseif strcmp(data.simulationType,'glass')
+
+         % initialize opto data cells
+        data.glass.movement = {};
+        data.glass.shapes = {};
+        
+        % loop until an empty line is found
+        while 1
+            
+            % get the next line from the file
+            line = fgetl(fID);
+            
+            % if the line is empty
+            if strcmp(line,'')
+            
+                % if there is size type defined, break out of the loop
+                if numel(data.glass.movement) > 0
+                    break
+                    
+                % otherwise, give error and return
+                else
+                    disp('Error. No glass parameters given.'); data = 0; return
+                end
+                
+            % if the line reads "% parameter study", or has other comment,
+            % give error and return
+            elseif strcmp(line,'% parameter study') || strcmp(line(1),'%')
+                disp('Error. Wrong file format, there should be an empty line before ''% parameter study''.') ;data = 0; return
+            
+            % otherwise
+            else
+                
+                % scan the line to obtain two strings
+                line = textscan(line,'%s %s');
+                
+                % get the file extension of the first file
+                [~,~,ext] = fileparts(line{1}{1});
+                
+                % if the the string is "load", save it
+                if strcmp(line{1}{1},'load')
+                    data.glass.movement{end+1} = 'load';
+                
+                % otherwise, check that the extension is csv, if not, give
+                % error and return
+                elseif ~strcmp(ext,'.csv')
+                    inputNumber = numel(data.glass.movement)+1;
+                    disp(['Error. Wrong file format, should be a .csv file. (simulation number' num2str(inputNumber) ').']); data = 0; return
+                else
+                    
+                    % open the file
+                    fIDTemp = fopen(line{1}{1});
+                    
+                    % if it opens, close the file, and save the file name
+                    if fIDTemp ~= -1
+                        fclose(fIDTemp);
+                        data.glass.movement{end+1} = line{1}{1};
+                        
+                    % otherwise, give error and return
+                    else
+                        inputNumber = numel(data.glass.movement)+1;
+                        disp(['Error. The simulation number ' num2str(inputNumber) ' movement file cannot be found or opened']); data = 0; return
+                    end
+                end
+                
+                % get the file extension of the second file
+                [~,~,ext] = fileparts(line{2}{1});
+                
+                % if the the string is "load", save it
+                if strcmp(line{2}{1},'load')
+                    data.glass.shapes{end+1} = 'load';
+                
+                % otherwise, check that the extension is csv, if not, give
+                % error and return
+                elseif ~strcmp(ext,'.csv')
+                    inputNumber = numel(data.glass.shapes)+1;
+                    disp(['Error. Wrong file format, should be a .csv file (simulation number ' num2str(inputNumber) ').']); data = 0; return
+                
+                % otherwise
+                else
+                    
+                    % open the file
+                    fIDTemp = fopen(line{2}{1});
+                    
+                    % if it opens, close the file, and save the file name
+                    if fIDTemp ~= -1
+                        fclose(fIDTemp);
+                        data.glass.shapes{end+1} = line{2}{1};
+                        
+                    % otherwise, give error and return
+                    else
+                        inputNumber = numel(data.glass.shapes)+1;
+                        disp(['Error. The simulation number ' num2str(inputNumber) ' shapes file cannot be found or opened']); data = 0; return
+                    end
+                end
+            end
+        end
+
     end
     
 % otherwise, give error and return

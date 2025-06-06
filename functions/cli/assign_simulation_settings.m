@@ -544,6 +544,95 @@ elseif strcmp(data.simulationType,'opto')
         end
     end
     
+% if glass simulation
+elseif strcmp(data.simulationType,'glass')
+    
+    % if the number of opto settings does not equal the number of
+    % simulations
+    if length(data.glass.movement) ~= data.nSimulations
+        
+        % if the activation file name is "load"
+        if strcmp(data.glass.movement{1},'load')
+            
+            % open a dialog to choose a opto activation file
+            [file,path] = uigetfile('.csv','Select a movement file for all of the simulations');
+            
+            % if no file is chosen, return
+            if file == 0
+                data = 0;
+                return
+                
+            % otherwise, get the file path and name
+            else
+                data.glass.movement{1} = [path file];
+            end
+        end
+        
+        % if the activation shapes file name is "load"
+        if strcmp(data.glass.shapes{1},'load')
+            
+            % open a dialog to choose a opto activation shapes file
+            [file,path] = uigetfile('.csv','Select a shapes file for all of the simulations');
+            
+            % if no file is chosen, return
+            if file == 0
+                data = 0;
+                return
+                
+            % otherwise, get the file path and name
+            else
+                data.glass.shapes{1} = [path file];
+            end
+        end
+        
+        % copy the settings from the first simulation to the rest
+        for i = 2:data.nSimulations
+            data.glass.movement{i} = data.glass.movement{1};
+            data.glass.shapes{i} = data.glass.shapes{1};
+        end
+        
+    % if the number of opto settings equals the number of simulations    
+    else
+        
+        % go through the simulations
+        for i = 1:data.nSimulations
+            
+            % if the activation file name is "load"
+            if strcmp(data.glass.movement{i},'load')
+                
+                % open a dialog to choose an opto activation file
+                [file,path] = uigetfile('.csv',['Select a movement file for simulation ' num2str(i)]);
+                
+                % if no file is chosen, return
+                if file == 0
+                    data = 0;
+                    return
+                    
+                % otherwise, get the file path and name
+                else
+                    data.glass.movement{i} = [path file];
+                end
+            end
+            
+            % if the activation shapes file name is "load"
+            if strcmp(data.glass.shapes{1},'load')
+                
+                % open a dialog to choose an opto activation shapes file
+                [file,path] = uigetfile('.csv',['Select a shapes file for simulation ' num2str(i)]);
+            
+                % if no file is chosen, return
+                if file == 0
+                    data = 0;
+                    return
+                
+                % otherwise, get the file path and name
+                else
+                    data.glass.shapes{i} = [path file];
+                end
+            end
+        end
+    end
+
 % if stretch simulation
 elseif strcmp(data.simulationType,'stretch') % STRETCHING
     

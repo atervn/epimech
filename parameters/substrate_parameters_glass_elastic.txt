@@ -1,8 +1,8 @@
-substratePointDistance,2e-06
-youngsModulus,35000
-youngsModulusConstant,6.6e-07
+substratePointDistance,2e-6
+youngsModulus,1100
+youngsModulusConstant,6.6e-7
 restorativeForceConstant,0.059
 repulsionLengthConstant,0.5
 honeycombConstants,114
 substrateEdgeConstant,100
-subEta,0.0001
+subEta,0.00005

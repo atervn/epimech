@@ -25,6 +25,8 @@ if strcmp(fgetl(fID),'% simulation type')
         data.simulationType = 'opto';
     elseif strcmp(line,'stretch')
         data.simulationType = 'stretch';
+    elseif strcmp(line,'glass')
+        data.simulationType = 'glass';
     
     % not correct simulation type
     else
