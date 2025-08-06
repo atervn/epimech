@@ -29,6 +29,7 @@ switch settingsType
         settings.focalAdhesions = logical(settings.focalAdhesions);
         settings.pointlike = logical(settings.pointlike);
         settings.opto = logical(settings.opto);
+        settings.glass = logical(settings.glass);
         settings.substrateForcesCentral = logical(settings.substrateForcesCentral);
         settings.substrateForcesRepulsion = logical(settings.substrateForcesRepulsion);
         settings.substrateForcesRestoration = logical(settings.substrateForcesRestoration);

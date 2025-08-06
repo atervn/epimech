@@ -1,4 +1,4 @@
-eta,0.0001
+eta,0.0002
 scalingLength,2e-05
 scalingTime,1
 simulationTime,10

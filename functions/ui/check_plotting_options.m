@@ -71,6 +71,12 @@ if plottingOptions.opto
    end
 end
 
+if plottingOptions.glass
+   if ~(exist([folderName '/glass'],'dir') == 7)
+       plottingOptions.glass = false;
+   end
+end
+
 % LEGACY
 if plottingOptions.substrateForcesCentral
     if exist([folderName '/substrate_forces/central/'],'dir') ~= 7
