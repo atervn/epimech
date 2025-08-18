@@ -5,4 +5,4 @@ restorativeForceConstant,0.059
 repulsionLengthConstant,0.5
 honeycombConstants,114
 substrateEdgeConstant,100
-subEta,0.00025
+subEta,0.0002
